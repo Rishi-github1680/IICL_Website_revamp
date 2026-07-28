@@ -1,0 +1,9 @@
+.vercel
+.env*
+.gstack/
+node_modules
+dist
+
+# Page entry files are generated from src/pages.config.js by scripts/gen-pages.mjs.
+# Edit the manifest, not these. Regenerate with `npm run gen`.
+/*.html

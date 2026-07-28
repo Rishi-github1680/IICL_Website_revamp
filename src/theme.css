@@ -1,0 +1,210 @@
+/* IICL design system — the single source for type, spacing and the shared
+   interactive components. Imported once from page.js and IICLHero.svelte, so it
+   applies to every content page. (styles.css is separate; it only dresses the
+   standalone 3D model pages.) */
+
+:root {
+  /* Type */
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Weights — nothing heavier than 600. Bold is reserved for genuine emphasis. */
+  --w-body: 400;
+  --w-light: 300;
+  --w-medium: 500;
+  --w-heading: 600;
+
+  /* Layout container. The gutter is fixed at 32px on desktop and 24px on phones —
+     one number for the whole site, so nothing invents its own edge distance. */
+  --wrap-max: 1680px;
+  --wrap-pad: 32px;
+
+  /* Spacing scale. Sections sit 32px apart in total, so the padding either side
+     of the join is half that. */
+  --space-section: 16px;   /* section top/bottom padding → 32px between sections */
+  --space-card: 16px;      /* card interior */
+  --space-head: 10px;      /* heading → its content */
+  --space-block: 12px;     /* between sibling blocks */
+  --gap-grid: 10px;
+
+  /* Type scale. Fixed at both ends and linearly interpolated between, so tablets
+     get a real intermediate size rather than snapping to the phone or desktop step.
+     390px → 32 / 24 / 14.   1440px → 48 / 32 / 18. */
+  --fs-h1:   clamp(32px, calc(32px + 16 * (100vw - 390px) / 1050), 48px);
+  --fs-h2:   clamp(24px, calc(24px +  8 * (100vw - 390px) / 1050), 32px);
+  --fs-body: clamp(14px, calc(14px +  4 * (100vw - 390px) / 1050), 18px);
+  /* One step under body, for meta lines and captions. */
+  --fs-small: clamp(12.5px, calc(12.5px + 2.5 * (100vw - 390px) / 1050), 15px);
+
+  /* Surface */
+  --ink: #16171a;
+  --muted: #5a5d63;
+  --line: #e7e4df;
+  --line-soft: #f0eeea;
+  --paper: #ffffff;
+  --paper-2: #faf9f7;
+  --brand: #ee2f2e;
+
+  --shadow-1: 0 1px 2px rgba(18,20,24,0.04), 0 1px 1px rgba(18,20,24,0.03);
+  --shadow-2: 0 6px 16px rgba(18,20,24,0.07), 0 2px 5px rgba(18,20,24,0.04);
+  --shadow-3: 0 18px 40px rgba(18,20,24,0.11), 0 4px 12px rgba(18,20,24,0.05);
+
+  --nav-h: 60px;   /* measured height of the sticky .nav-bar */
+}
+
+/* Phones and small tablets take the 24px gutter. Section rhythm stays 32px. */
+@media (max-width: 900px) { :root { --wrap-pad: 24px; } }
+
+body { font-family: var(--font); }
+
+/* Anchors must clear the sticky navbar. This is what makes in-page index links
+   land with the heading visible instead of tucked under the header. */
+[id] { scroll-margin-top: calc(var(--nav-h) + 22px); }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* ── Highlighted statement ─────────────────────────────────────────────
+   One line that carries the point of a section. Used instead of burying the
+   claim in the third sentence of a paragraph. */
+.statement {
+  margin: 0 0 var(--space-block);
+  padding-left: 18px;
+  border-left: 2px solid var(--brand);
+  font-size: clamp(18px, 1.9vw, 22px);
+  font-weight: var(--w-light);
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.statement em { font-style: normal; font-weight: var(--w-medium); }
+
+/* ── Inline CTA link ───────────────────────────────────────────────────
+   The "ask" at the end of a section. A link, not another loud button. */
+.cta-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 4px;
+  font-size: 15px; font-weight: var(--w-medium); line-height: 1.4;
+  color: var(--brand); text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+  padding-bottom: 3px;
+  transition: border-color .22s, gap .22s;
+}
+.cta-link:hover { border-bottom-color: var(--brand); gap: 12px; }
+.cta-link .arw { transition: transform .22s cubic-bezier(0.22,1,0.36,1); }
+.cta-link:hover .arw { transform: translateX(2px); }
+
+/* ── Outcome strip ─────────────────────────────────────────────────────
+   Three claims carrying visual weight, so a section can say what changes
+   without another six paragraphs. Picks up --acc where a page sets one
+   (product pages), otherwise the brand red. */
+.outcomes {
+  list-style: none; margin: 14px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--line); border: 1px solid var(--line);
+  border-radius: 8px; overflow: hidden;
+}
+.outcome { background: #fff; padding: 18px 18px; display: grid; gap: 7px; align-content: start; transition: background .22s; }
+.outcome:hover { background: var(--paper-2); }
+.outcome b {
+  font-size: clamp(23px, 2.5vw, 30px); font-weight: var(--w-heading); line-height: 1;
+  letter-spacing: -0.03em; color: var(--acc, var(--brand));
+}
+.outcome span { font-size: 14px; line-height: 1.5; color: var(--muted); }
+@media (max-width: 860px) { .outcomes { grid-template-columns: 1fr; } }
+
+/* ── Flow diagram ──────────────────────────────────────────────────────
+   A left-to-right process as a row of numbered stages joined by a rail, instead
+   of five paragraphs the reader has to hold in their head. Wraps to a vertical
+   ladder on narrow screens, where the rail runs down the left instead. */
+.flow { list-style: none; margin: 16px 0 0; padding: 0; position: relative;
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; }
+.flow::before { content: ''; position: absolute; left: 0; right: 0; top: 21px; height: 2px;
+  background: linear-gradient(90deg, var(--brand), color-mix(in srgb, var(--brand) 22%, transparent)); }
+.flow-step { position: relative; padding: 0 18px 0 0; }
+.flow-step b { position: relative; z-index: 1; display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: 50%; background: #fff;
+  border: 2px solid var(--brand); color: var(--brand);
+  font-family: var(--font-mono); font-size: 13px; font-weight: var(--w-medium); }
+.flow-step strong { display: block; margin: 14px 0 5px; font-size: 15.5px; font-weight: var(--w-heading); color: var(--ink); }
+.flow-step span { display: block; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+@media (max-width: 860px) {
+  .flow { grid-auto-flow: row; gap: 18px; }
+  .flow::before { left: 21px; right: auto; top: 0; bottom: 0; width: 2px; height: auto;
+    background: linear-gradient(180deg, var(--brand), color-mix(in srgb, var(--brand) 22%, transparent)); }
+  .flow-step { display: grid; grid-template-columns: 44px 1fr; gap: 0 16px; padding: 0; }
+  .flow-step b { grid-row: 1 / span 2; }
+  .flow-step strong { margin: 10px 0 4px; }
+}
+
+/* ── Comparison ────────────────────────────────────────────────────────
+   Two columns, before and after. Used where a page was explaining a change in
+   prose that the reader had to reconstruct. */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 16px 0 0;
+  background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.compare > div { background: #fff; padding: 20px; }
+.compare > div + div { background: color-mix(in srgb, var(--brand) 4%, #fff); }
+.compare h4 { margin: 0 0 12px; font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+.compare > div + div h4 { color: var(--brand); }
+.compare ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.compare li { position: relative; padding-left: 22px; font-size: 14.5px; line-height: 1.55; color: #40434a; }
+.compare li::before { content: ''; position: absolute; left: 0; top: 8px; width: 10px; height: 2px;
+  border-radius: 2px; background: #c9c6c1; }
+.compare > div + div li::before { background: var(--brand); }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+
+/* ── Metric row ────────────────────────────────────────────────────────
+   Figures given room to be read, with the unit and the caveat attached. */
+.metrics { list-style: none; margin: 16px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1px;
+  background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.metric { background: #fff; padding: 20px 18px; display: grid; gap: 6px; align-content: start; }
+.metric b { font-size: clamp(26px, 3vw, 36px); font-weight: var(--w-heading); line-height: 1;
+  letter-spacing: -0.03em; color: var(--acc, var(--brand)); font-family: var(--font-mono); }
+.metric strong { font-size: 14px; font-weight: var(--w-medium); color: var(--ink); }
+.metric span { font-size: 13px; line-height: 1.5; color: var(--muted); }
+
+/* ── FAQ accordion ─────────────────────────────────────────────────────
+   Single-open is native: <details name="..."> makes the group exclusive, so
+   opening one closes the last without a line of JavaScript. */
+.faq-list { max-width: 76ch; margin: 4px 0 0; border-top: 1px solid var(--line); }
+.faq-item { border-bottom: 1px solid var(--line); }
+
+.faq-q {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;
+  padding: 17px 0;
+  font-size: 16px; font-weight: var(--w-medium); line-height: 1.5;
+  color: var(--ink); transition: color .18s;
+}
+.faq-q::-webkit-details-marker { display: none; }
+.faq-q:hover { color: var(--brand); }
+
+/* Chevron, drawn from two borders, rotating 180° on open. */
+.faq-mark { position: relative; flex: none; width: 16px; height: 16px; margin-top: 4px; }
+.faq-mark::before {
+  content: ''; position: absolute; left: 3px; top: 4px; width: 8px; height: 8px;
+  border-right: 1.5px solid var(--brand); border-bottom: 1.5px solid var(--brand);
+  transform: rotate(45deg); transform-origin: center;
+  transition: transform .3s cubic-bezier(0.22,1,0.36,1);
+}
+.faq-item[open] .faq-mark::before { transform: rotate(225deg); }
+
+.faq-a { padding: 0 0 20px; max-width: 68ch; }
+.faq-a > .para:last-child, .faq-a > .list:last-child { margin-bottom: 0; }
+
+/* Smooth open/close where the browser supports animating to auto height. */
+@supports (interpolate-size: allow-keywords) {
+  :root { interpolate-size: allow-keywords; }
+  .faq-item::details-content {
+    block-size: 0; overflow: hidden; opacity: 0;
+    transition: block-size .34s cubic-bezier(0.22,1,0.36,1), opacity .26s ease,
+                content-visibility .34s allow-discrete;
+  }
+  .faq-item[open]::details-content { block-size: auto; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq-mark::before { transition: none; }
+  .faq-item::details-content { transition: none; }
+}
