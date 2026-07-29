@@ -5,6 +5,7 @@
 </script>
 
 <ServiceLayout
+  autoFaq={false}
   kicker="Service"
   h1="ERP Consulting, Implementation and Integration"
   lede="ERP consulting, implementation, customisation, migration and support, connecting finance, HR, procurement, inventory and sales in one system."

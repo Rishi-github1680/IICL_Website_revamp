@@ -42,8 +42,7 @@
     <div class="wrap">
       <ArticleGrid posts={CASES} featured={false} kicker="Use cases" heading="Deployments, and what changed" />
       <p class="para uc-more">
-        Each one describes the problem, what was built and what was measured afterwards —
-        <a href="/use-cases">see all use cases</a>.
+        Each one describes the problem, what was built and what was measured afterwards.
       </p>
     </div>
   </section>
@@ -53,7 +52,7 @@
       <h2 class="section-h"><span class="tick"></span>Written by the people who build the systems</h2>
       <div class="section-body">
         <p class="para">These articles come from the engineers and consultants who deliver this work, not from a marketing team. They cover the questions that come up before a project starts: which processes suit automation, what integration actually involves, where a person has to stay in the loop, and what tends to go wrong.</p>
-        <p class="para">If you are researching a specific problem, the <a href="/use-cases">use cases</a> describe complete deployments, and the <a href="/ai-genai-services">services pages</a> explain how an engagement is scoped and governed.</p>
+        <p class="para">If you are researching a specific problem, the case studies above describe complete deployments, and the <a href="/ai-genai-services">services pages</a> explain how an engagement is scoped and governed.</p>
       </div>
     </div>
   </section>
@@ -73,5 +72,4 @@
   .cat-chip i { font-style: normal; font-size: 9.5px; padding: 1px 7px; border-radius: 999px; background: rgba(255,255,255,.14); }
   .mono { font-family: var(--font-mono); }
   .uc-more { margin-top: 22px; }
-  .uc-more a { color: #b81c1c; }
 </style>

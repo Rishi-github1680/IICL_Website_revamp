@@ -4,19 +4,25 @@
   let openIdx = $state(-1);
   const toggle = (i) => { openIdx = openIdx === i ? -1 : i; };
   const close = () => { openIdx = -1; mobileOpen = false; };
+  // Escape closes the panel and returns focus to the control that opened it, rather
+  // than stranding it at the top of the document (Spec G14: keyboard-safe dismissal).
+  const onEscape = () => {
+    const i = openIdx;
+    close();
+    if (i >= 0) document.getElementById('navtrig-' + i)?.focus();
+  };
   const onWindowClick = (e) => { if (!e.target.closest('.nav-group')) openIdx = -1; };
 
   // iicl.in groups its AI Solutions menu into two titled columns.
   const INDUSTRY_SOL = ['iCognito.ai', 'iDental.ai', 'LexGenie.ai'];
 </script>
 
-<svelte:window on:keydown={(e) => e.key === 'Escape' && close()} on:click={onWindowClick} />
+<svelte:window on:keydown={(e) => e.key === 'Escape' && onEscape()} on:click={onWindowClick} />
 
 <div class="nav-bar">
   <div class="nav-inner">
     <a href="/" class="brand" onclick={close}>
       <img class="brand-logo" src="/iicl_logo.png" alt="IICL — Intelligence India.Com" />
-      <span class="brand-sub">Intelligence India.Com<br>Hyderabad · Raleigh</span>
     </a>
 
     <button class="hamburger" class:on={mobileOpen} aria-label="Menu" aria-expanded={mobileOpen} onclick={() => (mobileOpen = !mobileOpen)}>
@@ -27,12 +33,19 @@
       {#each MENU as item, i}
         {#if item.items || item.cols || item.mega === 'promo'}
           <div class="nav-group" class:active={openIdx === i} class:is-mega={!!item.mega}>
-            <button class="nav-link nav-trigger" aria-expanded={openIdx === i} onclick={() => toggle(i)}>
+            <button
+              class="nav-link nav-trigger"
+              id="navtrig-{i}"
+              aria-haspopup="true"
+              aria-expanded={openIdx === i}
+              aria-controls="navmenu-{i}"
+              onclick={() => toggle(i)}
+            >
               {item.label}<span class="caret" aria-hidden="true">▾</span>
             </button>
 
             {#if item.mega === 'promo'}
-              <div class="dropdown mega mega-promo">
+              <div class="dropdown mega mega-promo" id="navmenu-{i}" role="group" aria-labelledby="navtrig-{i}">
                 <a href={item.highlight.href} class="mm-highlight" onclick={close}>
                   <img src={item.highlight.img} alt={item.highlight.title} />
                   <span class="mm-h5">{item.highlight.title}</span>
@@ -42,7 +55,17 @@
             {:else if item.mega === 'products'}
               <!-- No image: the products are the content. Each row carries the product's
                    own accent dot and a one-line description, so the panel explains itself. -->
-              <div class="dropdown mega mega-products">
+              <div class="dropdown mega mega-products" id="navmenu-{i}" role="group" aria-labelledby="navtrig-{i}">
+                {#if item.services}
+                  <div class="mm-col">
+                    <span class="mm-h4">Services</span>
+                    {#each item.services as svc}
+                      <a href={svc.href} class="mm-item mm-item-svc" onclick={close}>
+                        <span class="mm-txt"><strong>{svc.label}</strong></span>
+                      </a>
+                    {/each}
+                  </div>
+                {/if}
                 <div class="mm-col">
                   <span class="mm-h4">Industry Solutions</span>
                   {#each item.items.filter((p) => INDUSTRY_SOL.includes(p.label)) as sub}
@@ -96,7 +119,7 @@
                 </a>
               </div>
             {:else if item.mega === 'columns'}
-              <div class="dropdown mega mega-columns">
+              <div class="dropdown mega mega-columns" id="navmenu-{i}" role="group" aria-labelledby="navtrig-{i}">
                 {#each item.cols as col}
                   <div class="mm-col">
                     <span class="mm-h4">{col.title}</span>
@@ -114,7 +137,7 @@
                 {/each}
               </div>
             {:else}
-              <div class="dropdown">
+              <div class="dropdown" id="navmenu-{i}" role="group" aria-labelledby="navtrig-{i}">
                 {#each item.items as sub}
                   <a href={sub.href} class="mm-link" onclick={close}>{sub.label}</a>
                 {/each}
@@ -145,16 +168,16 @@
   .brand { display: inline-flex; align-items: center; gap: 13px; text-decoration: none; flex: none; transition: opacity .2s; }
   .brand:hover { opacity: 0.82; }
   .brand-logo { height: 34px; width: auto; display: block; }
-  .brand-sub { font-size: 11px; line-height: 1.4; color: rgba(243,243,244,0.55); padding-left: 13px; border-left: 1px solid rgba(255,255,255,0.16); }
-
   .nav-links { display: flex; align-items: center; gap: 26px; }
   .nav-group { position: relative; }
 
   /* Light weight by design — the nav is a quiet rail, not a headline. */
   .nav-link { position: relative; font-family: inherit; font-size: 14.5px; font-weight: var(--w-body); letter-spacing: 0.005em;
     color: rgba(243,243,244,0.84); background: none; border: 0; cursor: pointer;
-    text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; transition: color .2s; }
-  .nav-link:hover { color: #ff5a4d; }
+    text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; padding: 4px 0;
+    transition: color .2s, transform .24s cubic-bezier(0.22, 1, 0.36, 1); }
+  /* A small lift on hover, so the word reacts to the pointer rather than only recolouring. */
+  .nav-link:hover, .nav-group:hover .nav-trigger { color: #ff5a4d; transform: translateY(-2px); }
   .nav-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; background: #ee2f2e;
     transform: scaleX(0); transform-origin: left; transition: transform .28s cubic-bezier(0.22,1,0.36,1); }
   .nav-link:hover::after, .nav-group:hover .nav-trigger::after, .nav-group.active .nav-trigger::after { transform: scaleX(1); }
@@ -166,11 +189,11 @@
   .talk { position: relative; display: inline-flex; align-items: center; gap: 9px; overflow: hidden;
     text-decoration: none; font-size: 14px; font-weight: var(--w-body); letter-spacing: 0.01em; color: #f3f3f4;
     padding: 8px 17px; border: 1px solid rgba(238,47,46,0.55); border-radius: 999px;
-    transition: border-color .3s, color .3s; }
+    transition: border-color .3s, color .3s, transform .24s cubic-bezier(0.22, 1, 0.36, 1); }
   .talk::before { content: ''; position: absolute; inset: 0; background: #ee2f2e; z-index: 0;
     transform: scaleX(0); transform-origin: left; transition: transform .42s cubic-bezier(0.22,1,0.36,1); }
   .talk-dot, .talk-text, .talk-arrow { position: relative; z-index: 1; }
-  .talk:hover { border-color: #ee2f2e; color: #fff; }
+  .talk:hover { border-color: #ee2f2e; color: #fff; transform: translateY(-2px); }
   .talk:hover::before { transform: scaleX(1); }
 
   .talk-dot { width: 6px; height: 6px; border-radius: 50%; background: #ee2f2e; flex: none;
@@ -205,13 +228,20 @@
   .dropdown.mega { position: fixed; left: 0; right: 0; margin: 14px auto 0; top: 60px; box-sizing: border-box; display: grid;
     background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 30px; border-radius: 10px; }
   /* Two even link columns with a full-width footer CTA underneath. */
+  .mm-item-svc { padding: 9px 10px; }
+  .mm-item-svc strong { font-size: 14px; }
   .mega-products { max-width: 720px; grid-template-columns: 1fr 1fr; gap: 8px 34px; padding: 24px 24px 10px; }
   /* Single promo panel — anchored under its trigger rather than spanning the viewport. */
   .dropdown.mega-promo { position: absolute; top: 100%; left: 0; right: auto; width: 340px; max-width: 340px;
     margin-top: 14px; grid-template-columns: 1fr; padding: 22px; }
-  .mega-columns { max-width: 760px; grid-template-columns: repeat(3, 1fr); gap: 6px 20px; padding: 22px 18px; }
-  .mega-columns .mm-link { font-size: 14px; padding: 6px 0; }
-
+  /* Anchored under its own trigger rather than centred on the viewport, and right-
+     aligned because About Us sits near the end of the bar. `grid-auto-flow: column`
+     with content-sized tracks means the panel is exactly as wide as the columns it
+     actually has — a fixed 3-track grid left a whole empty column of dead space. */
+  .dropdown.mega-columns { position: absolute; top: 100%; left: auto; right: 0; margin: 14px 0 0;
+    width: max-content; max-width: min(660px, calc(100vw - 32px));
+    grid-auto-flow: column; grid-auto-columns: minmax(136px, max-content);
+    gap: 4px 34px; padding: 20px 22px; }
   /* Icon rows for the About Us panel. The icon is a mask so every glyph takes one
      ink colour — the source SVGs are a mix of palettes and looked scattered raw. */
   .mm-row { display: flex; align-items: center; gap: 10px; text-decoration: none;
@@ -297,7 +327,6 @@
 
   @media (max-width: 980px) {
     .hamburger { display: flex; }
-    .brand-sub { display: none; }
     .nav-links { position: fixed; inset: 60px 0 auto; flex-direction: column; align-items: stretch; gap: 0; background: #070707; border-bottom: 1px solid rgba(238,47,46,0.25); padding: 8px 20px 24px; max-height: calc(100vh - 60px); overflow-y: auto; display: none; }
     .nav-links.open { display: flex; }
     .nav-group { border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -319,7 +348,9 @@
     .mm-h4 { color: rgba(244,242,238,0.45); margin-top: 10px; padding: 0; }
     .mm-link { color: #f4f2ee; }
     /* Icon rows on the dark mobile sheet. */
-    .mega-columns { padding: 0 0 10px; gap: 0; }
+    /* Undo the desktop anchoring and column flow — on the sheet it stacks. */
+    .dropdown.mega-columns { position: static; width: auto; max-width: none; margin: 0;
+      grid-auto-flow: row; grid-auto-columns: auto; padding: 0 0 10px; gap: 0; }
     .mm-row { padding: 9px 0; border-radius: 0; }
     .mm-row:hover { background: transparent; }
     .mm-ico::before { background: rgba(244,242,238,0.75); }

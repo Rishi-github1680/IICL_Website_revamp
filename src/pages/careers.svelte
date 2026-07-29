@@ -8,6 +8,7 @@
   // they never carry the primary action. Below ~900px it degrades to a plain grid.
   import { onMount } from 'svelte';
   import Layout from '../Layout.svelte';
+  import { hpan } from '../hscroll.js';
 
   const ROLES = [
     { title: 'AI / ML Engineer', team: 'Engineering', loc: 'Hyderabad', type: 'Full-time',
@@ -44,7 +45,6 @@
 
   let active = $state(0);
   let stageEl;
-  let dragging = $state(false);
   // Per-card signed distance from the centre of the viewport, in card-steps.
   let dist = $state([]);
 
@@ -89,42 +89,17 @@
     ].join(';');
   }
 
-  // Click-and-drag for mouse users; touch and trackpad scroll the rail natively.
-  function deckDrag(node) {
+  // The deck pans with the mouse wheel (use:hpan); touch and trackpad scroll it
+  // natively. No dragging, so a click on a card is only ever a click on the card.
+  function deck(node) {
     stageEl = node;              // authoritative reference
-    let x0 = 0, left0 = 0, moved = 0, on = false;
-    const down = (e) => {
-      if (e.pointerType === 'touch' || (e.button ?? 0) !== 0) return;
-      on = true; dragging = true; moved = 0; x0 = e.clientX; left0 = node.scrollLeft;
-    };
-    const move = (e) => {
-      if (!on) return;
-      const dx = e.clientX - x0;
-      moved = Math.max(moved, Math.abs(dx));
-      node.scrollLeft = left0 - dx;
-    };
-    const up = () => {
-      if (!on) return;
-      on = false; dragging = false;
-      go(Math.round(node.scrollLeft / step()));
-    };
-    const swallow = (e) => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } };
-
-    node.addEventListener('pointerdown', down);
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', up);
-    node.addEventListener('click', swallow, true);
+    const pan = hpan(node);
     node.addEventListener('scroll', measure, { passive: true });
     requestAnimationFrame(measure);   // after first layout, so clientWidth is real
 
     return {
       destroy() {
-        node.removeEventListener('pointerdown', down);
-        window.removeEventListener('pointermove', move);
-        window.removeEventListener('pointerup', up);
-        window.removeEventListener('pointercancel', up);
-        node.removeEventListener('click', swallow, true);
+        pan.destroy();
         node.removeEventListener('scroll', measure);
       },
     };
@@ -159,7 +134,7 @@
     <div class="wrap">
       <div class="deck-head">
         <h2 class="section-h"><span class="tick"></span>Currently hiring</h2>
-        <span class="deck-count mono">{shown.length} open</span>
+        <span class="deck-count mono">Current openings</span>
       </div>
 
       <div class="team-row" role="group" aria-label="Filter roles by team">
@@ -173,8 +148,7 @@
     <div class="stage-outer">
       <div
         class="stage"
-        class:is-dragging={dragging}
-        use:deckDrag
+        use:deck
         role="group" aria-roledescription="carousel" aria-label="Open roles"
       >
         {#each shown as r, i (r.title)}
@@ -250,11 +224,12 @@
      except whichever card is nearest the centre. */
   .stage { position: relative; height: 470px; perspective: 1500px; transform-style: preserve-3d;
     display: flex; align-items: center; gap: 24px;
-    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+    /* Proximity so wheel panning is continuous; the coverflow pose follows scroll,
+       and cards still settle centred when you stop. */
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity;
     scrollbar-width: none; -ms-overflow-style: none;
-    padding-inline: calc(50% - 150px); cursor: grab; }
+    padding-inline: calc(50% - 150px); }
   .stage::-webkit-scrollbar { display: none; }
-  .stage.is-dragging { cursor: grabbing; user-select: none; scroll-snap-type: none; }
 
   .card { position: relative; flex: 0 0 300px; height: 400px; box-sizing: border-box;
     scroll-snap-align: center;

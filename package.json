@@ -6,8 +6,10 @@
   "scripts": {
     "gen": "node scripts/gen-pages.mjs",
     "dev": "npm run gen && vite --host 0.0.0.0",
-    "build": "npm run gen && vite build",
-    "preview": "npm run gen && vite preview --host 0.0.0.0"
+    "build": "npm run gen && vite build && npm run build:ssr && npm run prerender",
+    "preview": "npm run gen && vite preview --host 0.0.0.0",
+    "build:ssr": "vite build --config vite.config.ssr.js",
+    "prerender": "node scripts/prerender.mjs"
   },
   "dependencies": {
     "three": "0.179.1"

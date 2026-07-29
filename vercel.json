@@ -3,5 +3,32 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/contact",
+      "destination": "/contactus",
+      "permanent": true
+    },
+    {
+      "source": "/contact/",
+      "destination": "/contactus",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us",
+      "destination": "/contactus",
+      "permanent": true
+    },
+    {
+      "source": "/staff-augmentation",
+      "destination": "/gcc-technology-teams",
+      "permanent": true
+    },
+    {
+      "source": "/iCognito",
+      "destination": "/icognito",
+      "permanent": true
+    }
+  ]
 }

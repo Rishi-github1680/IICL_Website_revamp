@@ -5,6 +5,7 @@
 </script>
 
 <ServiceLayout
+  autoFaq={false}
   kicker="Service"
   h1="WhatsApp Business API Integration for Sales and Customer Service"
   lede="Connect WhatsApp to your website, CRM, ERP and payment gateway to generate leads, take orders, send updates and automate customer support."
@@ -63,7 +64,7 @@
         <p class="para">We’ve deployed GPT-4- and Claude-based WhatsApp bots that understand complex queries, retrieve contextual answers from PDFs or knowledge bases using RAG, and provide 24/7 support without generating hallucinations.</p>
         <p class="para">Built a WhatsApp-only shopping experience for hyperlocal D2C brands, from product discovery to payment and real-time delivery tracking, using interactive message templates and WhatsApp Catalogs.</p>
         <p class="para">Integrated AI-driven bots for microfinance and neobanking apps, enabling balance checks, loan EMI reminders, eKYC collection, and fraud alerts securely over WhatsApp using end-to-end encryption.</p>
-        <p class="para">Deployed multilingual bots for appointment booking, report sharing, post-op care, and medicine reminders, integrated with HIS and secure document storage systems, HIPAA-aligned workflows.</p>
+        <p class="para">Deployed multilingual bots for appointment booking, report sharing, post-op care, and medicine reminders, integrated with HIS and secure document storage systems, workflows designed around the customer’s own regulatory obligations, which are confirmed per deployment.</p>
         <p class="para">Created auto-schedulers and drip campaigns for student onboarding, class reminders, exam prep tips, and fee collection for universities and edtech platforms, with counsellor workload reductions of around 60% commonly reported.</p>
       </div>
     </div>

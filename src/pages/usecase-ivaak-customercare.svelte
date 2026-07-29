@@ -12,6 +12,19 @@
   heroBanner="/img/banners/A11-banner-usecases.png"
   article
 >
+  <!-- G12 classification. Until the baseline, eligible population, measurement period,
+       calculation and customer publication approval exist, this page is illustrative and
+       must say so above the fold. -->
+  <section class="page-section">
+    <div class="wrap">
+      <p class="para uc-class">
+        <strong>Illustrative scenario.</strong> This page describes a representative
+        workflow pattern, not a measured customer deployment. Figures are not published
+        until a baseline, measurement period, calculation method and the customer's
+        approval to publish are in place.
+      </p>
+    </div>
+  </section>
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
@@ -111,9 +124,9 @@
 
   <section class="page-section shade">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>A Real-World Customer Support Transformation Scenario</h2>
+      <h2 class="section-h"><span class="tick"></span>A representative customer-support transformation</h2>
       <div class="section-body">
-        <p class="para">A rapidly growing enterprise support operation was struggling with increasing customer communication volumes across voice, WhatsApp, chat, and email channels.</p>
+        <p class="para">Consider a growing enterprise support operation facing rising volumes across voice, WhatsApp, chat and email.</p>
       </div>
     </div>
   </section>
@@ -241,3 +254,10 @@
     </div>
   </section>
 </Layout>
+
+<style>
+  .uc-class { padding: 14px 18px; border: 1px solid var(--line); border-left: 3px solid var(--brand);
+    border-radius: 0 6px 6px 0; background: #fff; font-size: var(--fs-small); line-height: 1.65;
+    color: var(--muted); }
+  .uc-class strong { color: var(--ink); }
+</style>

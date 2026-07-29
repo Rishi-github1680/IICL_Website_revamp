@@ -1,0 +1,79 @@
+/* The no-3D backdrop, shared by the standalone model routes (styles.css) and the
+   content pages (theme.css). Markup lives in backdrop-markup.js.
+
+   It is drawn as a schematic — hub, satellites, links with signal moving along
+   them — rather than a glow, so it reads as a picture of the product rather than
+   a loading state. Pure CSS + inline SVG: no GPU, no Three.js. */
+
+.ai-fb { position: absolute; inset: 0; overflow: hidden; isolation: isolate;
+  background: radial-gradient(circle at 50% 45%, #150609 0%, #0a0507 45%, #050505 100%); }
+
+/* Optional photograph behind the schematic, for pages that have their own art. */
+.ai-fb-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: .3; filter: grayscale(.35) contrast(1.05); }
+
+/* Slow drifting warmth, so the still frame is not completely dead. */
+.ai-fb-wash { position: absolute; inset: -20%; pointer-events: none;
+  background:
+    radial-gradient(34% 28% at 32% 36%, rgba(237,16,29,.2), transparent 70%),
+    radial-gradient(30% 24% at 70% 64%, rgba(255,90,77,.14), transparent 72%);
+  filter: blur(24px); animation: aiWash 26s ease-in-out infinite alternate; }
+@keyframes aiWash {
+  from { transform: translate3d(-2%, -1%, 0) scale(1); }
+  to   { transform: translate3d(2%, 2%, 0) scale(1.07); }
+}
+
+.ai-fb-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* Links: dashed, with the dashes crawling outward from the hub. */
+.ai-fb .fb-links path { stroke-dasharray: 5 12; animation: fbFlow 3.6s linear infinite; }
+.ai-fb .fb-links path:nth-child(2) { animation-duration: 4.4s; }
+.ai-fb .fb-links path:nth-child(3) { animation-duration: 3.1s; }
+.ai-fb .fb-links path:nth-child(4) { animation-duration: 4.9s; }
+.ai-fb .fb-links path:nth-child(5) { animation-duration: 4.1s; }
+.ai-fb .fb-links path:nth-child(6) { animation-duration: 3.4s; }
+@keyframes fbFlow { to { stroke-dashoffset: -68; } }
+
+/* Satellites */
+.ai-fb .fb-sats circle { fill: #ff5a4d; }
+.ai-fb .fb-sats .fb-halo { fill: none; stroke: #ed101d; stroke-opacity: .45;
+  animation: fbHalo 4.2s ease-out infinite; transform-origin: center; transform-box: fill-box; }
+.ai-fb .fb-sats g:nth-child(2) .fb-halo { animation-delay: -.7s; }
+.ai-fb .fb-sats g:nth-child(3) .fb-halo { animation-delay: -1.4s; }
+.ai-fb .fb-sats g:nth-child(4) .fb-halo { animation-delay: -2.1s; }
+.ai-fb .fb-sats g:nth-child(5) .fb-halo { animation-delay: -2.8s; }
+.ai-fb .fb-sats g:nth-child(6) .fb-halo { animation-delay: -3.5s; }
+@keyframes fbHalo { 0% { transform: scale(.55); opacity: .9; } 100% { transform: scale(1.5); opacity: 0; } }
+
+.ai-fb .fb-sats rect { fill: rgba(255,255,255,.05); stroke: rgba(255,255,255,.14); }
+.ai-fb .fb-sats text { fill: rgba(244,242,238,.82); font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 12px; letter-spacing: .18em; }
+
+/* Hub */
+.ai-fb .fb-hub-glow { animation: fbPulse 4s ease-in-out infinite; transform-origin: 600px 350px; }
+@keyframes fbPulse { 50% { transform: scale(1.12); opacity: .8; } }
+.ai-fb .fb-hub-plate { fill: #0d0e12; stroke: #ed101d; stroke-width: 1.6; }
+.ai-fb .fb-hub-ring { fill: none; stroke: rgba(255,255,255,.16); stroke-width: 1.2;
+  animation: fbSpin 40s linear infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes fbSpin { to { rotate: 360deg; } }
+.ai-fb .fb-hub text { fill: #fff; font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 17px; letter-spacing: .16em; text-anchor: middle; }
+
+/* Readout */
+.ai-fb .fb-meter text { fill: rgba(244,242,238,.5); font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px; letter-spacing: .22em; }
+.ai-fb .fb-meter-bg { fill: rgba(255,255,255,.1); }
+.ai-fb .fb-meter-fill { fill: #ed101d; transform-origin: left center; transform-box: fill-box;
+  animation: fbFill 5.5s ease-in-out infinite; }
+@keyframes fbFill { 0%, 100% { transform: scaleX(.18); } 55% { transform: scaleX(.86); } }
+
+/* Embedded (ui=0) scenes keep the schematic but let the page show through. */
+.transparent .ai-fb { background: radial-gradient(circle at 50% 45%, rgba(21,6,9,.92) 0%, rgba(5,5,5,.7) 55%, rgba(5,5,5,0) 100%); }
+
+@media (max-width: 700px) {
+  .ai-fb .fb-sats text, .ai-fb .fb-sats rect { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-fb-wash, .ai-fb .fb-links path, .ai-fb .fb-halo,
+  .ai-fb .fb-hub-glow, .ai-fb .fb-hub-ring, .ai-fb .fb-meter-fill { animation: none; }
+}

@@ -5,7 +5,7 @@
 // Three products are commented out rather than deleted — their pages still build,
 // they are simply unlinked from the menus. Uncomment a line to bring one back.
 export const PRODUCTS = [
-  { label: 'iCognito.ai', acc: '#ff6361', href: '/iCognito', tag: 'Conversational AI', desc: 'Conversational AI across every channel', logo: '/img/icognito.svg', thumb: '/img/banners/A4-banner-icognito.png', site: 'https://icognito.ai' },
+  { label: 'iCognito.ai', acc: '#ff6361', href: '/icognito', tag: 'Conversational AI', desc: 'Conversational AI across every channel', logo: '/img/icognito.svg', thumb: '/img/banners/A4-banner-icognito.png', site: 'https://icognito.ai' },
   { label: 'iDental.ai', acc: '#ff413f', href: '/idental', tag: 'Dental SaaS', desc: 'Practice management for dental clinics', logo: '/img/idental.svg', thumb: '/img/banners/A6-banner-idental.png', site: 'https://idental.ai' },
   { label: 'iVaak.ai', acc: '#ee2f2e', href: '/ivaak', tag: 'Voice AI', desc: 'Multilingual AI voice agents', logo: '/img/ivaak.svg', thumb: '/img/banners/A2-banner-ivaak.png', site: 'https://ivaak.ai' },
   { label: 'TruFix.ai', acc: '#c11514', href: '/trufix', tag: 'AI Ticketing', desc: 'Ticketing that verifies resolutions', logo: '/img/trufix.svg', thumb: '/img/banners/A8-banner-trufix.png', site: 'https://trufix.ai' },
@@ -41,39 +41,62 @@ export const INDUSTRIES = [
   { label: 'HR', href: '/hr', icon: '/img/ind-hr.svg' },
 ];
 
-export const RESOURCES = [
-  { label: 'Use Cases', href: '/use-cases', icon: '/img/nav-usecases.svg' },
-  { label: 'Blog', href: '/blog', icon: '/img/nav-blog.svg' },
+// Blog now sits in the Company column; the separate Use Cases index was removed,
+// so there is no Resources group left to render.
+
+// Insights: the journal and the case studies. Kept as its own top-level destination
+// because Spec G3 puts it in the header, not inside a company panel.
+export const INSIGHTS = [
+  { label: 'Journal', href: '/blog', icon: '/img/nav-blog.svg' },
+  { label: 'Use Cases', href: '/blog#use-cases', icon: '/img/nav-usecases.svg' },
 ];
 
-export const MENU = [
-  // Agentic AI is a single promo panel — image + copy, no product list.
-  { label: 'Agentic AI', mega: 'promo',
-    highlight: { href: '/agentic-ai', img: '/img/agentic.png', title: 'Agentic AI Development', text: 'Design, deploy and orchestrate autonomous AI agents that carry out multi-step work across your systems, with human approval built into the workflow.' } },
-  { label: 'AI Solutions', mega: 'products', items: PRODUCTS,
-    highlight: { href: '/ai-genai-services', img: '/img/ai-solution-banner.webp', title: 'Custom AI Solutions', text: 'Need something tailored? Our experts can build it for you.' } },
-  // Staff Augmentation is a top-level destination, not buried in a panel.
-  { label: 'Staff Augmentation', href: '/staff-augmentation' },
-  { label: 'About Us', mega: 'columns', cols: [
-    { title: 'Company', links: [
-      { label: 'About Us', href: '/aboutus', icon: '/img/nav-about.svg' },
-      { label: 'Careers', href: '/careers', icon: '/img/nav-careers.svg' },
-      // Contact Us lives in the top bar as the CTA — repeating it here is noise.
-    ] },
-    // Services column withdrawn from this panel for now. The pages still build and
-    // are still linked from the footer; uncomment to bring the column back.
-    // { title: 'Services', links: SERVICES },
-    { title: 'Industries', links: INDUSTRIES },
-    { title: 'Resources', links: RESOURCES },
-  ] },
-  { label: 'Contact Us', href: '/contactus', cta: true },
+export const COMPANY_LINKS = [
+  { label: 'About IICL', href: '/aboutus', icon: '/img/nav-about.svg' },
+  { label: 'Careers', href: '/careers', icon: '/img/nav-careers.svg' },
 ];
+
+// Talent. Spec B3/G3: "Do not use IT Staff Augmentation as the only top-level label
+// for the approved GCC pathway" — GCC Technology Teams is the destination, and the
+// legacy staffing route redirects into it (Stage 4).
+export const TALENT = [
+  { label: 'GCC Technology Teams', href: '/gcc-technology-teams', icon: '/img/nav-gcc.svg' },
+  { label: 'Careers', href: '/careers', icon: '/img/nav-careers.svg' },
+];
+
+// Header hierarchy per Spec G3:
+//   AI Solutions · Talent · Industries · Insights · Company · Discuss Your Requirement
+// Agentic AI and Enterprise AI & GenAI sit inside AI Solutions rather than competing
+// with it as separate company identities.
+export const MENU = [
+  { label: 'AI Solutions', mega: 'products', items: PRODUCTS,
+    services: [
+      { label: 'Enterprise AI & GenAI', href: '/ai-genai-services' },
+      { label: 'Agentic AI', href: '/agentic-ai' },
+    ],
+    highlight: { href: '/ai-genai-services', img: '/img/ai-solution-banner.webp', title: 'Enterprise AI & GenAI', text: 'Consulting and implementation, from use case to governed production.' } },
+  { label: 'Talent', mega: 'columns', cols: [
+    { title: 'Technology teams', links: TALENT },
+  ] },
+  { label: 'Industries', mega: 'columns', cols: [
+    { title: 'Industries', links: INDUSTRIES },
+  ] },
+  { label: 'Insights', mega: 'columns', cols: [
+    { title: 'Insights', links: INSIGHTS },
+  ] },
+  { label: 'Company', mega: 'columns', cols: [
+    { title: 'Company', links: COMPANY_LINKS },
+  ] },
+  { label: 'Discuss Your Requirement', href: '/contactus', cta: true },
+];
+
 
 // Hero artwork — original SVGs generated by scripts/gen-industry-art.mjs.
 // One visual family (neural mesh + IICL red on near-black, with HUD instrument chrome)
 // and a motif per page, so the site looks designed rather than stocked. Vector: ~20KB
 // each and sharp at any size. Regenerate with: node scripts/gen-industry-art.mjs
 export const PAGE_ART = {
+  '/gcc-technology-teams': { img: '/img/industry/staff-augmentation.svg', alt: 'Schematic of specialised technology capability domains forming a GCC team' },
   healthcare:       { img: '/img/industry/healthcare.svg',     alt: 'Heartbeat trace running through a neural network, representing AI in healthcare' },
   manufacturing:    { img: '/img/industry/manufacturing.svg',  alt: 'Robotic arm and gear system over a production line, representing AI in manufacturing' },
   finance:          { img: '/img/industry/finance.svg',        alt: 'Rising candlestick chart with a trend line, representing AI in finance' },

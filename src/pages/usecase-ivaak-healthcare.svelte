@@ -15,6 +15,19 @@
   ]}
   article
 >
+  <!-- G12 classification. Until the baseline, eligible population, measurement period,
+       calculation and customer publication approval exist, this page is illustrative and
+       must say so above the fold. -->
+  <section class="page-section">
+    <div class="wrap">
+      <p class="para uc-class">
+        <strong>Illustrative scenario.</strong> This page describes a representative
+        workflow pattern, not a measured customer deployment. Figures are not published
+        until a baseline, measurement period, calculation method and the customer's
+        approval to publish are in place.
+      </p>
+    </div>
+  </section>
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
@@ -126,7 +139,7 @@
 
   <section class="page-section">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>Real-World Use Case: Multi-Specialty Clinic Transformation</h2>
+      <h2 class="section-h"><span class="tick"></span>Representative workflow: Multi-Specialty Clinic Transformation</h2>
       <div class="section-body">
         <p class="para">One healthcare scenario highlighted in the iVaak AI product brochure involves a growing multi-specialty clinic handling between 200–400 patient calls per day.</p>
       </div>
@@ -146,7 +159,7 @@
     <div class="wrap">
       <h2 class="section-h"><span class="tick"></span>The iVaak AI Solution</h2>
       <div class="section-body">
-        <p class="para">The clinic deployed a HIPAA-ready AI Voice Agent capable of answering every inbound call instantly, booking appointments automatically, handling billing and FAQ inquiries, managing prescription refill workflows, sending WhatsApp confirmations, escalating urgent medical cases, and automating reminder calls. The AI integrated directly with the clinic's scheduling platform and healthcare workflows.</p>
+        <p class="para">The clinic deployed a AI Voice Agent designed to answer inbound calls, booking appointments automatically, handling billing and FAQ inquiries, managing prescription refill workflows, sending WhatsApp confirmations, escalating urgent medical cases, and automating reminder calls. The AI integrated directly with the clinic's scheduling platform and healthcare workflows.</p>
       </div>
     </div>
   </section>
@@ -157,8 +170,8 @@
       <div class="section-body">
         <p class="para">This demonstrates how conversational AI can directly improve both operational efficiency and patient experience simultaneously.</p>
         <ul class="list">
-          <li>Call answer rate improved from 60% → 99%</li>
-          <li>Missed appointments dropped below 8%</li>
+          <li>Inbound calls answered consistently rather than abandoned at peak times</li>
+          <li>Fewer missed appointments through automated reminders and confirmations</li>
           <li>Routine call handling workload reduced significantly</li>
           <li>Staff focused more on patient care instead of repetitive administrative calls</li>
         </ul>
@@ -213,9 +226,9 @@
 
   <section class="page-section shade">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>6. HIPAA-Ready Security &amp; Compliance</h2>
+      <h2 class="section-h"><span class="tick"></span>6. Security and compliance considerations</h2>
       <div class="section-body">
-        <p class="para">Healthcare communication involves highly sensitive patient data. iVaak AI includes end-to-end encryption, audit-ready logging, role-based access controls, consent management, HIPAA-ready architecture, and DPDP-compliant workflows — making it suitable for regulated healthcare environments.</p>
+        <p class="para">Healthcare communication involves highly sensitive patient data. iVaak AI provides end-to-end encryption, audit-ready logging, role-based access controls and consent management. Whether a deployment meets HIPAA, the DPDP Act or any other obligation depends on the full architecture, the selected providers, the configured controls and the operating procedures — we map what is covered and state plainly what remains yours to satisfy.</p>
       </div>
     </div>
   </section>
@@ -300,3 +313,10 @@
     </div>
   </section>
 </Layout>
+
+<style>
+  .uc-class { padding: 14px 18px; border: 1px solid var(--line); border-left: 3px solid var(--brand);
+    border-radius: 0 6px 6px 0; background: #fff; font-size: var(--fs-small); line-height: 1.65;
+    color: var(--muted); }
+  .uc-class strong { color: var(--ink); }
+</style>

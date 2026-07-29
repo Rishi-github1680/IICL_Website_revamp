@@ -12,6 +12,19 @@
   heroBanner="/img/banners/A11-banner-usecases.png"
   article
 >
+  <!-- G12 classification. Until the baseline, eligible population, measurement period,
+       calculation and customer publication approval exist, this page is illustrative and
+       must say so above the fold. -->
+  <section class="page-section">
+    <div class="wrap">
+      <p class="para uc-class">
+        <strong>Illustrative scenario.</strong> This page describes a representative
+        workflow pattern, not a measured customer deployment. Figures are not published
+        until a baseline, measurement period, calculation method and the customer's
+        approval to publish are in place.
+      </p>
+    </div>
+  </section>
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
@@ -173,9 +186,9 @@
 
   <section class="page-section shade">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>Real-World Use Case: AI-Powered Lead Conversion at Scale</h2>
+      <h2 class="section-h"><span class="tick"></span>Representative workflow: AI-assisted lead qualification</h2>
       <div class="section-body">
-        <p class="para">A large real estate developer was handling over 3,000 monthly property inquiries generated through Google Ads, housing portals, Facebook campaigns, and WhatsApp campaigns.</p>
+        <p class="para">Consider a developer receiving a high volume of monthly property enquiries across Google Ads, housing portals, social campaigns and WhatsApp.</p>
       </div>
     </div>
   </section>
@@ -204,8 +217,8 @@
       <div class="section-body">
         <p class="para">Most importantly, sales executives spent less time handling repetitive inquiries and more time closing serious buyers.</p>
         <ul class="list">
-          <li>100% lead response coverage</li>
-          <li>Significant reduction in lead drop-offs</li>
+          <li>Consistent response coverage on inbound enquiries</li>
+          <li>Fewer enquiries lost before first contact</li>
           <li>Faster site visit scheduling</li>
           <li>Improved sales productivity</li>
           <li>Better lead quality visibility</li>
@@ -335,3 +348,10 @@
     </div>
   </section>
 </Layout>
+
+<style>
+  .uc-class { padding: 14px 18px; border: 1px solid var(--line); border-left: 3px solid var(--brand);
+    border-radius: 0 6px 6px 0; background: #fff; font-size: var(--fs-small); line-height: 1.65;
+    color: var(--muted); }
+  .uc-class strong { color: var(--ink); }
+</style>

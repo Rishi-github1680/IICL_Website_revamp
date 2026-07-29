@@ -1,3 +1,5 @@
+@import "./fonts.css";
+@import "./backdrop.css";
 /* IICL design system — the single source for type, spacing and the shared
    interactive components. Imported once from page.js and IICLHero.svelte, so it
    applies to every content page. (styles.css is separate; it only dresses the
@@ -14,14 +16,19 @@
   --w-medium: 500;
   --w-heading: 600;
 
-  /* Layout container. The gutter is fixed at 32px on desktop and 24px on phones —
-     one number for the whole site, so nothing invents its own edge distance. */
-  --wrap-max: 1680px;
-  --wrap-pad: 32px;
+  /* Layout container. The gutter is one number for the whole site, so nothing
+     invents its own edge distance. Content pages sit at 48px; industry pages
+     override it to 32px so their wider grids fill more of the screen. */
+  /* 1680px ran the content almost to the edges of a wide monitor. 1360 keeps a real
+     margin either side, so the page reads as a centred column rather than a
+     wall-to-wall stretch. */
+  --wrap-max: 1360px;
+  --wrap-pad: 48px;
 
-  /* Spacing scale. Sections sit 32px apart in total, so the padding either side
-     of the join is half that. */
-  --space-section: 16px;   /* section top/bottom padding → 32px between sections */
+  /* Spacing scale. Sections sit 56px apart in total, so the padding either side
+     of the join is half that — 32px total was cramped enough that sections ran
+     into each other, most visibly on the product pages. */
+  --space-section: 28px;   /* section top/bottom padding → 56px between sections */
   --space-card: 16px;      /* card interior */
   --space-head: 10px;      /* heading → its content */
   --space-block: 12px;     /* between sibling blocks */

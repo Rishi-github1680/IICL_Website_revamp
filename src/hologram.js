@@ -18,7 +18,8 @@ const stage = createStage({
   fogDensity: 0.024,
   minDistance: 1.6, // allow the scroll to dolly all the way in
   maxDistance: 13,
-  zoomNear: 0.27, // deep dive — ends inside the brain (9 → ~2.4)
+  zoomNear: 0.52, // dive that still frames the whole brain — closer than this and
+                  // the form is cropped at the sides by the time chapter 1 is on screen
 });
 
 const group = new THREE.Group();

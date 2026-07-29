@@ -15,6 +15,14 @@
     kicker = 'Service', h1 = '', lede = '', heroImage = null,
     specs = [],            // [{ k, v }] — the strip along the bottom of the hero
     path = '', faqs = null, cta = null, ctaHref = '/contactus',
+    // The closing band used to hard-code "Start with one day" and a 1-day-workshop CTA.
+    // Spec E section 2 forbids that fixed-duration message on the Agentic AI page, and
+    // it was wrong on several others too, so pages now supply their own closing copy.
+    bandKicker = 'Start with one process',
+    bandHeading = "Bring us one process. We'll show you what an agent does with it.",
+    // Pages that still write their own .faq-list markup opt out, so the questions are
+    // not rendered twice. New pages should leave this on.
+    autoFaq = true,
     children,
   } = $props();
 
@@ -86,6 +94,8 @@
 
 <div bind:this={rootEl} class="svc-root">
   <Cursor />
+  <!-- Spec G14: a skip link, and a real <main> landmark for the page content. -->
+  <a class="skip-link" href="#main">Skip to main content</a>
   <Nav />
 
   <header class="svc-hero">
@@ -103,13 +113,10 @@
       </div>
     </div>
 
-    {#if specs.length}
-      <div class="svc-specs">
-        {#each specs as s}
-          <div class="spec"><span class="spec-k mono">{s.k}</span><span class="spec-v">{s.v}</span></div>
-        {/each}
-      </div>
-    {/if}
+    <!-- The spec strip that used to sit here was removed: it read as a row of cards
+         wedged under the hero. `specs` is still accepted so the pages keep their data
+         and it can be brought back without editing every page. -->
+
   </header>
 
   <div bind:this={bodyEl} class="svc-body">
@@ -129,16 +136,34 @@
       </div>
     </aside>
 
-    <main class="svc-content">
+    <main id="main" class="svc-content">
       {@render children?.()}
+
+      <!-- Rendered from the same `faqs` prop that feeds the FAQ structured data, so the
+           two cannot diverge (Spec F4: mark up only visible, verified content). -->
+      {#if autoFaq && faqs && faqs.length}
+        <section class="page-section faq-section">
+          <div class="wrap">
+            <h2 class="section-h"><span class="tick"></span>Common questions</h2>
+            <div class="faq-list">
+              {#each faqs as f}
+                <details class="faq-item" name="faq">
+                  <summary class="faq-q">{f.q}<span class="faq-mark" aria-hidden="true"></span></summary>
+                  <div class="faq-a"><p class="para">{f.a}</p></div>
+                </details>
+              {/each}
+            </div>
+          </div>
+        </section>
+      {/if}
     </main>
   </div>
 
   <div class="cta-band">
     <div class="wrap">
-      <span class="mono cta-kicker">Start with one day</span>
-      <h2 class="cta-h2">Bring us one process. We'll show you what an agent does with it.</h2>
-      <a href={ctaHref} class="cta cta-big">{cta || 'Book the 1-day workshop'} <span class="mono">→</span></a>
+      <span class="mono cta-kicker">{bandKicker}</span>
+      <h2 class="cta-h2">{bandHeading}</h2>
+      <a href={ctaHref} class="cta cta-big">{cta || 'Talk to us'} <span class="mono">→</span></a>
     </div>
   </div>
 
@@ -146,7 +171,15 @@
 </div>
 
 <style>
+  /* Off-screen until focused, then a solid, readable target. */
+  :global(.skip-link) { position: absolute; left: 8px; top: -60px; z-index: 200;
+    padding: 10px 18px; background: #ee2f2e; color: #fff; text-decoration: none;
+    font-size: 14px; font-weight: 600; border-radius: 0 0 6px 6px; transition: top .18s ease; }
+  :global(.skip-link:focus) { top: 0; }
   .svc-root { --red: #ee2f2e; --ink: #16171a; --muted: #55585e; --line: #e6e3de;
+    /* Service pages keep the pre-48px gutter — the sticky index rail already
+       indents the content, so the wider site gutter doubled up here. */
+    --wrap-pad: 32px;
     background: #fff; color: var(--ink); font-family: var(--font); min-height: 100vh; }
   .svc-root :global(.mono) { font-family: var(--font-mono); }
   .svc-root :global(.wrap) { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
@@ -176,14 +209,6 @@
     font-weight: 600; color: #fff; max-width: 18ch; text-shadow: 0 2px 30px rgba(0,0,0,0.55); }
   .svc-lede { margin: 16px 0 0; max-width: 56ch; font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.74); }
   .svc-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
-
-  .svc-specs { position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.14);
-    background: rgba(6,6,6,0.55); backdrop-filter: blur(6px); }
-  .svc-specs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; }
-  .spec { padding: 20px 26px; border-left: 1px solid rgba(255,255,255,0.09); display: flex; flex-direction: column; gap: 6px; }
-  .spec:first-child { border-left: 0; padding-left: max(32px, calc(50vw - 508px)); }
-  .spec-k { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); }
-  .spec-v { font-size: 15px; line-height: 1.45; color: rgba(244,242,238,0.86); }
 
   /* ── Body: sticky index rail beside the content column ── */
   .svc-body { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box;
@@ -251,9 +276,6 @@
   @media (max-width: 760px) {
     .svc-h1 { max-width: none; }
     .svc-hero { padding-top: 84px; min-height: 0; }
-    .svc-specs { grid-auto-flow: row; }
-    .spec { border-left: 0; border-top: 1px solid rgba(255,255,255,0.09); padding-left: 32px !important; }
-    .spec:first-child { border-top: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
     .svc-content :global(.page-section.reveal) { opacity: 1; transform: none; transition: none; }

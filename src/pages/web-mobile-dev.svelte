@@ -5,6 +5,7 @@
 </script>
 
 <ServiceLayout
+  autoFaq={false}
   kicker="Service"
   h1="Custom Web and Mobile Application Development"
   lede="Custom enterprise portals, mobile apps, SaaS products and customer platforms, built with optional AI features and supported after launch."

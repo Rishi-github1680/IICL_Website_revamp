@@ -9,6 +9,9 @@
   import Footer from './Footer.svelte';
   import { PRODUCTS } from './menu.js';
   import { revealSections } from './fold.js';
+  import { show3D } from './prefs.js';
+  import { can3D } from './can3d.js';
+  import Backdrop from './Backdrop.svelte';
   import { breadcrumbSchema, productSchema, faqSchema, jsonLd } from './seo.js';
 
   let {
@@ -25,10 +28,23 @@
 
   let rootEl, bodyEl;
 
-  onMount(() => {
+  // Zero-network capability check: a device without WebGL, or one on a metered or 2G
+  // connection, never requests the Three.js bundle at all (Spec F7).
+  const canModel = $derived(!!heroModel && $show3D && can3D());
+  // The backdrop under the scene holds until the scene reports its first frame.
+  let modelReady = $state(false);
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    return revealSections(bodyEl);
+  onMount(() => {
+    // A scene reports its first rendered frame; until then the backdrop holds. If it
+    // never reports, the backdrop simply stays — a slow or failed 3D fetch degrades
+    // to artwork rather than an empty box.
+    const onReady = (e) => { if (e.data?.iiclReady) modelReady = true; };
+    window.addEventListener('message', onReady);
+
+    const stop = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? () => {}
+      : revealSections(bodyEl);
+    return () => { window.removeEventListener('message', onReady); stop(); };
   });
 
   const trail = [{ name: 'Home', href: '/' }, { name: 'AI Solutions', href: '/#products' }];
@@ -46,12 +62,20 @@
 
 <div bind:this={rootEl} class="pr-root" style="--acc:{accent};">
   <Cursor />
+  <!-- Spec G14: a skip link, and a real <main> landmark for the page content. -->
+  <a class="skip-link" href="#main">Skip to main content</a>
   <Nav />
 
   <header class="pr-hero" style={heroBanner ? `background-image:url('${heroBanner}');` : ''}>
     <div class="pr-glow" aria-hidden="true"></div>
     {#if heroModel}
-      <iframe class="pr-model" src={heroModel} title="Interactive 3D model" loading="eager" aria-hidden="true"></iframe>
+      <!-- The backdrop is the base layer and is always drawn first, so the hero is
+           never an empty box while the scene loads. It fades once the scene reports
+           its first rendered frame; if that never comes, it simply stays. -->
+      <div class="pr-model pr-model-flat" class:is-gone={modelReady} aria-hidden="true"><Backdrop /></div>
+      {#if canModel}
+        <iframe class="pr-model" src={heroModel} title="Interactive 3D model" loading="lazy" aria-hidden="true"></iframe>
+      {/if}
     {/if}
     <div class="pr-scrim" aria-hidden="true"></div>
 
@@ -69,16 +93,13 @@
       </div>
     </div>
 
-    {#if specs.length}
-      <dl class="pr-specs">
-        {#each specs as s}
-          <div class="pr-spec"><dt class="mono">{s.k}</dt><dd>{s.v}</dd></div>
-        {/each}
-      </dl>
-    {/if}
+    <!-- The spec strip that used to sit here was removed: it read as a row of cards
+         wedged under the hero. `specs` is still accepted so the pages keep their data
+         and it can be brought back without editing every page. -->
+
   </header>
 
-  <main bind:this={bodyEl} class="pr-body">
+  <main id="main" bind:this={bodyEl} class="pr-body">
     {@render children?.()}
 
     <!-- Rendered from the `faqs` prop, which already feeds the FAQ structured data.
@@ -129,6 +150,11 @@
 </div>
 
 <style>
+  /* Off-screen until focused, then a solid, readable target. */
+  :global(.skip-link) { position: absolute; left: 8px; top: -60px; z-index: 200;
+    padding: 10px 18px; background: #ee2f2e; color: #fff; text-decoration: none;
+    font-size: 14px; font-weight: 600; border-radius: 0 0 6px 6px; transition: top .18s ease; }
+  :global(.skip-link:focus) { top: 0; }
   .pr-root { --ink: #16171a; --muted: #55585e; --line: #e6e3de;
     background: #fff; color: var(--ink); font-family: var(--font); min-height: 100vh; }
   .pr-root :global(.mono) { font-family: var(--font-mono); }
@@ -140,6 +166,9 @@
   /* The product's own colour, once, as light — not as a red wash over everything. */
   .pr-glow { position: absolute; top: -30%; right: -10%; width: 70%; height: 130%; pointer-events: none;
     background: radial-gradient(closest-side, color-mix(in srgb, var(--acc) 34%, transparent), transparent 72%); }
+  /* The still stand-in sits under the scene and fades out once it renders. */
+  .pr-model-flat { overflow: hidden; transition: opacity .55s ease; }
+  .pr-model-flat.is-gone { opacity: 0; }
   .pr-model { position: absolute; top: 0; right: -4%; width: 56%; height: 100%; border: 0; pointer-events: none;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 26%); mask-image: linear-gradient(90deg, transparent 0, #000 26%); }
   .pr-scrim { position: absolute; inset: 0; pointer-events: none;
@@ -163,19 +192,12 @@
     transition: border-color .2s, background .2s; }
   .pr-ghost:hover { border-color: var(--acc); background: color-mix(in srgb, var(--acc) 16%, transparent); }
 
-  /* Spec strip: the at-a-glance facts a buyer scans for before reading a word. */
-  .pr-specs { position: relative; z-index: 2; margin: 0; display: grid; grid-auto-flow: column;
-    grid-auto-columns: 1fr; border-top: 1px solid rgba(255,255,255,0.14); background: rgba(6,7,9,0.6);
-    backdrop-filter: blur(6px); }
-  .pr-spec { padding: 18px 24px; border-left: 1px solid rgba(255,255,255,0.09); display: grid; gap: 5px; }
-  .pr-spec:first-child { border-left: 0; padding-left: max(32px, calc(50vw - 508px)); }
-  .pr-spec dt { font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--acc); }
-  .pr-spec dd { margin: 0; font-size: 14.5px; line-height: 1.45; color: rgba(244,242,238,0.88); }
-
   /* ── Body ──
      Narrower than the hero on purpose: at 1080px a 700px text block left a third of
      the row empty, which read as an unfinished page rather than as breathing room. */
-  .pr-body { max-width: 1120px; margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
+  /* Same rail as every other content page — the old 1120px cap inset this body
+     further than the rest of the site, which read as extra padding. */
+  .pr-body { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
 
   /* .outcomes lives in theme.css and picks up this page's --acc automatically. */
   .pr-body :global(.page-section) { padding: var(--space-section) 0; border-bottom: 1px solid var(--line); }
@@ -247,9 +269,6 @@
     .pr-h1 { max-width: none; }
     .pr-hero-inner { padding: 0 var(--wrap-pad) 32px; }
     .pr-body { padding: 0 var(--wrap-pad); }
-    .pr-specs { grid-auto-flow: row; }
-    .pr-spec { border-left: 0; border-top: 1px solid rgba(255,255,255,0.09); padding-left: 20px !important; }
-    .pr-spec:first-child { border-top: 0; }
     .pr-more-row { grid-template-columns: 1fr; }
     .pr-actions { flex-direction: column; align-items: stretch; }
     .pr-cta, .pr-ghost { justify-content: center; }

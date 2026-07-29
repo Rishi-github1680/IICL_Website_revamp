@@ -5,6 +5,7 @@
 </script>
 
 <ServiceLayout
+  autoFaq={false}
   kicker="Service"
   h1="Technology Staff Augmentation for GCCs, Enterprises and Startups"
   lede="Technology staff augmentation for GCCs, enterprises and startups, covering AI/ML, data, cloud, DevOps, Java, .NET, mobile, QA and cybersecurity."

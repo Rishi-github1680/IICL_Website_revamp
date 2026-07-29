@@ -5,27 +5,53 @@
   import Cursor from './Cursor.svelte';
   import Footer from './Footer.svelte';
   import { HERO_BANNER_DEFAULT } from './menu.js';
-  import { breadcrumbSchema, serviceSchema, productSchema, faqSchema, jsonLd } from './seo.js';
+  import { breadcrumbSchema, serviceSchema, productSchema, faqSchema, articleSchema, jsonLd } from './seo.js';
   import { revealSections } from './fold.js';
+  import { show3D } from './prefs.js';
+  import { can3D } from './can3d.js';
+  import Backdrop from './Backdrop.svelte';
+  import StoryHero from './StoryHero.svelte';
   let {
     kicker = '', h1 = '', lede = '', heroBanner = HERO_BANNER_DEFAULT, heroModel = null,
+    // A scroll-driven story world in place of the flat hero — { panels, status, screens }.
+    // Used only while models are on; with them off the normal hero (and its image) runs.
+    heroStory = null,
     // heroImage = { img, alt }: a real photograph, rendered as an <img> so it stays sharp,
     // carries alt text and can parallax. Falls back to the CSS-background texture.
     heroImage = null,
     // SEO: pages opt into structured data by passing these.
     path = '', schemaType = '', faqs = null, cta = null, ctaHref = '/contactus',
+    // The closing band used to hard-code "Start with one day" and a 1-day-workshop CTA.
+    // Spec E section 2 forbids that fixed-duration message on the Agentic AI page, and
+    // it was wrong on several others too, so pages now supply their own closing copy.
+    bandKicker = 'Start with one process',
+    bandHeading = "Bring us one process. We'll show you what an agent does with it.",
     // Product pages: external product website, rendered as a hero action.
     site = null,
     // Long-form article pages: reading-progress bar + editorial typography.
     article = false,
+    // Publication metadata. Without a real date there is no Article markup — a
+    // fabricated one is worse than none (Spec G12).
+    published = null, updated = null, heroAlt = '',
     // Set false on pages that still write their own FAQ markup.
     autoFaq = false,
     children,
   } = $props();
 
+  // The scene only runs if the page offers one AND the visitor has models on.
+  // Zero-network capability check: a device without WebGL, or one on a metered or
+  // 2G connection, never requests the Three.js bundle (Spec F7).
+  const showModel = $derived(!!heroModel && $show3D && can3D());
+  let modelReady = $state(false);
+
   let rootEl, photoEl, progressEl;
 
   onMount(() => {
+    // A scene reports its first rendered frame; until then the backdrop holds. If it
+    // never reports, the backdrop simply stays — a slow or failed 3D fetch degrades
+    // to artwork rather than an empty box.
+    const onReady = (e) => { if (e.data?.iiclReady) modelReady = true; };
+    window.addEventListener('message', onReady);
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) return;
 
@@ -33,7 +59,7 @@
     const stopReveal = revealSections(rootEl);
 
     // Hero parallax + article reading progress, batched into one scroll frame.
-    if (!photoEl && !progressEl) return stopReveal;
+    if (!photoEl && !progressEl) return () => { window.removeEventListener('message', onReady); stopReveal(); };
     let raf = 0, ticking = false;
     const apply = () => {
       ticking = false;
@@ -55,6 +81,7 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
     return () => {
+      window.removeEventListener('message', onReady);
       stopReveal();
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
@@ -77,6 +104,12 @@
     path ? breadcrumbSchema(trail) : null,
     entity,
     faqs && faqs.length ? faqSchema(faqs) : null,
+    article
+      ? articleSchema({
+          headline: h1, description: lede, path,
+          image: heroImage?.img, datePublished: published, dateModified: updated,
+        })
+      : null,
   );
 </script>
 
@@ -84,25 +117,48 @@
   {@html blocks ? `<script type="application/ld+json">${blocks}<\/script>` : ''}
 </svelte:head>
 
-<div bind:this={rootEl} class="page-root" class:article-flow={article}>
+<div bind:this={rootEl} class="page-root" class:article-flow={article} class:industry={kicker === 'Industry'}>
   {#if article}
     <div class="read-progress" aria-hidden="true"><i bind:this={progressEl}></i></div>
   {/if}
+  <!-- Spec G14: a skip link, and a real <main> landmark for the page content. -->
+  <a class="skip-link" href="#main">Skip to main content</a>
   <Cursor />
   <Nav />
 
+  {#if heroStory && $show3D}
+    <!-- Scroll-driven story world in place of the flat hero. -->
+    <StoryHero
+      kicker={kicker}
+      title={h1}
+      lede={lede}
+      panels={heroStory.panels}
+      status={heroStory.status}
+      screens={heroStory.screens}
+    >
+      <div class="page-hero-actions">
+        <a href={ctaHref} class="cta">{cta || 'Talk to us'} <span class="mono">→</span></a>
+        <a href="/#products" class="ghost-light">Explore the products</a>
+      </div>
+    </StoryHero>
+  {:else}
+  <!-- A page can supply both a 3D scene and a still image. The scene runs when the
+       visitor has models switched on; otherwise the image stands in for it, so the
+       hero is never empty and the iframe is never created. -->
   <header
     class="page-hero"
-    class:has-model={!!heroModel}
-    class:has-photo={!!heroImage}
+    class:has-model={showModel}
+    class:has-photo={!!heroImage && !showModel}
     style={heroImage ? '' : `background-image: linear-gradient(90deg, rgba(6,6,6,0.88) 0%, rgba(6,6,6,0.64) 42%, rgba(6,6,6,0.18) 100%), url('${heroBanner}');`}
   >
-    {#if heroImage}
+    {#if showModel}
+      <!-- Backdrop underneath, so the hero is never an empty box while the scene
+           loads; it fades only once the scene reports its first frame. -->
+      <div class="hero-model hero-model-flat" class:is-gone={modelReady} aria-hidden="true"><Backdrop /></div>
+      <iframe class="hero-model" src={heroModel} title="Interactive 3D model" loading="lazy" aria-hidden="true"></iframe>
+    {:else if heroImage}
       <img bind:this={photoEl} class="hero-photo" src={heroImage.img} alt={heroImage.alt} fetchpriority="high" decoding="async" />
       <div class="hero-scrim"></div>
-    {/if}
-    {#if heroModel}
-      <iframe class="hero-model" src={heroModel} title="Interactive 3D model" loading="eager" aria-hidden="true"></iframe>
     {/if}
     <div class="wrap">
       {#if kicker}
@@ -117,7 +173,9 @@
       </div>
     </div>
   </header>
+  {/if}
 
+  <main id="main">
   {@render children?.()}
 
   <!-- Rendered from the `faqs` prop, which already feeds the FAQ structured data.
@@ -140,18 +198,27 @@
 
   <div class="cta-band">
     <div class="wrap">
-      <span class="mono cta-kicker">Start with one day</span>
-      <h2 class="cta-h2">Bring us one process. We'll show you what an agent does with it.</h2>
-      <a href={ctaHref} class="cta cta-big">{cta || 'Book the 1-day workshop'} <span class="mono">→</span></a>
+      <span class="mono cta-kicker">{bandKicker}</span>
+      <h2 class="cta-h2">{bandHeading}</h2>
+      <a href={ctaHref} class="cta cta-big">{cta || 'Talk to us'} <span class="mono">→</span></a>
     </div>
   </div>
+
+  </main>
 
   <Footer />
 </div>
 
 <style>
+  /* Off-screen until focused, then a solid, readable target. */
+  :global(.skip-link) { position: absolute; left: 8px; top: -60px; z-index: 200;
+    padding: 10px 18px; background: #ee2f2e; color: #fff; text-decoration: none;
+    font-size: 14px; font-weight: 600; border-radius: 0 0 6px 6px; transition: top .18s ease; }
+  :global(.skip-link:focus) { top: 0; }
   .page-root { --red: #ee2f2e; --ink: #16171a; --muted: #55585e; --line: #e6e3de;
     background: #fff; color: var(--ink); font-family: var(--font); min-height: 100vh; }
+  /* Industry pages run their grids tighter to the edge than the rest of the site. */
+  .page-root.industry { --wrap-pad: 32px; }
   .page-root :global(.mono) { font-family: var(--font-mono); }
   .page-root :global(.wrap) { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
 
@@ -175,6 +242,10 @@
   .page-hero.has-photo { min-height: 430px; display: flex; align-items: center; padding: 82px 0 70px; }
   /* The photo is oversized so the parallax drift never exposes an edge, and anchored
      centre so nothing important crops out at any viewport ratio. */
+  /* The still stand-in sits under the scene and fades out once it renders. */
+  .hero-model-flat { overflow: hidden; transition: opacity .55s ease; }
+  .hero-model-flat.is-gone { opacity: 0; }
+
   .hero-photo { position: absolute; inset: -6% 0; width: 100%; height: 112%; object-fit: cover; object-position: center 34%;
     transform: scale(1.04); transform-origin: center center; will-change: transform; z-index: 0; }
   /* Lighter scrim: dense only behind the headline column, clearing to almost nothing

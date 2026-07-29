@@ -19,13 +19,6 @@
     return () => clearInterval(id);
   });
 
-  const STATS = [
-    { v: '20+', k: 'Years in global IT services' },
-    { v: '08', k: 'SaaS products in production' },
-    { v: '09', k: 'Industries served today' },
-    { v: '02', k: 'Delivery centres — Hyderabad & Raleigh' },
-  ];
-
   // "Why enterprises choose IICL" — these were titles and descriptions run together
   // as loose paragraphs, with one heading left with no body at all.
   const REASONS = [
@@ -58,6 +51,25 @@
   h1="About Intelligence India.Com Limited"
   lede="Intelligence India.Com Limited builds AI agents, enterprise software and automation platforms, with delivery teams operating across India and the USA."
   heroImage={PAGE_ART["aboutus"]}
+  heroStory={{
+    screens: 620,
+    // The phase captions carry the narrative. No `status` readout: the floating
+    // system-log pill was noise on a page that already has a heading and a lede.
+    panels: [
+      { n: '01 — The gap', h: 'We start where the work is stuck.',
+        note: 'Not with a platform, but with the process nobody has time to fix. The near side is what you run today. The far side is what AI makes possible.',
+        at: [0.17, 0.21, 0.27, 0.31] },
+      { n: '02 — The attempt', h: 'The first design rarely survives contact.',
+        note: 'A two-week proof exists to find that out cheaply. When something collapses, it collapses on our time, on a scope small enough to be honest about.',
+        at: [0.36, 0.4, 0.47, 0.52] },
+      { n: '03 — The memory', h: 'What failed becomes what we build on.',
+        note: 'The wreckage stays in view. Every engagement carries forward what the last one learned — which is why the second design is supported before it is spanned.',
+        at: [0.6, 0.65, 0.76, 0.82] },
+      { n: '04 — The crossing', h: 'Hyderabad builds. Raleigh delivers.',
+        note: 'Two continents, one delivery engine, running in production for enterprise and mid-market teams. The crossing holds because of the one that did not.',
+        at: [0.91, 0.95, 1.5, 2] },
+    ],
+  }}
   path="/aboutus"
   cta="Discuss a Partnership"
   faqs={[
@@ -84,14 +96,12 @@
   <!-- Numbers -->
   <section class="page-section shade">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>Where we stand today</h2>
-      <div class="stat-row">
-        {#each STATS as s}
-          <div class="stat"><span class="stat-v mono" use:countUp>{s.v}</span><span class="stat-k">{s.k}</span></div>
-        {/each}
+      <h2 class="section-h"><span class="tick"></span>What we build</h2>
+      <div class="section-body">
+        <p class="para">The product suite below is the part of our work that is publicly available. Counts of products, service lines, industries and delivery centres are withheld until each figure has a confirmed definition, measurement date and approval to publish.</p>
       </div>
 
-      <!-- The eight products, on a slow ticker. Pause on hover; every name is a link. -->
+      <!-- Product ticker. Pause on hover; every name is a real linked page. -->
       <div class="marq" aria-label="IICL products in production">
         <div class="marq-track">
           {#each [0, 1] as dup}

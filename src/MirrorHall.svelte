@@ -9,13 +9,13 @@
   // for mouse users, who otherwise have no way to pan. There are no arrow buttons —
   // the hall itself is the control.
   import { onMount } from 'svelte';
+  import { hpan } from './hscroll.js';
 
   let { items = [], collection = 'Nº 01', title = '', sub = '', perView = 3, children } = $props();
 
   let railEl;
   let fit = $state(perView);
   let start = $state(0);           // index of the leftmost fully-visible panel
-  let dragging = $state(false);
 
   const maxStart = $derived(Math.max(0, items.length - fit));
 
@@ -46,40 +46,12 @@
     const onScroll = () => { start = Math.round(el.scrollLeft / stepPx()); };
     el.addEventListener('scroll', onScroll, { passive: true });
 
-    // Click-and-drag for mouse users. Touch and trackpad already scroll natively.
-    let x0 = 0, left0 = 0, moved = 0, active = false;
-    const down = (e) => {
-      if (e.pointerType === 'touch' || (e.button ?? 0) !== 0) return;
-      active = true; dragging = true; moved = 0;
-      x0 = e.clientX; left0 = el.scrollLeft;
-    };
-    const move = (e) => {
-      if (!active) return;
-      const dx = e.clientX - x0;
-      moved = Math.max(moved, Math.abs(dx));
-      el.scrollLeft = left0 - dx;
-    };
-    const up = () => {
-      if (!active) return;
-      active = false; dragging = false;
-      go(Math.round(el.scrollLeft / stepPx()));   // settle onto a panel
-    };
-    // A drag that travelled must not also open the link underneath it.
-    const swallowClick = (e) => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } };
-
-    el.addEventListener('pointerdown', down);
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-    el.addEventListener('click', swallowClick, true);
-
+    // Mouse users pan with the wheel (see use:hpan below) — no dragging, so a
+    // click on a panel is always just a click on the link.
     return () => {
       wide.removeEventListener('change', sync);
       mid.removeEventListener('change', sync);
       el.removeEventListener('scroll', onScroll);
-      el.removeEventListener('pointerdown', down);
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-      el.removeEventListener('click', swallowClick, true);
     };
   });
 </script>
@@ -95,8 +67,8 @@
 
   <div
     bind:this={railEl}
+    use:hpan
     class="mh-rail"
-    class:is-dragging={dragging}
     style="--per:{fit};"
   >
     {#each items as it, i (it.href)}
@@ -131,7 +103,7 @@
           ></button>
         {/each}
       </span>
-      <span class="mh-hint mono" aria-hidden="true">Drag to explore</span>
+      <span class="mh-hint mono" aria-hidden="true">Move the mouse to explore</span>
     </footer>
     <p class="mh-count mono" aria-live="polite">
       {String(Math.min(start + fit, items.length)).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
@@ -158,10 +130,11 @@
      Percentages in flex-basis resolve against the scroller's own width, not its
      scroll width, so the sizing stays correct at any viewport. */
   .mh-rail { --gap: 26px; position: relative; display: flex; align-items: flex-end; gap: var(--gap);
-    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
-    scrollbar-width: none; -ms-overflow-style: none; cursor: grab; padding: 0 2px 2px; }
+    /* Proximity, not mandatory: mandatory quantises wheel panning, so a small tick
+       either did nothing or jumped a whole panel. This still aligns on settle. */
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity;
+    scrollbar-width: none; -ms-overflow-style: none; padding: 0 2px 2px; }
   .mh-rail::-webkit-scrollbar { display: none; }
-  .mh-rail.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
 
   .mh-item { position: relative; min-width: 0; scroll-snap-align: start;
     flex: 0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per));

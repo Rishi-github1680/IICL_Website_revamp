@@ -5,6 +5,7 @@
 </script>
 
 <ServiceLayout
+  autoFaq={false}
   kicker="Service"
   h1="Managed IT Help Desk Services"
   lede="Managed IT help desk covering user support, application support, incident management and access requests across phone, email, chat and WhatsApp."
@@ -39,7 +40,7 @@
 
   <section class="page-section shade">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>Our ERP Capabilities</h2>
+      <h2 class="section-h"><span class="tick"></span>Managed help desk capabilities</h2>
       <div class="section-body">
         <p class="para">Unify all your support requests — whether they come via email, chat, voice, or social — into a centralized dashboard with intelligent routing and SLA tracking.</p>
         <p class="para">Reduce agent load and time-to-resolution with AI-powered automation integrated directly into the Helpdesk.</p>

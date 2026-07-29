@@ -82,6 +82,66 @@ const coreWire = new THREE.Mesh(
 );
 galaxy.add(coreWire);
 
+// Product badge textures: the whole planet — accent glow, dark coin, accent ring and
+// the white product mark — baked into ONE canvas, drawn as ONE sprite. The first cut
+// layered a flat sprite with a 3D glow sphere and a torus ring; those meshes cut
+// through the sprite plane and z-fought as the planet orbited, which is what read as
+// flicker/shaking. A single textured sprite has nothing to fight with.
+//
+// The icons are stroke="currentColor" line art, which resolves to nothing outside a
+// DOM context — the colour is substituted in before rasterising. The badge (glow +
+// coin + ring) is drawn immediately so a planet is never blank; the mark lands on the
+// same canvas when its fetch resolves.
+const _badgeTex = new Map();
+function badgeTexture(url, accHex) {
+  const key = url + accHex;
+  if (_badgeTex.has(key)) return _badgeTex.get(key);
+
+  const S = 256, mid = S / 2;
+  const c = document.createElement("canvas");
+  c.width = c.height = S;
+  const ctx = c.getContext("2d");
+
+  // Soft accent halo, widest first so everything else sits on top of it.
+  const halo = ctx.createRadialGradient(mid, mid, S * 0.18, mid, mid, S * 0.5);
+  halo.addColorStop(0, accHex + "59");
+  halo.addColorStop(0.65, accHex + "1f");
+  halo.addColorStop(1, accHex + "00");
+  ctx.fillStyle = halo;
+  ctx.fillRect(0, 0, S, S);
+
+  // The coin: near-black disc with a crisp accent ring.
+  ctx.beginPath();
+  ctx.arc(mid, mid, S * 0.32, 0, Math.PI * 2);
+  ctx.fillStyle = "#0c0d10";
+  ctx.fill();
+  ctx.lineWidth = S * 0.02;
+  ctx.strokeStyle = accHex;
+  ctx.stroke();
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  _badgeTex.set(key, tex);
+
+  fetch(url)
+    .then((r) => (r.ok ? r.text() : Promise.reject(new Error(r.status))))
+    .then((svg) => new Promise((res, rej) => {
+      const img = new Image();
+      img.onload = () => res(img);
+      img.onerror = rej;
+      img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg.replace(/currentColor/g, "#ffffff"));
+    }))
+    .then((img) => {
+      // Mark centred inside the coin, well clear of the ring.
+      const m = S * 0.36;
+      ctx.drawImage(img, mid - m / 2, mid - m / 2, m, m);
+      tex.needsUpdate = true;
+    })
+    .catch(() => {});   // a missing icon leaves a clean coin, not a broken scene
+
+  return tex;
+}
+
 // ── Product planets — clean concentric lanes, every planet carrying its brand accent.
 // The signature move: each planet pulls a comet tail of light along its lane, so the whole
 // system reads as one streamlined machine in motion — flat, ordered, alive.
@@ -99,31 +159,20 @@ for (let i = 0; i < PN; i++) {
   orbit.rotation.x = Math.PI / 2;
   galaxy.add(orbit);
 
-  const planet = new THREE.Mesh(
-    new THREE.SphereGeometry(size, 24, 18),
-    new THREE.MeshPhysicalMaterial({
-      color: acc.clone().multiplyScalar(0.16), emissive: acc, emissiveIntensity: 0.9,
-      metalness: 0.5 + (i % 3) * 0.15, roughness: 0.22 + (i % 4) * 0.08, transparent: true, opacity: 0.98,
-    }),
-  );
+  // Each product rides its lane as its own badge — glow, coin, ring and mark are all
+  // in the sprite's texture, so there are no extra meshes to z-fight against it.
+  // `planet` stays a group so the animation positions and scales it as before.
+  const planet = new THREE.Group();
   galaxy.add(planet);
 
-  const glow = new THREE.Mesh(
-    new THREE.SphereGeometry(size * 1.45, 16, 12),
-    new THREE.MeshBasicMaterial({ color: acc, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending }),
-  );
-  planet.add(glow);
-
-  let ring = null;
-  if (i % 2 === 0) {
-    ring = new THREE.Mesh(
-      new THREE.TorusGeometry(size * 1.75, 0.008, 4, 60),
-      new THREE.MeshBasicMaterial({ color: acc.clone().lerp(new THREE.Color("#ffffff"), 0.35), transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending }),
-    );
-    ring.rotation.x = Math.PI / 2.6 + i * 0.12;
-    ring.rotation.y = 0.4;
-    planet.add(ring);
-  }
+  const mark = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: badgeTexture(PRODUCTS[i].logo, PRODUCTS[i].acc || "#ed101d"),
+    transparent: true, opacity: 0.98, depthWrite: false,
+  }));
+  // The coin occupies ~64% of the texture, so the badge runs a little larger than
+  // the old sphere did to keep the visible disc at a comparable size.
+  mark.scale.setScalar(size * 5.4);
+  planet.add(mark);
 
   // Comet tail: a strand of grains sweeping the lane behind the planet, brightest at the head.
   const tp = new Float32Array(TRAIL_N * 3);
@@ -141,7 +190,7 @@ for (let i = 0; i < PN; i++) {
   galaxy.add(trail);
 
   planets.push({
-    planet, orbit, glow, ring, size, trailGeo,
+    planet, mark, orbit, size, trailGeo, trail,
     orbitR,
     a: i * 2.75,                        // current orbital angle
     orbitSpeed: 0.09 / (0.8 + i * 0.3), // Kepler-ish: inner lanes run faster
@@ -155,15 +204,12 @@ let mode = "off"; // off | travel | idle
 let travel = null;
 let driftA = 0; // slow circling while flying alongside a star
 
-if (!document.getElementById("iicl-fonts")) {
-  const l = document.createElement("link");
-  l.id = "iicl-fonts";
-  l.rel = "stylesheet";
-  l.href = "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap";
-  document.head.appendChild(l);
-}
-const MONO = "'IBM Plex Mono',monospace";
-const SANS = "'IBM Plex Sans',system-ui,sans-serif";
+// Both faces are self-hosted and already loaded by styles.css, which this page links.
+// The runtime <link> to fonts.googleapis.com that used to sit here pulled a third
+// -party stylesheet into an iframe that had no other network dependency, and asked for
+// IBM Plex Sans — a third family the design system does not use.
+const MONO = "'IBM Plex Mono',ui-monospace,monospace";
+const SANS = "'Inter',system-ui,-apple-system,sans-serif";
 
 // Clear any earlier instances (dev HMR re-evaluates this module).
 for (const id of ["iicl-explore-card", "iicl-explore-hint", "iicl-explore-labels"]) {
@@ -187,63 +233,98 @@ sunLabel.style.cssText =
 sunLabel.innerHTML = `<span>IICL CORE</span><div style="width:1px;height:16px;margin:5px auto 0;background:rgba(255,255,255,.4);"></div>`;
 labelWrap.appendChild(sunLabel);
 
-// The trademark plate — boxless, in the site's chapter language. No counter, no chrome.
+// The product card. It is DOCKED to one side of the viewport rather than tracking the
+// planet's projected position. Chasing the planet meant two damped systems — the camera
+// easing toward its berth, and the card easing toward the camera's projection of it —
+// running against each other, which wobbled and periodically put the card on top of the
+// planet it was describing. The camera already frames the planet to the right (see
+// anchor()), so the card sits left and stays put.
+const CARD_CSS = `
+#iicl-explore-card{position:fixed;z-index:40;display:none;pointer-events:none;
+  left:clamp(20px,4vw,64px);top:50%;transform:translateY(-50%);width:min(340px,38vw);
+  opacity:0;transition:opacity .5s ease,transform .5s cubic-bezier(.22,1,.36,1)}
+#iicl-explore-card.is-in{opacity:1}
+.gx-card{position:relative;pointer-events:auto;padding:22px 22px 18px;border-radius:16px;
+  background:linear-gradient(160deg,rgba(20,21,26,.94),rgba(9,10,13,.96));
+  border:1px solid var(--gx-line);box-shadow:0 24px 70px rgba(0,0,0,.66);backdrop-filter:blur(14px)}
+.gx-card::before{content:'';position:absolute;left:22px;right:22px;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gx-acc),transparent);opacity:.75}
+.gx-top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.gx-mark{position:relative;flex:none;width:40px;height:40px;border-radius:11px;
+  background:var(--gx-tint);display:grid;place-items:center}
+.gx-mark i{position:absolute;inset:9px;background:var(--gx-acc);
+  -webkit-mask:var(--gx-logo) center/contain no-repeat;mask:var(--gx-logo) center/contain no-repeat}
+.gx-tag{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gx-acc);line-height:1.3}
+.gx-count{display:block;margin-top:3px;font-size:9.5px;letter-spacing:.16em;color:rgba(244,242,238,.38)}
+.gx-name{font-size:clamp(24px,2.6vw,31px);font-weight:600;letter-spacing:-.025em;color:#fff;line-height:1.08}
+.gx-name span{color:var(--gx-acc)}
+.gx-desc{margin-top:10px;font-size:14px;line-height:1.6;color:rgba(244,242,238,.68)}
+.gx-rule{height:1px;background:rgba(255,255,255,.09);margin:18px 0 15px}
+.gx-cta{display:inline-flex;align-items:center;gap:9px;padding:11px 20px;border-radius:9px;
+  background:var(--gx-acc);color:#fff;text-decoration:none;font-size:14.5px;font-weight:600;
+  transition:filter .2s,transform .2s}
+.gx-cta:hover{filter:brightness(1.1);transform:translateX(2px)}
+.gx-foot{display:flex;align-items:center;gap:7px;margin-top:18px}
+.gx-bar{height:3px;border-radius:2px;cursor:pointer;transition:width .35s,background .35s;border:0;padding:0}
+.gx-nav{margin-left:auto;display:flex;gap:2px}
+.gx-nav button{background:none;border:0;padding:3px 7px;cursor:pointer;font-size:17px;
+  color:rgba(244,242,238,.5);transition:color .2s}
+.gx-nav button:hover:not(:disabled){color:#fff}
+.gx-nav button:disabled{opacity:.25;cursor:default}
+@media (max-width:860px){
+  #iicl-explore-card{left:16px;right:16px;width:auto;top:auto;bottom:22px;transform:none}
+  #iicl-explore-card.is-in{transform:none}
+  .gx-desc{display:none}
+}`;
+const cardStyle = document.createElement("style");
+cardStyle.textContent = CARD_CSS;
+document.head.appendChild(cardStyle);
+
 const card = document.createElement("div");
 card.id = "iicl-explore-card";
-card.style.cssText =
-  "position:fixed;left:0;top:0;transform:translateY(-50%);z-index:40;display:none;width:min(330px,74vw);" +
-  "pointer-events:none;opacity:0;margin-top:18px;transition:opacity .45s ease,margin-top .45s ease;";
 document.body.appendChild(card);
-let cardX = -1, cardY = -1, cardSide = 0; // screen position rides beside the featured star
 
 function renderCard() {
   const p = PRODUCTS[selected];
   const name = p.label.replace(/\.ai$/i, "");
   const acc = p.acc || "#ee2f2e";
+  card.style.setProperty("--gx-acc", acc);
+  card.style.setProperty("--gx-tint", acc + "24");
+  card.style.setProperty("--gx-line", acc + "4d");
+  if (p.logo) card.style.setProperty("--gx-logo", `url('${p.logo}')`);
+
   const bars = PRODUCTS.map((_, k) =>
-    `<i data-idx="${k}" style="display:inline-block;height:2px;border-radius:1px;cursor:pointer;transition:all .3s;` +
-    `width:${k === selected ? 26 : 13}px;background:${k === selected ? acc : "rgba(255,255,255,.2)"};"></i>`
+    `<button class="gx-bar" data-idx="${k}" aria-label="Product ${k + 1}" style="width:${k === selected ? 24 : 12}px;` +
+    `background:${k === selected ? acc : "rgba(255,255,255,.22)"}"></button>`
   ).join("");
+
   card.innerHTML =
-    `<div style="background:linear-gradient(rgba(16,17,21,.93),rgba(9,10,13,.95));` +
-      `border:1px solid ${acc}4d;border-radius:14px;padding:20px 20px 18px;` +
-      `box-shadow:0 22px 60px rgba(0,0,0,.6);backdrop-filter:blur(10px);">` +
-      // Mark + tag on one line
-      `<div style="display:flex;align-items:center;gap:11px;">` +
-        (p.logo
-          ? `<span style="position:relative;flex:none;width:34px;height:34px;border-radius:9px;background:${acc}26;">` +
-            `<span style="position:absolute;inset:7px;background:${acc};` +
-            `-webkit-mask:url('${p.logo}') center/contain no-repeat;mask:url('${p.logo}') center/contain no-repeat;"></span></span>`
-          : "") +
-        `<span style="font-family:${MONO};font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:${acc};">` +
-          `${(p.tag || "PRODUCT").toUpperCase()}</span>` +
+    `<div class="gx-card">` +
+      `<div class="gx-top">` +
+        (p.logo ? `<span class="gx-mark"><i></i></span>` : "") +
+        `<span class="gx-tag">${(p.tag || "PRODUCT").toUpperCase()}` +
+          `<span class="gx-count">${String(selected + 1).padStart(2, "0")} / ${String(PN).padStart(2, "0")}</span>` +
+        `</span>` +
       `</div>` +
-      // Name
-      `<div style="font-family:${SANS};font-size:clamp(24px,3.4vw,32px);font-weight:600;color:#fff;letter-spacing:-.025em;margin-top:14px;line-height:1.1;">` +
-        `${name}<span style="color:${acc};">.ai</span></div>` +
-      // What it does
-      `<div style="font-family:${SANS};font-size:14px;line-height:1.62;color:rgba(244,242,238,.7);margin-top:9px;">${p.desc || ""}</div>` +
-      // Divider + CTA
-      `<div style="height:1px;background:rgba(255,255,255,.1);margin:16px 0 14px;"></div>` +
-      `<a href="${p.href}" target="_top" style="pointer-events:auto;display:inline-flex;align-items:center;gap:8px;` +
-        `font-family:${SANS};font-weight:600;font-size:14.5px;color:#fff;text-decoration:none;` +
-        `background:${acc};padding:10px 18px;border-radius:8px;">Explore ${name} <span style="font-family:${MONO};">→</span></a>` +
-      // Position in the set
-      `<div style="pointer-events:auto;display:flex;align-items:center;gap:6px;margin-top:18px;">${bars}` +
-        `<span style="flex:1;"></span>` +
-        `<button data-nav="-1" style="background:none;border:0;padding:2px 6px;cursor:pointer;font-family:${MONO};font-size:17px;color:rgba(244,242,238,.55);transition:color .2s;">‹</button>` +
-        `<button data-nav="1" style="background:none;border:0;padding:2px 6px;cursor:pointer;font-family:${MONO};font-size:17px;color:rgba(244,242,238,.55);transition:color .2s;">›</button>` +
+      `<div class="gx-name">${name}<span>.ai</span></div>` +
+      (p.desc ? `<div class="gx-desc">${p.desc}</div>` : "") +
+      `<div class="gx-rule"></div>` +
+      `<a class="gx-cta" href="${p.href}" target="_top">Explore ${name} <span>&rarr;</span></a>` +
+      `<div class="gx-foot">${bars}` +
+        `<span class="gx-nav">` +
+          `<button data-nav="-1" aria-label="Previous product"${selected === 0 ? " disabled" : ""}>&lsaquo;</button>` +
+          `<button data-nav="1" aria-label="Next product"${selected === PN - 1 ? " disabled" : ""}>&rsaquo;</button>` +
+        `</span>` +
       `</div>` +
     `</div>`;
-  card.querySelectorAll("[data-idx]").forEach((b) => b.addEventListener("click", () => { const k = +b.dataset.idx; if (mode === "idle" && k !== selected) goTo(k); }));
-  card.querySelectorAll("[data-nav]").forEach((b) => {
-    b.addEventListener("mouseenter", () => (b.style.color = "#ff5a4d"));
-    b.addEventListener("mouseleave", () => (b.style.color = "rgba(244,242,238,.55)"));
+
+  card.querySelectorAll("[data-idx]").forEach((b) =>
+    b.addEventListener("click", () => { const k = +b.dataset.idx; if (mode === "idle" && k !== selected) goTo(k); }));
+  card.querySelectorAll("[data-nav]").forEach((b) =>
     b.addEventListener("click", () => {
       const next = selected + +b.dataset.nav;
       if (mode === "idle" && next >= 0 && next < PN) goTo(next);
-    });
-  });
+    }));
 }
 
 const hint = document.createElement("div");
@@ -279,16 +360,13 @@ function anchor(i, drift, outPos, outLook) {
 
 function goTo(i, dur = 1.6, arc = 0.55) {
   selected = ((i % PN) + PN) % PN;
-  cardSide = 0; // re-pick the roomier side on arrival
-  card.style.opacity = "0";
-  card.style.marginTop = "18px";
+  card.classList.remove("is-in");
   travel = { fromPos: stage.camera.position.clone(), fromLook: lookCur.clone(), toIdx: selected, t: 0, dur, arc };
   mode = "travel";
   setTimeout(() => {
     if (!explore) return;
     renderCard();
-    card.style.opacity = "1";
-    card.style.marginTop = "0px";
+    card.classList.add("is-in");
   }, dur * 520);
 }
 
@@ -297,13 +375,13 @@ function setExplore(on) {
   stage.controls.autoRotate = false;
   stage.controls.enabled = !on; // the flight system owns the camera while exploring
   card.style.display = on ? "block" : "none";
+  if (!on) card.classList.remove("is-in");
   hint.style.display = on ? "block" : "none";
   for (const el of labels) el.style.display = on ? "block" : "none";
   if (on) {
     driftA = 0;
     goTo(selected, 2.1, 0.9); // the dive
   } else {
-    card.style.opacity = "0";
     travel = { fromPos: stage.camera.position.clone(), fromLook: lookCur.clone(), toIdx: -1, t: 0, dur: 1.3, arc: 0.6 };
     mode = "travel";
   }
@@ -354,12 +432,19 @@ stage.addUpdate((time, delta) => {
     // Real orbital revolution — slowed while exploring so the camera glides with its star.
     p.a += delta * p.orbitSpeed * (explore ? 0.3 : 1);
     p.planet.position.set(Math.cos(p.a) * p.orbitR, 0, Math.sin(p.a) * p.orbitR);
-    p.planet.rotation.y += delta * 0.4;
-    const pulse = 1 + Math.sin(time * 1.4 + i) * 0.06;
-    p.planet.scale.setScalar(pulse * (sel ? 1.15 : 1));
-    p.planet.material.emissiveIntensity = sel ? 1.35 : 0.9;
-    p.orbit.material.opacity = sel ? 0.3 : 0.09;
-    if (p.ring) p.ring.rotation.z += delta * 0.3;
+    // A camera-facing badge holds still: no spin, and no breathing pulse — the
+    // constant size wobble on a flat logo read as shaking rather than life.
+    p.planet.scale.setScalar(sel ? 1.18 : 1);
+    // In product view the other planets recede, so it is unambiguous which one the
+    // card is describing. Eased rather than switched, so entering and leaving the view
+    // is a fade instead of a jump. Outside product view they all read equally.
+    const wantMark = !explore ? 0.96 : sel ? 1 : 0.2;
+    const wantOrbit = !explore ? 0.09 : sel ? 0.3 : 0.04;
+    const wantTrail = !explore ? 0.85 : sel ? 0.9 : 0.14;
+    const k = 1 - Math.exp(-delta * 4);
+    p.mark.material.opacity += (wantMark - p.mark.material.opacity) * k;
+    p.orbit.material.opacity += (wantOrbit - p.orbit.material.opacity) * k;
+    p.trail.material.opacity += (wantTrail - p.trail.material.opacity) * k;
     // Comet tail follows the lane behind the planet, with a soft sinusoidal shimmer.
     const tattr = p.trailGeo.attributes.position;
     for (let k = 0; k < TRAIL_N; k++) {
@@ -410,21 +495,6 @@ stage.addUpdate((time, delta) => {
         `translate(${((proj.x * 0.5 + 0.5) * window.innerWidth).toFixed(1)}px,${((-proj.y * 0.5 + 0.5) * window.innerHeight).toFixed(1)}px) translate(-50%,-100%)`;
     }
 
-    // The card rides beside the star it travels with.
-    planets[selected].planet.getWorldPosition(proj);
-    proj.project(stage.camera);
-    const px = (proj.x * 0.5 + 0.5) * window.innerWidth;
-    const py = (-proj.y * 0.5 + 0.5) * window.innerHeight;
-    const cw = Math.min(330, window.innerWidth * 0.74);
-    if (cardSide === 0) cardSide = px < window.innerWidth * 0.55 ? 1 : -1; // roomier side, then stick with it
-    let txp = cardSide > 0 ? px + 84 : px - 84 - cw;
-    txp = Math.max(16, Math.min(window.innerWidth - cw - 16, txp));
-    const typ = Math.max(120, Math.min(window.innerHeight - 250, py));
-    if (cardX < 0) { cardX = txp; cardY = typ; } // first frame: appear in place
-    cardX += (txp - cardX) * (1 - Math.exp(-delta * 6));
-    cardY += (typ - cardY) * (1 - Math.exp(-delta * 6));
-    card.style.left = cardX.toFixed(1) + "px";
-    card.style.top = cardY.toFixed(1) + "px";
   } else {
     sunLabel.style.display = "none";
   }

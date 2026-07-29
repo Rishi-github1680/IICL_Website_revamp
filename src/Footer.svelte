@@ -1,6 +1,20 @@
 <script>
-  // Slate footer over a full-bleed world map. Data comes from menu.js.
-  import { PRODUCTS as products, SERVICES as services, INDUSTRIES as industries } from './menu.js';
+  // Slate footer over a full-bleed world map, laid out as a sitemap.
+  // The floating contact agent rides along here so every page that has a footer
+  // gets it, rather than wiring it into four separate layouts.
+  import { PRODUCTS as products, INDUSTRIES, TALENT, INSIGHTS } from './menu.js';
+  import Assistant from './Assistant.svelte';
+
+  // Inline marks rather than image files — there are no social icons in /img, and
+  // two paths cost less than two more network requests. Add an entry here (with a
+  // real profile URL) to bring another network in.
+  const SOCIAL = [
+    {
+      label: 'IICL on LinkedIn',
+      href: 'https://www.linkedin.com/company/iiclconsulting',
+      svg: `<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.7c0-1.36-.03-3.11-2-3.11-2 0-2.3 1.48-2.3 3.01V21h-4V9Z"/></svg>`,
+    },
+  ];
 </script>
 
 <footer class="ft">
@@ -23,16 +37,14 @@
         </p>
       </div>
 
-      <div class="ft-col">
-        <h4>Services</h4>
-        <ul>{#each services as s}<li><a href={s.href}>{s.label}</a></li>{/each}</ul>
-      </div>
-      <div class="ft-col">
-        <h4>Industries</h4>
-        <ul>{#each industries as s}<li><a href={s.href}>{s.label}</a></li>{/each}</ul>
-      </div>
-      <div class="ft-col">
-        <h4>AI Solutions</h4>
+      <!-- Solution-first (Spec FT1): Enterprise AI and GCC are the two commercial
+           pathways, so each gets its own group rather than hiding inside "Services". -->
+      <div class="ft-col ft-col-wide">
+        <h4>Enterprise AI Solutions</h4>
+        <ul>
+          <li><a href="/ai-genai-services">Enterprise AI &amp; GenAI</a></li>
+          <li><a href="/agentic-ai">Agentic AI</a></li>
+        </ul>
         <ul class="ft-products">
           {#each products as s}
             <li>
@@ -49,18 +61,46 @@
           {/each}
         </ul>
       </div>
+
       <div class="ft-col">
-        <h4>Social Links</h4>
-        <ul><li><a href="https://www.linkedin.com/company/iiclconsulting" target="_blank" rel="noopener">LinkedIn</a></li></ul>
+        <h4>GCC Technology Teams</h4>
+        <ul>
+          {#each TALENT as t}<li><a href={t.href}>{t.label}</a></li>{/each}
+        </ul>
+        <h4 class="ft-h4-gap">Industries</h4>
+        <ul>
+          {#each INDUSTRIES.slice(0, 5) as s}<li><a href={s.href}>{s.label}</a></li>{/each}
+        </ul>
+      </div>
+
+      <div class="ft-col">
+        <h4>Insights</h4>
+        <ul>
+          {#each INSIGHTS as s}<li><a href={s.href}>{s.label}</a></li>{/each}
+        </ul>
         <h4 class="ft-h4-gap">Company</h4>
         <ul>
-          <li><a href="/aboutus">About Us</a></li>
+          <li><a href="/aboutus">About IICL</a></li>
           <li><a href="/careers">Careers</a></li>
-          <li><a href="/use-cases">Use Cases</a></li>
-          <li><a href="/blog">Blogs</a></li>
-          <li><a href="/contactus">Contact Us</a></li>
+          <li><a href="/contactus">Contact</a></li>
           <li><a href="/privacy-policy">Privacy Policy</a></li>
+          <li><a href="/sitemap">Sitemap</a></li>
         </ul>
+      </div>
+    </div>
+
+    <!-- Actions row above the divider: the CTA now sits in the opposite corner from
+         the brand block, with the social marks alongside it on the right. -->
+    <div class="ft-actions">
+      <!-- FT1 requires both commercial paths in the footer, not just one. -->
+      <a class="ft-cta" href="/contactus?intent=ai-discovery-workshop">Book an AI Discovery Workshop <span class="ft-cta-arw">→</span></a>
+      <a class="ft-cta ft-cta-alt" href="/contactus?intent=gcc-team-expansion">Plan Your GCC Team Expansion <span class="ft-cta-arw">→</span></a>
+      <div class="ft-social">
+        {#each SOCIAL as s}
+          <a class="ft-soc" href={s.href} target="_blank" rel="noopener" aria-label={s.label} title={s.label}>
+            {@html s.svg}
+          </a>
+        {/each}
       </div>
     </div>
 
@@ -69,6 +109,8 @@
     </div>
   </div>
 </footer>
+
+<Assistant />
 
 <style>
   /* Slate base with the world map filling the whole footer edge to edge. `cover`
@@ -81,12 +123,16 @@
   /* Readability overlay — the map stays visible, the links stay legible. */
   .ft::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background: linear-gradient(180deg, rgba(18,24,32,0.86) 0%, rgba(18,24,32,0.6) 42%, rgba(18,24,32,0.82) 100%); }
-  .ft-wrap { position: relative; max-width: var(--wrap-max); margin: 0 auto; padding: 52px var(--wrap-pad) 0; box-sizing: border-box; }
+  /* Equal inset on all four corners — the block is centred on the page rail and sits
+     the same distance from every edge, so no side reads as heavier than another. */
+  .ft-wrap { position: relative; max-width: var(--wrap-max); margin: 0 auto;
+    padding: var(--wrap-pad); box-sizing: border-box; }
   /* The footer sits on the same rail as the page, and the columns are centred as a
      group: `justify-content: center` on a fixed-width track stops the row drifting
      left when the wrap is wider than the content needs. */
-  .ft-top { display: grid; grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(140px, 1fr));
-    gap: 26px 40px; align-items: start; justify-content: center; width: 100%; }
+  /* Brand · AI Solutions (widest, it leads) · Explore · Company. */
+  .ft-top { display: grid; grid-template-columns: minmax(240px, 1.35fr) minmax(190px, 1.1fr) repeat(2, minmax(130px, 0.8fr));
+    gap: 26px 44px; align-items: start; justify-content: center; width: 100%; }
 
   .ft-brand { max-width: 34ch; }
   .ft-logo { width: 52px; height: auto; display: block; }
@@ -103,7 +149,6 @@
      rhythm so each column reads as a block rather than a loose scatter. */
   .ft-col h4 { font-size: 11px; font-weight: var(--w-medium); letter-spacing: 0.14em; text-transform: uppercase;
     color: rgba(255,255,255,0.45); margin: 0 0 12px; }
-  .ft-h4-gap { margin-top: 22px !important; }
   .ft-col ul { list-style: none; margin: 0; padding: 0; }
   .ft-col li { margin: 0 0 4px; }
   .ft-col a { display: inline-block; color: rgba(255,255,255,0.82); text-decoration: none; font-size: 14px;
@@ -128,10 +173,39 @@
   .ft-prod.is-disabled { color: rgba(255,255,255,0.42); cursor: default; font-size: 14px; line-height: 1.55; padding: 2px 0; }
   .ft-prod.is-disabled:hover .ft-logo-mark { background: rgba(255,255,255,0.08); }
 
-  .ft-bottom { margin-top: 34px; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; }
+  /* No bottom padding of its own — the wrap's equal inset provides the final gap. */
+  /* Actions row: CTA at the right-hand end, social marks beside it, above the rule. */
+  .ft-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 30px; }
+
+  /* The one action in the footer, so it is filled rather than outlined — it should
+     read as the brightest thing down here. */
+  .ft-cta { display: inline-flex; align-items: center; gap: 9px;
+    padding: 12px 24px; background: #ee2f2e; border-radius: 999px;
+    color: #fff; text-decoration: none; font-size: 14.5px; font-weight: var(--w-medium);
+    box-shadow: 0 6px 20px rgba(238,47,46,0.32);
+    transition: background .25s, transform .25s cubic-bezier(0.22,1,0.36,1), box-shadow .25s; }
+  .ft-cta:hover { background: #ff3f3e; transform: translateY(-2px); box-shadow: 0 10px 26px rgba(238,47,46,0.44); }
+  .ft-cta-arw { font-family: var(--font-mono); font-size: 13px; transition: transform .25s cubic-bezier(0.22,1,0.36,1); }
+  .ft-cta:hover .ft-cta-arw { transform: translateX(3px); }
+
+  /* The second path is outlined rather than filled, so the two read as equal
+     destinations without two solid red blocks competing. */
+  .ft-cta-alt { background: transparent; border: 1px solid rgba(255,255,255,.28); box-shadow: none; }
+  .ft-cta-alt:hover { background: rgba(238,47,46,.14); border-color: #ee2f2e; box-shadow: none; }
+
+  .ft-social { display: flex; gap: 10px; }
+  .ft-soc { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+    color: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.16);
+    transition: color .22s, border-color .22s, background .22s, transform .22s; }
+  .ft-soc:hover { color: #fff; background: #ee2f2e; border-color: #ee2f2e; transform: translateY(-2px); }
+
+  .ft-bottom { margin-top: 16px; padding: 16px 0 0; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; }
   .ft-bottom span { font-size: 13px; color: rgba(255,255,255,0.5); }
 
-  @media (max-width: 1080px) { .ft-top { grid-template-columns: 1fr 1fr 1fr; } }
+  @media (max-width: 1080px) { .ft-top { grid-template-columns: 1.2fr 1fr 1fr; } }
   @media (max-width: 780px) { .ft-top { grid-template-columns: 1fr 1fr; gap: 28px; } }
-  @media (max-width: 560px) { .ft-top { grid-template-columns: 1fr; } .ft-wrap { padding-top: 40px; } }
+  @media (max-width: 560px) {
+    .ft-top { grid-template-columns: 1fr; }
+    .ft-actions { justify-content: space-between; }
+  }
 </style>

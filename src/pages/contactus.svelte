@@ -2,20 +2,24 @@
   import Layout from '../Layout.svelte';
   import { PAGE_ART } from '../menu.js';
   import { COMPANY } from '../seo.js';
+  import { REQUIREMENTS, resolveIntent } from '../intents.js';
 
-  // Requirement dropdown — the routing categories from the SEO strategy (Contact page).
-  const REQUIREMENTS = [
-    'AI agents and automation',
-    'Voice AI (iVaak)',
-    'WhatsApp Business API',
-    'Product demo',
-    'Staff augmentation',
-    'ERP implementation',
-    'Partnership',
-    'Something else',
-  ];
+  // Every CTA arrives with ?intent=<value>. The raw value is checked against the
+  // approved allowlist (Spec F3) and never rendered — an unknown or absent value
+  // simply falls back to the general enquiry flow. `intentKey` is the validated key,
+  // safe to pass on; the raw parameter never leaves this line.
+  const rawIntent = typeof location !== 'undefined'
+    ? new URLSearchParams(location.search).get('intent')
+    : null;
+  const intent = resolveIntent(rawIntent);
+  const intentKey = intent ? rawIntent : null;
 
-  let form = $state({ name: '', company: '', email: '', phone: '', requirement: '', message: '', website: '' });
+  let form = $state({
+    name: '', company: '', email: '', phone: '',
+    // Preselect the matching enquiry type when we recognise the intent.
+    requirement: intent ? intent.label : '',
+    message: '', website: '',
+  });
   let status = $state('idle'); // idle | sending | error
   let error = $state('');
 
@@ -29,7 +33,8 @@
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        // Only the resolved key is sent — never the raw query value.
+        body: JSON.stringify({ ...form, intent: intentKey }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -57,7 +62,7 @@
       <h2 class="section-h"><span class="tick"></span>Describe the work, not the technology.</h2>
       <div class="section-body">
         <p class="para">The more concrete the process, the more useful our first reply. Helpful detail: what the work involves today, roughly how much of it there is, and which systems it touches.</p>
-        <p class="para">If you would rather look around first, see <a href="/#products">what we build</a>, the <a href="/use-cases">use cases</a>, or <a href="/aboutus">how we run a project</a>.</p>
+        <p class="para">If you would rather look around first, see <a href="/#products">what we build</a>, the <a href="/blog">case studies</a>, or <a href="/aboutus">how we run a project</a>.</p>
       </div>
     </div>
   </section>
@@ -66,7 +71,18 @@
     <div class="wrap">
       <h2 class="section-h"><span class="tick"></span>Send an enquiry</h2>
       <div class="section-body">
+        {#if intent}
+          <p class="para intent-lede"><strong>{intent.label}.</strong> {intent.lede}</p>
+        {/if}
         <p class="para">Fields marked * are required. We reply by email within one working day unless you ask us to call.</p>
+
+        <!-- Required on every conversion form (Spec B10, D5, E-AGQ1). -->
+        <p class="para form-safety">
+          <strong>Please do not send sensitive material through this form.</strong>
+          That means passwords, API keys, personal or candidate records, production data,
+          security vulnerabilities and confidential architecture documents. Anything of that
+          kind should be exchanged through an approved channel once an engagement has started.
+        </p>
 
         <form class="enq" onsubmit={submit} novalidate>
           <div class="row">
@@ -148,13 +164,6 @@
         </div>
       </div>
 
-      <div class="map">
-        <iframe
-          title="IICL Hyderabad office location"
-          src="https://www.google.com/maps?q=Jains+Sadguru+Images+Capital+Park,+Image+Gardens+Road,+Madhapur,+Hyderabad+500084&output=embed"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
     </div>
   </section>
 </Layout>
@@ -164,6 +173,12 @@
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .field { display: grid; gap: 7px; }
   .field span { font-size: 13.5px; font-weight: 600; color: #33363c; letter-spacing: 0.01em; }
+  .intent-lede { padding: 12px 16px; border-left: 3px solid #ee2f2e;
+    background: color-mix(in srgb, #ee2f2e 5%, transparent); border-radius: 0 6px 6px 0; }
+  /* Deliberately plain and unmissable — this is a safety notice, not decoration. */
+  .form-safety { padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px;
+    background: #fff; font-size: var(--fs-small); line-height: 1.6; }
+
   .field input, .field select, .field textarea {
     font: inherit; font-size: 15.5px; color: #16171a; background: #fff;
     border: 1px solid #d9d5ce; border-radius: 6px; padding: 12px 14px; width: 100%; box-sizing: border-box;
@@ -191,10 +206,6 @@
   .office h3 { margin: 0 0 12px; font-size: 19px; font-weight: 600; color: #16171a; }
   .office a { color: #b81c1c; text-decoration: none; }
   .office a:hover { text-decoration: underline; }
-
-  .map { border: 1px solid #e6e3de; border-radius: 8px; overflow: hidden; line-height: 0; }
-  .map iframe { width: 100%; height: 340px; border: 0; }
-
   @media (max-width: 760px) {
     .row, .offices { grid-template-columns: 1fr; }
   }

@@ -7,7 +7,7 @@
   lede="One assistant answering on WhatsApp, your website and QR entry points — drawing on your systems, and handing over to a person when it should."
   heroBanner="/img/banners/A4-banner-icognito.png"
   heroModel="/chatbot.html?transparent=1&ui=0"
-  path="/iCognito"
+  path="/icognito"
   cta="Request an iCognito Demo"
   specs={[
     { k: 'Handles', v: 'Customer enquiries' },
@@ -33,7 +33,7 @@
         <a class="cta-link" href="/contactus">See how it fits your channels <span class="arw">→</span></a>
       </div>
       <div class="split-media">
-        <figure><img src="/img/products/iCognito-1.png" alt="iCognito.ai conversation across channels" loading="lazy" /></figure>
+        <figure><img src="/img/products/icognito-1.png" alt="iCognito.ai conversation across channels" loading="lazy" /></figure>
       </div>
     </div>
   </section>
@@ -61,7 +61,7 @@
         <a class="cta-link" href="/contactus">Talk through your escalation rules <span class="arw">→</span></a>
       </div>
       <div class="split-media">
-        <figure><img src="/img/products/iCognito-2.png" alt="iCognito.ai analytics and resolution metrics" loading="lazy" /></figure>
+        <figure><img src="/img/products/icognito-2.png" alt="iCognito.ai analytics and resolution metrics" loading="lazy" /></figure>
       </div>
     </div>
   </section>

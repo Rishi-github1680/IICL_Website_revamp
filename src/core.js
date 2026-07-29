@@ -3,6 +3,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { BACKDROP_HTML } from "./backdrop-markup.js";
 
 export { THREE };
 
@@ -17,6 +18,98 @@ export const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 
 if (params.get("ui") === "0") document.body.classList.add("ui-hidden");
 if (params.get("transparent") === "1") document.body.classList.add("transparent");
+
+// ── Fallback ────────────────────────────────────────────────────────────────
+// These scenes are the whole page on a model route and the hero on several content
+// routes, so a WebGL failure used to leave a black rectangle. Instead paint a
+// CSS-only AI backdrop (see .ai-fb in styles.css) — no canvas, no Three.js.
+export function paintFallback(host) {
+  const el = host || document.getElementById("scene");
+  if (!el || el.querySelector(".ai-fb")) return;
+
+  const fb = document.createElement("div");
+  fb.className = "ai-fb";
+  fb.setAttribute("role", "img");
+  fb.setAttribute("aria-label", el.getAttribute("aria-label") || "Diagram of an IICL agent at work");
+  fb.innerHTML = BACKDROP_HTML;
+  el.appendChild(fb);
+  document.body.classList.add("no-webgl");
+}
+
+// `createStage` throws IICL_NO_WEBGL to halt the calling module — the modules are
+// top-level scripts with nothing to return to, so a throw is the stop mechanism.
+// The visitor already has the static backdrop by then, so this is a handled outcome,
+// not a fault; without this the browser reports it as an uncaught error (Spec G14).
+// Scoped to exactly this sentinel so real errors still surface.
+const NO_WEBGL = "IICL_NO_WEBGL";
+if (typeof window !== "undefined" && !window.__iiclWebglGuard) {
+  window.__iiclWebglGuard = true;
+  window.addEventListener("error", (e) => {
+    if (e?.message?.includes(NO_WEBGL) || e?.error?.message === NO_WEBGL) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  });
+  window.addEventListener("unhandledrejection", (e) => {
+    if (e?.reason?.message === NO_WEBGL) e.preventDefault();
+  });
+}
+
+// Cheap capability probe — creating the real renderer is what actually throws,
+// but this catches the common "WebGL disabled" case before Three.js runs.
+// `?fallback=1` forces the failure path so the backdrop can be reviewed on demand.
+export function webglSupported() {
+  if (params.get("fallback") === "1") return false;
+  try {
+    const c = document.createElement("canvas");
+    return !!(window.WebGLRenderingContext && (c.getContext("webgl2") || c.getContext("webgl")));
+  } catch {
+    return false;
+  }
+}
+
+// Safety net for everything the probe and the try/catch miss — a driver crash, a
+// module that throws mid-build, a scene that never reaches its first frame. If no
+// canvas has appeared shortly after load, show the fallback rather than nothing.
+if (typeof window !== "undefined") {
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      const el = document.getElementById("scene");
+      if (el && !el.querySelector("canvas")) paintFallback(el);
+    }, 2500);
+  });
+}
+
+// Side toggle for previewing the fallback without breaking your GPU. Only on the
+// standalone model routes — `ui=0` embeds (journey stages, product heroes) skip it,
+// and .ui-hidden hides it in CSS as a second guard.
+if (typeof window !== "undefined" && params.get("ui") !== "0") {
+  // The module graph can finish after DOMContentLoaded has already fired, so only
+  // wait for the event when the document is still parsing.
+  const whenReady = (fn) =>
+    document.readyState === "loading" ? window.addEventListener("DOMContentLoaded", fn) : fn();
+
+  whenReady(() => {
+    if (!document.getElementById("scene")) return;
+
+    const on = params.get("fallback") === "1";
+    const btn = document.createElement("button");
+    btn.id = "fallback-toggle";
+    btn.className = "fb-toggle" + (on ? " is-on" : "");
+    btn.type = "button";
+    btn.title = on ? "Showing the no-WebGL fallback" : "Preview the no-WebGL fallback";
+    btn.innerHTML = `<span class="fb-dot"></span><span class="fb-label">${on ? "Fallback ON" : "Preview fallback"}</span>`;
+
+    btn.addEventListener("click", () => {
+      const url = new URL(window.location.href);
+      if (on) url.searchParams.delete("fallback");
+      else url.searchParams.set("fallback", "1");
+      window.location.href = url.toString();
+    });
+
+    document.body.appendChild(btn);
+  });
+}
 
 // All particle materials share pointer-repulsion uniforms, updated by the active stage.
 const particleMats = [];
@@ -34,6 +127,14 @@ export function createStage({
 } = {}) {
   const container = document.getElementById("scene");
   const transparent = params.get("transparent") === "1";
+
+  // Bail before any Three.js work if the context cannot exist. The caller module
+  // stops here; the visitor gets the CSS backdrop instead of a black box.
+  if (!webglSupported()) {
+    paintFallback(container);
+    throw new Error("IICL_NO_WEBGL");
+  }
+
   const scene = new THREE.Scene();
   scene.background = transparent ? null : new THREE.Color(0x050505);
   scene.fog = new THREE.FogExp2(0x050505, fogDensity);
@@ -41,11 +142,18 @@ export function createStage({
   const camera = new THREE.PerspectiveCamera(38, 1, 0.08, 100);
   camera.position.set(...cameraPosition);
 
-  const renderer = new THREE.WebGLRenderer({
-    antialias: !isLowPower,
-    alpha: transparent,
-    powerPreference: "high-performance",
-  });
+  // Context creation can still fail on a blocklisted or exhausted GPU.
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({
+      antialias: !isLowPower,
+      alpha: transparent,
+      powerPreference: "high-performance",
+    });
+  } catch (err) {
+    paintFallback(container);
+    throw new Error("IICL_NO_WEBGL");
+  }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, isLowPower ? 1.25 : 1.8));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -133,7 +241,12 @@ export function createStage({
     if (!visible || paused) return;
     const delta = Math.min(clock.getDelta(), 0.05);
     elapsed += reducedMotion ? delta * 0.08 : delta;
-    controls.update();
+    // `enabled = false` only stops OrbitControls listening for input — update() still
+    // repositions the camera from its own spherical state around controls.target every
+    // frame. When a scene drives the camera itself (the galaxy flight system), that is
+    // two things writing camera.position per frame, which reads as jitter. Skipping the
+    // update while disabled hands the camera over cleanly.
+    if (controls.enabled) controls.update();
     // Journey scroll-zoom: dolly the camera toward the model over this stage (shared by every model).
     if (zoomActive) {
       const want = baseDist * (1 - zoomT * (1 - zoomNear));
@@ -163,7 +276,15 @@ export function createStage({
     }
     for (const update of updaters) update(elapsed, delta);
     composer.render();
+    // Tell the host page the moment there is something real on screen. Until this
+    // arrives the host keeps its static backdrop up, so a slow or failed 3D fetch
+    // never shows as an empty box.
+    if (!announced) {
+      announced = true;
+      try { window.parent?.postMessage({ iiclReady: true }, "*"); } catch {}
+    }
   }
+  let announced = false;
   frame();
 
   return {

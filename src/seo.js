@@ -116,6 +116,27 @@ export function productSchema({ name, description, path, category }) {
 }
 
 // FAQ — `faqs` is [{q, a}, ...]. Only emit for questions genuinely answered on the page.
+/**
+ * Article/BlogPosting for the journal. Only fields we can actually stand behind:
+ * no invented authors and no invented dates (Spec G12). `datePublished` is required
+ * for the rich result, so a post without one simply gets no Article markup.
+ */
+export function articleSchema({ headline, description, path, image, datePublished, dateModified, author }) {
+  if (!headline || !path || !datePublished) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline,
+    description: description || undefined,
+    image: image ? SITE + image : undefined,
+    datePublished,
+    dateModified: dateModified || datePublished,
+    author: { "@type": "Organization", name: COMPANY.name, url: SITE },
+    publisher: { "@id": SITE + "/#organization" },
+    mainEntityOfPage: { "@type": "WebPage", "@id": SITE + path },
+  };
+}
+
 export function faqSchema(faqs) {
   return {
     "@context": "https://schema.org",

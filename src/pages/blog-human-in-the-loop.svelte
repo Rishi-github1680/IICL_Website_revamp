@@ -67,7 +67,7 @@
       <div class="section-body">
         <p class="para">Agreeing this split early prevents the argument that otherwise arrives at go-live, when someone senior sees the system doing something they assumed a person was doing.</p>
         <p class="para">It also gives you a clean way to expand. Once a Level 2 workflow has months of reviewed decisions behind it, you have real evidence about where it is reliable — and can move parts of it to Level 1 deliberately, with numbers, rather than optimistically.</p>
-        <p class="para">More on how we scope and govern this in <a href="/ai-genai-services">AI and GenAI services</a>, or see it working in the <a href="/use-cases">case studies</a>.</p>
+        <p class="para">More on how we scope and govern this in <a href="/ai-genai-services">AI and GenAI services</a>, or see it working in the <a href="/blog">case studies</a>.</p>
       </div>
     </div>
   </section>
