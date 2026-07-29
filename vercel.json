@@ -29,6 +29,11 @@
       "source": "/iCognito",
       "destination": "/icognito",
       "permanent": true
+    },
+    {
+      "source": "/gcc-careers",
+      "destination": "/careers",
+      "permanent": true
     }
   ],
   "headers": [

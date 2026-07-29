@@ -12,7 +12,16 @@
   import { hpan } from '../hscroll.js';
   import { jobPostingSchema, jsonLd } from '../seo.js';
 
-  const ROLES = [
+  // Two employment tracks, one page. Permanent roles are IICL's own hiring; contract
+  // roles are placements inside a customer's GCC team. A candidate should not have to
+  // work out which of two pages applies to them.
+  const TRACKS = [
+    { key: 'permanent', label: 'Permanent roles', note: 'Employed by IICL, working on our own products and delivery.' },
+    { key: 'contract',  label: 'Contract roles',  note: 'Placed inside a customer GCC or enterprise technology team, for a defined term.' },
+  ];
+  let track = $state('permanent');
+
+  const PERMANENT = [
     { title: 'AI / ML Engineer', team: 'Engineering', loc: 'Hyderabad', type: 'Full-time', posted: '', validThrough: '',
       blurb: 'Build and ship the models behind our voice and document products, from data through to a monitored production endpoint.',
       skills: ['Python', 'PyTorch', 'RAG', 'MLOps'] },
@@ -28,7 +37,7 @@
     { title: 'QA Engineer', team: 'Delivery', loc: 'Hyderabad', type: 'Full-time', posted: '', validThrough: '',
       blurb: 'Test systems that talk back. Build the harnesses that catch regressions in non-deterministic output.',
       skills: ['Automation', 'Playwright', 'API testing', 'Test design'] },
-    { title: 'Business Development Manager', team: 'Sales', loc: 'Raleigh, NC', type: 'Full-time', posted: '', validThrough: '',
+    { title: 'Business Development Manager', team: 'Sales', loc: 'USA', type: 'Full-time', posted: '', validThrough: '',
       blurb: 'Open and run enterprise conversations across the US, working with the engineers who deliver the work.',
       skills: ['Enterprise sales', 'Discovery', 'SaaS', 'Pipeline'] },
     { title: 'Customer Success Manager', team: 'Delivery', loc: 'Hyderabad', type: 'Full-time', posted: '', validThrough: '',
@@ -38,6 +47,35 @@
       blurb: 'Design interfaces for systems that are partly autonomous, where showing what the machine did matters as much as what it can do.',
       skills: ['Product design', 'Figma', 'Design systems'] },
   ];
+
+  const CONTRACT = [
+    { title: 'AI / ML Engineer', team: 'AI & GenAI', loc: 'Hyderabad', type: 'Contract · 6-12 months',
+      blurb: 'Deliver models and evaluation harnesses inside a customer GCC team, working to their standards and their review process.',
+      skills: ['Python', 'PyTorch', 'RAG', 'MLOps'] },
+    { title: 'Data Engineer', team: 'Data Platforms', loc: 'Hyderabad / Bengaluru', type: 'Contract · 6-12 months',
+      blurb: 'Build and operate pipelines on the customer lakehouse, with their governance model and their release cadence.',
+      skills: ['Spark', 'dbt', 'Airflow', 'Lakehouse'] },
+    { title: 'Cloud / SRE Engineer', team: 'Cloud & SRE', loc: 'Hyderabad / Remote', type: 'Contract · rolling',
+      blurb: 'Reliability, observability and infrastructure automation inside an existing platform team.',
+      skills: ['Kubernetes', 'Terraform', 'Observability', 'FinOps'] },
+    { title: 'Security Engineer', team: 'Cybersecurity', loc: 'Hyderabad', type: 'Contract · 6-12 months',
+      blurb: 'Cloud and application security work within the customer control framework and their approval chain.',
+      skills: ['Cloud security', 'IAM', 'AppSec', 'Detection'] },
+    { title: 'Full-Stack Engineer', team: 'Product Engineering', loc: 'Hyderabad / Remote', type: 'Contract · 3-9 months',
+      blurb: 'Product surfaces and integrations delivered against a defined scope and acceptance criteria.',
+      skills: ['TypeScript', 'React / Svelte', 'Node', 'Postgres'] },
+    { title: 'SAP / ServiceNow Consultant', team: 'Enterprise Platforms', loc: 'Hyderabad', type: 'Contract · project',
+      blurb: 'Functional and technical delivery on enterprise platforms, scoped to a programme rather than a headcount.',
+      skills: ['SAP', 'ServiceNow', 'Integration', 'ITSM'] },
+    { title: 'QA / SDET', team: 'Product Engineering', loc: 'Hyderabad', type: 'Contract · 3-9 months',
+      blurb: 'Test automation and release assurance embedded in the customer delivery team.',
+      skills: ['Automation', 'Playwright', 'API testing'] },
+    { title: 'Analytics Engineer', team: 'Data Platforms', loc: 'Remote', type: 'Contract · rolling',
+      blurb: 'Modelling and reporting layers built to the customer semantic standards.',
+      skills: ['dbt', 'SQL', 'BI', 'Semantic models'] },
+  ];
+
+  const ROLES = $derived(track === 'contract' ? CONTRACT : PERMANENT);
 
   // One JobPosting per live role. Roles without a posted date contribute nothing —
   // see jobPostingSchema. Until the dates are supplied this emits no markup at all,
@@ -55,8 +93,11 @@
 
   const apply = (r) => `mailto:reachus@iicl.in?subject=${encodeURIComponent(`Application — ${r.title}`)}`;
 
-  const TEAMS = ['All', ...new Set(ROLES.map((r) => r.team))];
+  const TEAMS = $derived(['All', ...new Set(ROLES.map((r) => r.team))]);
   let team = $state('All');
+  // Switching track resets the team filter and the focused card, or the deck would
+  // try to hold a position that no longer exists.
+  const pickTrack = (k) => { track = k; team = 'All'; active = 0; };
   const shown = $derived(team === 'All' ? ROLES : ROLES.filter((r) => r.team === team));
 
   let active = $state(0);
@@ -146,7 +187,7 @@
   kicker="Company"
   heroImage={PAGE_ART['careers']}
   h1="Build the systems people actually talk to"
-  lede="We build voice agents, WhatsApp commerce and enterprise AI from Hyderabad and Raleigh. Small teams, real customers, work you can point at."
+  lede="We build voice agents, WhatsApp commerce and enterprise AI from India and the USA. Small teams, real customers, work you can point at."
   path="/careers"
   cta="Apply for a Verified Open Role"
   ctaHref="mailto:reachus@iicl.in?subject=Application%20—%20General"
@@ -158,6 +199,14 @@
         <h2 class="section-h"><span class="tick"></span>Currently hiring</h2>
         <span class="deck-count mono">Current openings</span>
       </div>
+
+      <div class="track-row" role="tablist" aria-label="Employment track">
+        {#each TRACKS as t}
+          <button class="track" role="tab" aria-selected={track === t.key}
+            class:active={track === t.key} onclick={() => pickTrack(t.key)}>{t.label}</button>
+        {/each}
+      </div>
+      <p class="track-note">{TRACKS.find((t) => t.key === track)?.note}</p>
 
       <div class="team-row" role="group" aria-label="Filter roles by team">
         {#each TEAMS as t}
@@ -258,6 +307,14 @@
   .deck-sec { padding-bottom: 0; }
   .deck-head { display: flex; align-items: baseline; gap: 16px; }
   .deck-count { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--brand-ink); }
+
+  .track-row { display: flex; gap: 8px; margin: 0 0 12px; }
+  .track { font: inherit; font-size: 14px; font-weight: var(--w-medium); cursor: pointer;
+    padding: 9px 18px; border-radius: 999px; border: 1px solid var(--line);
+    background: #fff; color: var(--muted); transition: background .2s, color .2s, border-color .2s; }
+  .track:hover { color: var(--ink); }
+  .track.active { background: var(--brand-solid, #d81f1e); border-color: var(--brand-solid, #d81f1e); color: #fff; }
+  .track-note { margin: 0 0 18px; font-size: var(--fs-small); color: var(--muted); }
 
   .team-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
   .team-chip { font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #55585e;

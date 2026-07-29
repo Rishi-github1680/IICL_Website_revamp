@@ -37,7 +37,7 @@
   <Nav />
 
   <StoryHero
-    kicker="Intelligence India.Com Limited"
+    kicker="IICL"
     title="Every business stands on one side of a gap."
     lede="On the far side: what AI makes possible. Scroll — and watch an intelligent system work out how to get across. IICL builds the crossing."
     panels={PANELS}

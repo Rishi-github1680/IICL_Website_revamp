@@ -10,7 +10,6 @@ export const PRODUCTS = [
   { label: 'iVaak.ai', acc: '#ee2f2e', href: '/ivaak', tag: 'Voice AI', desc: 'Multilingual AI voice agents', logo: '/img/ivaak.svg', thumb: '/img/banners/A2-banner-ivaak.png', site: 'https://ivaak.ai' },
   { label: 'TruFix.ai', acc: '#c11514', href: '/trufix', tag: 'AI Ticketing', desc: 'Ticketing that verifies resolutions', logo: '/img/trufix.svg', thumb: '/img/banners/A8-banner-trufix.png', site: 'https://trufix.ai' },
   { label: 'iWac.ai', acc: '#e35553', href: '/iwac', tag: 'WhatsApp Commerce', desc: 'WhatsApp commerce and support', logo: '/img/iwac.svg', thumb: '/img/banners/A3-banner-iwac.png', site: 'https://iwac.ai' },
-  { label: 'ChilliFries.ai', acc: '#ff7043', href: '/chillifries', tag: 'Coming Soon', desc: 'Our newest product — launching soon', logo: '/img/chillifries.svg', site: 'https://chillifries.ai', soon: true, disabled: true },
 
   // Withdrawn from the menus for now — pages remain, just unlinked.
   // { label: 'LexGenie.ai', acc: '#ff8d8b', href: '/lexgenie', tag: 'Legal AI', desc: 'Legal document review and drafting', logo: '/img/lexgenie.svg', thumb: '/img/banners/A5-banner-lexgenie.png', site: 'https://lexgenie.ai' },
@@ -61,7 +60,6 @@ export const COMPANY_LINKS = [
 // legacy staffing route redirects into it (Stage 4).
 export const TALENT = [
   { label: 'GCC Technology Teams', href: '/gcc-technology-teams', icon: '/img/nav-gcc.svg' },
-  { label: 'GCC Careers', href: '/gcc-careers', icon: '/img/nav-careers.svg' },
 ];
 
 // Header hierarchy per Spec G3:
@@ -120,7 +118,7 @@ export const PAGE_ART = {
   helpdesk:             { img: '/img/industry/helpdesk.svg',           alt: 'Support ticket queue resolving to a verified fix, representing managed IT help desk services' },
 
   // Company and resource pages.
-  aboutus:     { img: '/img/industry/aboutus.svg',     alt: 'Hyderabad and Raleigh delivery hubs exchanging work across an arc' },
+  aboutus:     { img: '/img/industry/aboutus.svg',     alt: 'India and the USA delivery hubs exchanging work across an arc' },
   blog:        { img: '/img/industry/blog.svg',        alt: 'Stacked articles feeding a knowledge graph' },
   'use-cases': { img: '/img/industry/use-cases.svg',   alt: 'Scattered inbound contacts resolving into measured outcomes' },
   contactus:   { img: '/img/industry/contactus.svg',   alt: 'Enquiries converging on a single point of contact' },

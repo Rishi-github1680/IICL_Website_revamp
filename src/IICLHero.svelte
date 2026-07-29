@@ -1,4 +1,5 @@
 <script>
+  import { INDUSTRIES } from './menu.js';
   import './theme.css';
   import { onMount } from 'svelte';
   import { get3D } from './prefs.js';
@@ -43,7 +44,6 @@
     { name: 'iVaak', tag: 'VOICE AI', desc: 'Multilingual voice agents that answer, qualify and resolve calls.', href: '/ivaak', acc: '#ee2f2e', logo: '/img/ivaak.svg' },
     { name: 'TruFix', tag: 'AI TICKETING', desc: 'Ticketing that verifies resolutions instead of assuming them.', href: '/trufix', acc: '#c11514', logo: '/img/trufix.svg' },
     { name: 'iWAC', tag: 'WHATSAPP COMMERCE', desc: 'Sell, support and notify on the channel customers open.', href: '/iwac', acc: '#e35553', logo: '/img/iwac.svg' },
-    { name: 'ChilliFries', tag: 'COMING SOON', desc: 'Our newest product — in build now.', href: '/chillifries', acc: '#ff7043', logo: '/img/chillifries.svg', soon: true, disabled: true },
 
     // Withdrawn from the site for now — pages still build, they are just unlinked.
     // { name: 'LexGenie', tag: 'LEGAL AI', desc: 'Contract and legal document review, drafting and Q&A.', href: '/lexgenie', acc: '#ff8d8b' },
@@ -59,13 +59,8 @@
     { num: '06', name: 'GCC technology teams', desc: 'Specialised capability, built around your roadmap.', href: '/gcc-technology-teams' },
     { num: '07', name: 'Managed IT help desk', desc: 'A help desk your users stop complaining about.', href: '/helpdesk' }
   ];
-  const industries = [
-    { name: 'Healthcare', href: '/healthcare' }, { name: 'Manufacturing', href: '/manufacturing' },
-    { name: 'Finance', href: '/finance' }, { name: 'Banking', href: '/banking' },
-    { name: 'Legal', href: '/legal' }, { name: 'Logistics', href: '/logistics' },
-    { name: 'Supply chain', href: '/supply-chain' }, { name: 'Contact centre', href: '/contact-centre' },
-    { name: 'HR', href: '/hr' }
-  ];
+  // From the shared registry, so the strip cannot drift from the nav or the sitemap.
+  const industries = INDUSTRIES.map((i) => ({ name: i.label, href: i.href, icon: i.icon }));
   // Four Enterprise AI + four GCC, per Spec B10. The workshop pricing/credit claim that
   // used to sit here is withdrawn under the Q7 default until the commercial owner
   // confirms it is a public fixed-fee offer.
@@ -426,7 +421,7 @@
       <div bind:this={heroPanelEl} class="hero-panel">
         <div class="eyebrow">
           <span class="tick"></span>
-          <span class="eyebrow-text">Intelligence India.Com Limited · India &amp; USA</span>
+          <span class="eyebrow-text">IICL &middot; Intelligence India.com</span>
           <span class="tick"></span>
         </div>
         <span class="hero-brand">Enterprise AI, delivered.</span>
@@ -469,7 +464,7 @@
           <span class="chapter-kicker">03 — Global network</span>
         </div>
         <h2 class="chapter-h2">Two continents. One delivery engine.</h2>
-        <p class="chapter-p">Hyderabad builds, Raleigh delivers — one connected network shipping enterprise AI around the clock, in your time zone.</p>
+        <p class="chapter-p">Hyderabad builds, the US team delivers — one connected network shipping enterprise AI around the clock, in your time zone.</p>
         <a href="/aboutus" class="chapter-link">About IICL <span class="mono">→</span></a>
       </div>
 
@@ -479,7 +474,7 @@
           <span class="tick"></span>
         </div>
         <h2 class="chapter-h2">A product suite, across the industries we serve.</h2>
-        <p class="chapter-p">Delivered from Hyderabad and Raleigh — WhatsApp commerce, voice AI, service management and enterprise workflows, built for enterprise and mid-market teams.</p>
+        <p class="chapter-p">Delivered from Hyderabad and the USA — WhatsApp commerce, voice AI, service management and enterprise workflows, built for enterprise and mid-market teams.</p>
         <a href="#journey" class="chapter-link" onclick={enterExplore}>See all products <span class="mono">→</span></a>
       </div>
     </div>
@@ -509,7 +504,7 @@
       </div>
       <div data-reveal class="def-body">
         <p class="def-p">IICL helps organisations identify, design, validate and operate enterprise AI solutions. Our work connects business workflows with approved data, enterprise applications, human decision rights and measurable operating outcomes.</p>
-        <p class="def-p">We combine AI engineering, enterprise integration, specialised technology capability and product innovation through teams in Hyderabad, India and Raleigh, North Carolina, USA.</p>
+        <p class="def-p">We combine AI engineering, enterprise integration, specialised technology capability and product innovation through teams in India and the USA.</p>
       </div>
     </div>
   </div>
@@ -594,7 +589,10 @@
         <span class="mono ind-strip-k">Industries we already work in</span>
         <div class="ind-chips">
           {#each industries as ind}
-            <a href={ind.href} class="ind-chip">{ind.name}</a>
+            <!-- The name is the accessible name and the tooltip; only the mark is drawn. -->
+            <a href={ind.href} class="ind-chip" aria-label={ind.name} title={ind.name}>
+              <span class="ind-mark" style="--mark:url('{ind.icon}')" aria-hidden="true"></span>
+            </a>
           {/each}
         </div>
       </div>
@@ -652,10 +650,10 @@
     <div class="wrap">
       <div data-reveal class="section-head">
         <div class="label-row"><span class="tick"></span><span class="label">Delivery presence</span></div>
-        <h2 class="section-h2">Enterprise delivery from Hyderabad and Raleigh.</h2>
+        <h2 class="section-h2">Enterprise delivery from India and the USA.</h2>
       </div>
       <div data-reveal class="def-body">
-        <p class="def-p">IICL supports enterprise solution design and delivery through teams in Hyderabad, India and Raleigh, North Carolina, USA. The engagement model, working hours, onsite requirements and service responsibilities are confirmed for each scope.</p>
+        <p class="def-p">IICL supports enterprise solution design and delivery through teams in India and the USA. The engagement model, working hours, onsite requirements and service responsibilities are confirmed for each scope.</p>
       </div>
     </div>
   </div>
@@ -884,8 +882,11 @@
   .ind-strip { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--line); }
   .ind-strip-k { display: block; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
     color: var(--muted); margin-bottom: 14px; }
-  .ind-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .ind-chip { font-size: 14.5px; font-weight: 400; color: var(--ink); text-decoration: none; background: #fff;
+  .ind-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .ind-mark { display: block; width: 26px; height: 26px; background: currentColor;
+    -webkit-mask: var(--mark) center / contain no-repeat; mask: var(--mark) center / contain no-repeat; }
+  .ind-chip { display: inline-flex; align-items: center; justify-content: center;
+    width: 52px; height: 52px; color: var(--ink); text-decoration: none; background: #fff;
     border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px;
     transition: border-color .2s, color .2s, background .2s; }
   .ind-chip:hover { border-color: #ee2f2e; color: #fff; background: var(--brand-solid, #d81f1e); }

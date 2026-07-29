@@ -64,7 +64,7 @@ function makeHub(x) {
   return { hub, core, glow, wire };
 }
 const hubA = makeHub(-HUB_X); // Hyderabad — builds
-const hubB = makeHub(HUB_X);  // Raleigh — delivers
+const hubB = makeHub(HUB_X);  // the USA — delivers
 
 // ── Particle delivery streams (the ported StreamField) ──
 const N = isLowPower ? 1600 : 3200;

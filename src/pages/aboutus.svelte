@@ -48,8 +48,8 @@
 
 <Layout
   kicker="Company"
-  h1="About Intelligence India.Com Limited"
-  lede="Intelligence India.Com Limited builds AI agents, enterprise software and automation platforms, with delivery teams operating across India and the USA."
+  h1="About IICL"
+  lede="IICL builds AI agents, enterprise software and automation platforms, with delivery teams operating across India and the USA."
   heroImage={PAGE_ART["aboutus"]}
   heroStory={{
     screens: 620,
@@ -65,8 +65,8 @@
       { n: '03 — The memory', h: 'What failed becomes what we build on.',
         note: 'The wreckage stays in view. Every engagement carries forward what the last one learned — which is why the second design is supported before it is spanned.',
         at: [0.6, 0.65, 0.76, 0.82] },
-      { n: '04 — The crossing', h: 'Hyderabad builds. Raleigh delivers.',
-        note: 'Two continents, one delivery engine, serving enterprise and mid-market teams. The crossing holds because of the one that did not.',
+      { n: '04 — The crossing', h: 'What holds is what was tested.',
+        note: 'The bridge that stands is not the first one drawn. It is the one that carries the weight of everything the earlier attempt taught us — which is why we would rather find the flaw in a two-week proof than in your production systems.',
         at: [0.91, 0.95, 1.5, 2] },
     ],
   }}
@@ -209,7 +209,7 @@
         </div>
         <div class="office">
           <div class="office-head">
-            <span class="office-k mono">United States — Raleigh</span>
+            <span class="office-k mono">United States</span>
             {#if ralTime}<span class="office-clock mono"><i class="office-pulse"></i>{ralTime} ET</span>{/if}
           </div>
           <p class="para">{COMPANY.usa.street}, {COMPANY.usa.city}, {COMPANY.usa.region} {COMPANY.usa.postalCode}.</p>

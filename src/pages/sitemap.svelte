@@ -35,7 +35,6 @@
       { label: 'Home', href: '/' },
       { label: 'About IICL', href: '/aboutus' },
       { label: 'Careers', href: '/careers' },
-      { label: 'GCC Careers', href: '/gcc-careers' },
       { label: 'Contract and engagement models', href: '/contracts' },
       { label: 'Contact', href: '/contactus' },
       { label: 'Privacy Policy', href: '/privacy-policy' },

@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import Layout from '../Layout.svelte';
   import { PAGE_ART } from '../menu.js';
   import { COMPANY } from '../seo.js';
@@ -8,18 +9,41 @@
   // approved allowlist (Spec F3) and never rendered — an unknown or absent value
   // simply falls back to the general enquiry flow. `intentKey` is the validated key,
   // safe to pass on; the raw parameter never leaves this line.
-  const rawIntent = typeof location !== 'undefined'
-    ? new URLSearchParams(location.search).get('intent')
-    : null;
-  const intent = resolveIntent(rawIntent);
-  const intentKey = intent ? rawIntent : null;
+  // Set after mount, not at init: the page is prerendered with no query string, so a
+  // non-reactive read leaves Svelte reusing the server-rendered DOM and silently not
+  // patching text that changed.
+  let rawIntent = $state(null);
+  onMount(() => { rawIntent = new URLSearchParams(location.search).get('intent'); });
+
+  const intent = $derived(resolveIntent(rawIntent));
+  const intentKey = $derived(intent ? rawIntent : null);
+
+  // Focused or general. Every value below is ours — never the query string.
+  const heading = $derived(intent?.h1 || 'Contact IICL');
+  const opening = $derived(intent?.focusLede
+    || 'Tell us what the work looks like today. The more concrete the process, the more useful our first reply.');
+  const bring = $derived(intent?.bring || [
+    'The business function and the process inside it',
+    'Roughly how often it runs today',
+    'Which systems hold the information it depends on',
+    'What a measurable improvement would look like',
+  ]);
+  const nextStep = $derived(intent?.next
+    || 'We reply by email within one working day unless you ask us to call.');
+  const reading = $derived(intent?.read || [
+    { href: '/ai-genai-services', label: 'Enterprise AI & GenAI', why: 'Consulting and implementation, use case to production' },
+    { href: '/gcc-technology-teams', label: 'GCC Technology Teams', why: 'Building specialised technology capability in India' },
+  ]);
 
   let form = $state({
     name: '', company: '', email: '', phone: '',
     // Preselect the matching enquiry type when we recognise the intent.
-    requirement: intent ? intent.label : '',
+    requirement: '',
     message: '', website: '',
   });
+  // Preselect once the intent is known, without clobbering a choice the visitor made.
+  $effect(() => { if (intent && !form.requirement) form.requirement = intent.label; });
+
   let status = $state('idle'); // idle | sending | error
   let error = $state('');
 
@@ -50,8 +74,8 @@
 
 <Layout
   kicker="Company"
-  h1="Contact IICL"
-  lede="Talk to IICL about AI agents, voice AI, WhatsApp automation, ERP, application development or staffing. Offices in Hyderabad, India and the USA."
+  h1={heading}
+  lede={opening}
   heroImage={PAGE_ART["contactus"]}
   path="/contactus"
   cta="Send Enquiry"
@@ -60,11 +84,30 @@
   bandHeading="Describe the work, not the technology. The more concrete the process, the more useful our first reply.">
   <section class="page-section">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>Describe the work, not the technology.</h2>
+      {#if intent}
+        <p class="focus-tag mono">You are enquiring about &mdash; {intent.label}</p>
+      {/if}
+      <h2 class="section-h"><span class="tick"></span>What to bring</h2>
       <div class="section-body">
-        <p class="para">The more concrete the process, the more useful our first reply. Helpful detail: what the work involves today, roughly how much of it there is, and which systems it touches.</p>
-        <p class="para">If you would rather look around first, see <a href="/#products">what we build</a>, the <a href="/blog">case studies</a>, or <a href="/aboutus">how we run a project</a>.</p>
+        <p class="para">Describe the work, not the technology. These are the details that make our first reply useful rather than a request for more information.</p>
       </div>
+      <ul class="bring">
+        {#each bring as b}<li>{@html b}</li>{/each}
+      </ul>
+      <div class="section-body">
+        <p class="para next-note"><strong>What happens next.</strong> {nextStep}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Worth reading first</h2>
+      <ul class="pathlist">
+        {#each reading as r}
+          <li><a href={r.href}>{@html r.label}</a><span>{@html r.why}</span></li>
+        {/each}
+      </ul>
     </div>
   </section>
 
@@ -72,9 +115,6 @@
     <div class="wrap">
       <h2 class="section-h"><span class="tick"></span>Send an enquiry</h2>
       <div class="section-body">
-        {#if intent}
-          <p class="para intent-lede"><strong>{intent.label}.</strong> {intent.lede}</p>
-        {/if}
         <p class="para">Fields marked * are required. We reply by email within one working day unless you ask us to call.</p>
 
         <!-- Required on every conversion form (Spec B10, D5, E-AGQ1). -->
@@ -156,7 +196,7 @@
           </p>
         </div>
         <div class="office">
-          <h3>USA — Raleigh</h3>
+          <h3>United States</h3>
           <p class="para">{COMPANY.usa.street}, {COMPANY.usa.city}, {COMPANY.usa.region} {COMPANY.usa.postalCode}.</p>
           <p class="para">
             <a href="mailto:{COMPANY.email}">{COMPANY.email}</a><br />
@@ -170,6 +210,17 @@
 </Layout>
 
 <style>
+  .focus-tag { font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--brand-ink); margin: 0 0 10px; }
+  .bring { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 10px; }
+  .bring li { background: #fff; border: 1px solid var(--line); border-radius: 8px;
+    padding: 13px 16px 13px 40px; position: relative; font-size: 14.5px; line-height: 1.6; color: #40434a; }
+  .bring li::before { content: ''; position: absolute; left: 17px; top: 21px;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--brand); }
+  .next-note { margin-top: 20px; padding: 13px 16px; border-left: 3px solid var(--brand);
+    background: color-mix(in srgb, #ee2f2e 4%, transparent); border-radius: 0 6px 6px 0; }
+  .next-note strong { color: var(--ink); }
+
   .enq { margin: 26px 0 0; max-width: 720px; display: grid; gap: 18px; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .field { display: grid; gap: 7px; }
