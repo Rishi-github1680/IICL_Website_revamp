@@ -112,7 +112,9 @@
   .ag-card:hover .ag-go i { transform: translateX(6px); }
   .ag-card-excerpt { margin: 11px 0 0; font-size: 15.5px; line-height: 1.6; color: var(--muted); }
 
-  
+  @media (max-width: 900px) {
+    .ag-lead { grid-template-columns: 1fr; gap: 26px; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .ag-card, .ag-card-media img, .ag-lead-media img, .ag-go i, .ag-card-media::after { transition: none; }
     .ag-card:hover { transform: none; }

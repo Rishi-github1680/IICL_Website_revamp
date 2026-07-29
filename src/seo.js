@@ -5,6 +5,16 @@
 
 export const SITE = "https://iicl.in";
 
+/* Certification register. The audit requires any certification claim to carry its
+   scope and dates. Fill `body`, `certificate`, `scope`, `issued` and `expires` from the
+   certificate itself; until then the pages state the certification without the detail,
+   which the owner has confirmed is accurate. Nothing here is rendered automatically —
+   it exists so the facts live in one place rather than in five page copies. */
+export const CERTIFICATIONS = [
+  { name: "ISO/IEC 27001", body: "", certificate: "", scope: "", issued: "", expires: "" },
+  { name: "SOC 2", body: "", certificate: "", scope: "", issued: "", expires: "" },
+];
+
 export const COMPANY = {
   legalName: "Intelligence India.Com Limited",
   shortName: "IICL",
@@ -45,7 +55,7 @@ export function organizationSchema() {
     name: COMPANY.shortName,
     legalName: COMPANY.legalName,
     url: SITE + "/",
-    logo: SITE + "/img/iicl_logo.png",
+    logo: SITE + "/iicl_logo.png",
     email: COMPANY.email,
     telephone: COMPANY.phone,
     address: [postal(COMPANY.india), postal(COMPANY.usa)],
@@ -102,7 +112,7 @@ export function serviceSchema({ name, description, path, serviceType }) {
   };
 }
 
-export function productSchema({ name, description, path, category }) {
+export function productSchema({ name, description, path, category, brand, image }) {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -111,6 +121,10 @@ export function productSchema({ name, description, path, category }) {
     url: SITE + path,
     applicationCategory: category || "BusinessApplication",
     operatingSystem: "Web",
+    // Brand and image are what distinguish a product entity from a page. No `offers`:
+    // pricing is not public, and inventing one would be a false claim.
+    ...(brand ? { brand: { "@type": "Brand", name: brand } } : {}),
+    ...(image ? { image: SITE + image } : {}),
     publisher: { "@id": SITE + "/#organization" },
   };
 }

@@ -12,6 +12,7 @@
   import { onMount } from 'svelte';
   import Backdrop from './Backdrop.svelte';
   import { get3D } from './prefs.js';
+  import { snapStory } from './scrollsnap.js';
 
   let {
     kicker = '',
@@ -71,8 +72,17 @@
     };
     window.addEventListener('pointermove', onMove, { passive: true });
 
+    // Settle onto whichever panel is nearest once scrolling stops, so the story never
+    // sits frozen between two beats. Stops are the midpoint of each panel's fully-shown
+    // window, taken from the same `at` values that drive the fades.
+    const stops = panels
+      .map((pn) => (Array.isArray(pn.at) ? (pn.at[1] + pn.at[2]) / 2 : null))
+      .filter((v) => v != null && v >= 0 && v <= 1);
+    const stopSnap = no3D ? () => {} : snapStory(journeyEl, stops);
+
     return () => {
       stopped = true;
+      stopSnap();
       cancelAnimationFrame(raf);
       window.removeEventListener('pointermove', onMove);
       world?.dispose();
@@ -149,7 +159,7 @@
   .sh-eyebrow { display: flex; align-items: center; gap: 12px; font-size: 11.5px; letter-spacing: .24em;
     text-transform: uppercase; color: rgba(243,243,244,.66); margin-bottom: 24px; }
   .sh-h1 { margin: 0 0 26px; font-size: var(--fs-h1); line-height: 1.1; letter-spacing: -.025em;
-    font-weight: var(--w-heading); max-width: 22ch; color: #fff; text-wrap: balance;
+    font-weight: var(--w-heading); max-width: 22ch; color: #fff; text-wrap: pretty;
     text-shadow: 0 2px 40px rgba(0,0,0,.8); }
   .sh-lede { margin: 0 0 30px; font-size: var(--fs-body); line-height: 1.65; color: rgba(243,243,244,.7);
     max-width: 54ch; text-wrap: pretty; text-shadow: 0 1px 20px rgba(0,0,0,.9); }
@@ -165,7 +175,7 @@
   .sh-kicker { display: inline-flex; align-items: center; gap: 12px; font-size: 11.5px; letter-spacing: .22em;
     text-transform: uppercase; color: rgba(243,243,244,.66); margin-bottom: 12px; }
   .sh-h2 { margin: 0; font-size: var(--fs-h2); line-height: 1.14; letter-spacing: -.02em;
-    font-weight: var(--w-heading); color: #fff; text-wrap: balance; text-shadow: 0 2px 30px rgba(0,0,0,.9); }
+    font-weight: var(--w-heading); color: #fff; text-wrap: pretty; text-shadow: 0 2px 30px rgba(0,0,0,.9); }
   .sh-note { margin: 13px 0 0; font-size: 15px; line-height: 1.65; color: rgba(243,243,244,.66);
     max-width: 46ch; text-shadow: 0 1px 18px rgba(0,0,0,.9); }
   .sh-line.right .sh-note { margin-left: auto; }
@@ -177,7 +187,11 @@
     box-shadow: 0 0 10px rgba(237,16,29,.8); animation: shPulse 1.8s ease infinite; }
   @keyframes shPulse { 50% { opacity: .35; } }
 
-  
+  @media (max-width: 760px) {
+    .sh-line.left, .sh-line.right { left: var(--wrap-pad); right: var(--wrap-pad); text-align: left; max-width: none; }
+    .sh-line.right .sh-note { margin-left: 0; }
+    .sh-hud { left: var(--wrap-pad); right: var(--wrap-pad); }
+  }
   @media (prefers-reduced-motion: reduce) {
     .sh-hud-dot { animation: none; }
     .sh { height: 100vh !important; }

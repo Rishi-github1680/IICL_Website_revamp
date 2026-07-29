@@ -7,12 +7,15 @@
 
 <Layout
   kicker="Blog"
-  h1="iWac: The Future of AI-Powered Customer Engagement on WhatsApp"
+  h1="How to run sales and support on WhatsApp"
   lede="How businesses use WhatsApp to capture leads, take orders, collect payments and support customers without adding headcount."
   heroBanner="/img/banners/A10-banner-blog.png"
   path="/blog-iwac-ai"
   article
->
+  bandKicker="Read next"
+  bandHeading="Bring us the conversations you are running on WhatsApp and we will map the opt-in, template and payment path."
+  cta="Discuss the Related Workflow"
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
@@ -160,7 +163,7 @@
 
   <section class="page-section">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>The Future of Business Communication is Conversational</h2>
+      <h2 class="section-h"><span class="tick"></span>What this means for your next decision</h2>
       <div class="section-body">
         <p class="para">As customer expectations continue evolving, conversational engagement will become one of the most important components of digital transformation strategies. Businesses are moving toward communication models built around AI-powered engagement, conversational workflows, messaging-first experiences, real-time automation, and personalized customer journeys.</p>
         <p class="para">Static communication systems are rapidly being replaced by intelligent conversational ecosystems capable of operating dynamically at enterprise scale. Platforms like iWac are enabling this transformation by helping businesses modernize communication infrastructure without increasing operational complexity. Instead of managing disconnected systems and fragmented workflows, organizations gain centralized conversational engagement platforms capable of delivering intelligent customer experiences consistently across multiple touchpoints.</p>
@@ -170,7 +173,7 @@
 
   <section class="page-section shade">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>Final Thoughts</h2>
+      <h2 class="section-h"><span class="tick"></span>Where to start</h2>
       <div class="section-body">
         <p class="para">Customer communication is no longer just an operational function. It has become a strategic driver of customer loyalty, operational efficiency, and long-term business growth. Businesses that continue relying solely on traditional communication systems risk falling behind rapidly changing customer expectations. Modern customers expect conversations that are instant, intelligent, personalized, accessible, and seamless — and iWac helps businesses deliver exactly that.</p>
         <p class="para">By combining AI chatbots, WhatsApp Business integration, conversational automation, and intelligent workflow orchestration, iWac enables organizations to create faster, smarter, and more scalable customer engagement experiences. The future of business communication is conversational — and businesses embracing AI-powered engagement today are positioning themselves to lead the next generation of customer experience transformation.</p>

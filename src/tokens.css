@@ -1,0 +1,35 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   IICL design tokens — the one place to change type, and the only file you should
+   need to edit to swap a typeface.
+
+   TO CHANGE THE SITE FONT: edit --font-display below. Nothing else references a
+   font family by name; every component reads these variables.
+
+   Aeonik is the intended display face. It is licensed software from CoType Foundry
+   and is not shipped in this repo. The @font-face rules for it already exist in
+   src/fonts.css, so as soon as the licensed files are placed in public/fonts/ as
+       aeonik-300.woff2  aeonik-400.woff2  aeonik-500.woff2  aeonik-600.woff2
+   the browser will pick Aeonik up and Switzer stops being used. No code change.
+
+   Switzer sits behind it as the shipped stand-in: a free-for-commercial-use
+   neo-grotesque with very similar proportions, self-hosted by scripts/fetch-fonts.mjs.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* The display/UI face. Change this line to change the whole site. */
+  --font-display: Aeonik, Switzer, ui-sans-serif, system-ui, sans-serif;
+
+  /* Monospace, used for labels, counters and system-ish readouts. */
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Alias kept so existing rules that reference --font keep working. Both point at
+     the same value; prefer --font-display in new code. */
+  --font: var(--font-display);
+
+  /* Weights, named rather than numeric at the call site, so a face with a different
+     weight range can be accommodated here instead of in fifty components. */
+  --w-body: 400;
+  --w-medium: 500;
+  --w-heading: 600;
+  --w-light: 300;
+}

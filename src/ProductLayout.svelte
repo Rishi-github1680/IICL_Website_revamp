@@ -18,6 +18,8 @@
     h1 = '', lede = '', heroModel = null, heroBanner = null, path = '',
     specs = [],              // [{ k, v }] — the strip along the base of the hero
     faqs = null, cta = null, ctaHref = '/contactus',
+    bandKicker = 'See it on your own process',
+    bandHeading = 'Bring us one process and we will run the product against it.',
     children,
   } = $props();
 
@@ -54,7 +56,10 @@
   });
   const blocks = $derived(jsonLd(
     path ? breadcrumbSchema(trail) : null,
-    path ? productSchema({ name: h1, description: lede, path }) : null,
+    // Name comes from the product registry, not the H1: schema.org expects the
+    // application's actual name, and the H1 is an outcome sentence.
+    path ? productSchema({ name: me.label || h1, brand: 'IICL', image: me.thumb || heroBanner,
+                           category: me.tag, description: lede, path }) : null,
     faqs && faqs.length ? faqSchema(faqs) : null,
   ));
 </script>
@@ -183,8 +188,8 @@
     font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 20px; }
   .pr-tick { width: 22px; height: 2px; background: var(--acc); display: inline-block; }
   .pr-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.035em;
-    font-weight: 600; color: #fff; max-width: 17ch; }
-  .pr-lede { margin: 16px 0 0; max-width: 54ch; font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.74); }
+    font-weight: var(--w-light); color: #fff; max-width: 28ch; text-wrap: pretty; }
+  .pr-lede { margin: 16px 0 0; max-width: 66ch; font-weight: var(--w-light); font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.74); }
   .pr-actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 32px; }
 
   .pr-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--acc); color: #fff;
@@ -258,14 +263,31 @@
     letter-spacing: -0.02em; font-weight: 600; }
   .pr-cta-big { padding: 17px 36px; }
 
-  
-  
-  
+  @media (max-width: 980px) {
+    .pr-more-row { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .pr-model { display: none; }
+    .pr-body :global(.section-split) { grid-template-columns: 1fr; gap: 30px; }
+    .pr-body :global(.section-split.rev .split-text) { order: 0; }
+    .pr-body :global(.feature-grid) { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .pr-hero { padding-top: 84px; min-height: 0; }
+    .pr-h1 { max-width: none; }
+    .pr-hero-inner { padding: 0 var(--wrap-pad) 32px; }
+    .pr-body { padding: 0 var(--wrap-pad); }
+    .pr-more-row { grid-template-columns: 1fr; }
+    .pr-actions { flex-direction: column; align-items: stretch; }
+    .pr-cta, .pr-ghost { justify-content: center; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .pr-body :global(.page-section.reveal) { opacity: 1; transform: none; transition: none; }
   }
 
   /* On a narrow phone the CTA label is wider than the gutter allows, and
      white-space: nowrap turned that into a horizontal scrollbar. Let it wrap. */
-  
+  @media (max-width: 560px) {
+    .cta, .cta-big { white-space: normal; max-width: 100%; padding: 14px 22px; font-size: 15px; text-align: center; }
+  }
 </style>

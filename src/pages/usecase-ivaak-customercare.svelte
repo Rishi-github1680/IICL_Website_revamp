@@ -7,12 +7,15 @@
 
 <Layout
   kicker="Use case"
-  h1="Smarter Support Starts Here: The Rise of AI Voice Agents in Customer Service"
+  h1="AI voice agents for customer care"
   lede="How customer care teams use iVaak AI voice agents to handle routine calls, qualify enquiries and hand over to a person with full context."
   heroBanner="/img/banners/A11-banner-usecases.png"
   path="/usecase-ivaak-customercare"
   article
->
+  bandKicker="Read next"
+  bandHeading="Bring us your support contacts and we will show you which are repeatable and which need a person."
+  cta="Discuss the Related Workflow"
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <!-- G12 classification. Until the baseline, eligible population, measurement period,
        calculation and customer publication approval exist, this page is illustrative and
        must say so above the fold. -->
@@ -197,7 +200,7 @@
 
   <section class="page-section">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>The Future of Customer Support is Conversational AI</h2>
+      <h2 class="section-h"><span class="tick"></span>What this means for your next decision</h2>
       <div class="section-body">
         <p class="para">Customer support is rapidly evolving from reactive service management into proactive conversational engagement. The organizations leading this transformation are those embracing AI-first customer communication, voice-driven engagement, autonomous support workflows, real-time personalization, omnichannel continuity, and scalable conversational infrastructure.</p>
         <p class="para">AI Voice Agents are no longer experimental technology. They are becoming foundational infrastructure for modern customer engagement operations. Businesses that adopt conversational AI today position themselves to deliver faster customer experiences, better operational scalability, improved customer loyalty, reduced support costs, and stronger brand differentiation. This is exactly the transformation iVaak AI enables.</p>
@@ -207,7 +210,7 @@
 
   <section class="page-section shade">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>Final Thoughts</h2>
+      <h2 class="section-h"><span class="tick"></span>Where to start</h2>
       <div class="section-body">
         <p class="para">The future of customer support belongs to businesses that can communicate intelligently, instantly, and at scale. Traditional support systems alone are no longer sufficient to meet the demands of modern customer engagement. Customers expect conversations that feel natural, businesses to respond immediately, and seamless communication across every channel. iVaak AI helps organizations deliver exactly that.</p>
         <p class="para">By combining AI Voice Agents, conversational AI, multilingual intelligence, workflow automation, and enterprise integrations, iVaak AI enables businesses to transform customer support into a scalable, intelligent, always-on engagement ecosystem. The result is not just better support — it is smarter customer relationships, stronger operational efficiency, and a significantly more competitive customer experience.</p>

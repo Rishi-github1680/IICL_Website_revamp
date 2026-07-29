@@ -11,13 +11,12 @@
   import { onMount } from 'svelte';
   import { hpan } from './hscroll.js';
 
-  let { items = [], collection = 'Nº 01', title = '', sub = '', perView = 3, children } = $props();
+  let { items = [], collection = 'Nº 01', title = '', sub = '', perView = 3,
+        // The hall is the page heading when there is no hero above it.
+        heading = 'h2', children } = $props();
 
   let railEl;
-  // The site renders one fixed desktop layout at every size, so the panel count is
-  // constant. This used to track viewport breakpoints in JS to stay in step with the
-  // CSS; with the breakpoints gone there is nothing to track.
-  const fit = perView;
+  let fit = $state(perView);
   let start = $state(0);           // index of the leftmost fully-visible panel
 
   const maxStart = $derived(Math.max(0, items.length - fit));
@@ -37,6 +36,13 @@
   };
 
   onMount(() => {
+    const wide = window.matchMedia('(min-width: 1081px)');
+    const mid = window.matchMedia('(min-width: 721px)');
+    const sync = () => { fit = wide.matches ? perView : mid.matches ? Math.min(2, perView) : 1; };
+    sync();
+    wide.addEventListener('change', sync);
+    mid.addEventListener('change', sync);
+
     const el = railEl;
     // Keep the dots and counter in step with wherever the rail actually is.
     const onScroll = () => { start = Math.round(el.scrollLeft / stepPx()); };
@@ -45,6 +51,8 @@
     // Mouse users pan with the wheel (see use:hpan below) — no dragging, so a
     // click on a panel is always just a click on the link.
     return () => {
+      wide.removeEventListener('change', sync);
+      mid.removeEventListener('change', sync);
       el.removeEventListener('scroll', onScroll);
     };
   });
@@ -53,7 +61,7 @@
 <div class="mh">
   <header class="mh-head">
     <span class="mh-kicker mono">IICL — Collection {collection}</span>
-    <h2 class="mh-title">{title}</h2>
+    <svelte:element this={heading} class="mh-title">{title}</svelte:element>
     {#if sub}<p class="mh-sub">{sub}</p>{/if}
   </header>
 
@@ -177,9 +185,13 @@
   .mh-count { position: relative; margin: 12px 0 0; text-align: center;
     font-size: 11px; letter-spacing: .3em; color: rgba(244,242,238,.5); }
 
-  
+  @media (max-width: 720px) {
+    .mh { padding: 44px var(--wrap-pad) 32px; }
+    .mh-mirror, .mh-fade { display: none; }
+    .mh-glow { bottom: -8px; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .mh-card, .mh-card img, .mh-mirror, .mh-item { transition: none; }
+    .mh-card, .mh-card img, .mh-mirror, .mh-row, .mh-item { transition: none; }
     .mh-item:hover .mh-card { transform: none; }
   }
 </style>

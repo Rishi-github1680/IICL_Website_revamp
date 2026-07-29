@@ -10,7 +10,7 @@
   h1="Managed IT Help Desk Services"
   lede="Managed IT help desk covering user support, application support, incident management and access requests across phone, email, chat and WhatsApp."
   path="/helpdesk"
-  cta="Discuss Your Help Desk Requirement"
+  cta="Discuss a Defined Requirement"
   heroImage={PAGE_ART["helpdesk"]}
   specs={[
     { k: "Coverage", v: "User, application, incident, access" },
@@ -24,7 +24,9 @@
     { q: "How does handover work?", a: "We shadow your current process first, document what is undocumented, then take tickets in stages. Nothing transfers until the runbook is complete." },
     { q: "Where does automation fit in?", a: "In ticket classification, routing, suggested responses and knowledge search. It shortens the path to an answer; a person still owns the resolution." },
   ]}
->
+  bandKicker="Define the requirement"
+  bandHeading="Bring us your support scope and we will set out coverage, boundaries, transition and reporting."
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap">
       <div class="section-body">

@@ -11,7 +11,10 @@
   heroBanner="/img/banners/A10-banner-blog.png"
   path="/blog-human-in-the-loop"
   article
->
+  bandKicker="Read next"
+  bandHeading="Bring us the decisions in question and we will help you set the authority levels."
+  cta="Discuss the Related Workflow"
+  ctaHref="/contactus?intent=agentic-ai-security-assessment">
   <section class="page-section">
     <div class="wrap">
       <div class="section-body">

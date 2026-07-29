@@ -66,25 +66,27 @@
         note: 'The wreckage stays in view. Every engagement carries forward what the last one learned — which is why the second design is supported before it is spanned.',
         at: [0.6, 0.65, 0.76, 0.82] },
       { n: '04 — The crossing', h: 'Hyderabad builds. Raleigh delivers.',
-        note: 'Two continents, one delivery engine, running in production for enterprise and mid-market teams. The crossing holds because of the one that did not.',
+        note: 'Two continents, one delivery engine, serving enterprise and mid-market teams. The crossing holds because of the one that did not.',
         at: [0.91, 0.95, 1.5, 2] },
     ],
   }}
   path="/aboutus"
-  cta="Discuss a Partnership"
+  cta="Discuss an AI Requirement"
   faqs={[
     { q: 'Where does IICL operate from?', a: 'Delivery runs from Hyderabad, India, with a US presence in Raleigh, North Carolina. Both offices are reachable on +91 99894 42002 or reachus@iicl.in.' },
     { q: 'How does an engagement usually start?', a: 'With a one-day workshop that maps the processes worth automating and ends with a scoped, priced plan — whether or not you continue with us.' },
     { q: 'Is IICL certified?', a: 'IICL is ISO 27001 certified and SOC 2 audited. Your compliance lead is welcome to review the controls before anything goes to production.' }
   ]}
->
+  bandKicker="Two ways to start"
+  bandHeading="Start with one AI workflow, or one GCC capability requirement."
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <!-- Who we are -->
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
         <h2 class="section-h"><span class="tick"></span>Who we are</h2>
         <p class="para">IICL builds intelligent systems that change how enterprises operate, scale and make decisions. We work at the join between traditional enterprise systems and modern automation — the place where most AI projects actually stall.</p>
-        <p class="para">The company grew out of two decades in global IT services, with a leadership team carrying 25 years of domain experience. That background is why our engagements start with your existing systems and constraints rather than a greenfield assumption.</p>
+        <p class="para">The company grew out of global IT services delivery, and the leadership team came from that same background. It is why our engagements start with your existing systems and constraints rather than a greenfield assumption.</p>
         <p class="para">Alongside consulting and delivery, we run eight SaaS products in production, covering voice, WhatsApp commerce, legal document review, dental practice management, workforce attendance, financial analysis and IT ticketing.</p>
       </div>
       <div class="split-media">
@@ -187,7 +189,7 @@
       <h2 class="section-h"><span class="tick"></span>Security and compliance</h2>
       <div class="section-body">
         <p class="para">IICL is <strong>ISO 27001 certified</strong> and <strong>SOC 2 audited</strong>. Access is role-based, activity is logged, and data retention follows your policy. Every engagement includes a security review before anything reaches production, and your compliance lead is welcome to walk the controls with us first.</p>
-        <p class="para">Where your obligations extend further — HIPAA, GDPR or the Indian DPDP Act — we map our controls against them and tell you plainly what is covered and what remains yours to satisfy.</p>
+        <p class="para">HIPAA, GDPR and the Indian DPDP Act place obligations on you, not on a supplier, and no vendor can certify your compliance with them. What we can do is map our controls against those obligations and tell you plainly what is covered and what remains yours to satisfy.</p>
       </div>
     </div>
   </section>
@@ -245,6 +247,9 @@
 
 <style>
   /* Stats */
+  .stat { background: #fff; padding: 26px 22px; display: flex; flex-direction: column; gap: 8px; }
+  .stat-v { font-size: clamp(30px, 3.4vw, 42px); line-height: 1; color: #16171a; }
+  .stat-k { font-size: 14px; line-height: 1.5; color: #55585e; }
 
   /* Mission / vision */
   .mv { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
@@ -283,8 +288,14 @@
   .office-k { display: block; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #ee2f2e; margin-bottom: 12px; }
   .office-note { color: #55585e; margin-bottom: 0; }
   .office-contact { margin-top: 24px; }
-  .office-contact a { color: #b81c1c; }
+  .office-contact a, .office a { color: #b81c1c; }
 
-  
-  
+  @media (max-width: 860px) {
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+    .mv, .offices { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .stat-row { grid-template-columns: 1fr; }
+    .step { flex-direction: column; gap: 8px; }
+  }
 </style>

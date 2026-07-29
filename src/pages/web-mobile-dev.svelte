@@ -10,7 +10,7 @@
   h1="Custom Web and Mobile Application Development"
   lede="Custom enterprise portals, mobile apps, SaaS products and customer platforms, built with optional AI features and supported after launch."
   path="/web-mobile-dev"
-  cta="Share Your Application Requirement"
+  cta="Discuss a Defined Requirement"
   heroImage={PAGE_ART["web-mobile-dev"]}
   specs={[
     { k: "We build", v: "Web, mobile, SaaS, portals" },
@@ -25,7 +25,9 @@
     { q: "Can you work on an application someone else built?", a: "Often, yes. We start with a short technical review to establish what is there and what it would cost to take on, then tell you honestly whether continuing or rebuilding is the better option." },
     { q: "Do we have to include AI features?", a: "No. AI is worth adding where it removes real work, such as search, document handling or support. Where it does not, we will say so." },
   ]}
->
+  bandKicker="Define the requirement"
+  bandHeading="Bring us a defined product requirement and we will scope architecture, security, QA and ownership."
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">

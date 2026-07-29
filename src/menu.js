@@ -48,12 +48,12 @@ export const INDUSTRIES = [
 // because Spec G3 puts it in the header, not inside a company panel.
 export const INSIGHTS = [
   { label: 'Journal', href: '/blog', icon: '/img/nav-blog.svg' },
-  { label: 'Use Cases', href: '/blog#use-cases', icon: '/img/nav-usecases.svg' },
+  { label: 'Use Cases', href: '/use-cases', icon: '/img/nav-usecases.svg' },
 ];
 
 export const COMPANY_LINKS = [
   { label: 'About IICL', href: '/aboutus', icon: '/img/nav-about.svg' },
-  { label: 'Careers', href: '/careers', icon: '/img/nav-careers.svg' },
+  { label: 'Contracts', href: '/contracts', icon: '/img/nav-contracts.svg' },
 ];
 
 // Talent. Spec B3/G3: "Do not use IT Staff Augmentation as the only top-level label
@@ -61,7 +61,7 @@ export const COMPANY_LINKS = [
 // legacy staffing route redirects into it (Stage 4).
 export const TALENT = [
   { label: 'GCC Technology Teams', href: '/gcc-technology-teams', icon: '/img/nav-gcc.svg' },
-  { label: 'Careers', href: '/careers', icon: '/img/nav-careers.svg' },
+  { label: 'GCC Careers', href: '/gcc-careers', icon: '/img/nav-careers.svg' },
 ];
 
 // Header hierarchy per Spec G3:
@@ -96,6 +96,8 @@ export const MENU = [
 // and a motif per page, so the site looks designed rather than stocked. Vector: ~20KB
 // each and sharp at any size. Regenerate with: node scripts/gen-industry-art.mjs
 export const PAGE_ART = {
+  'gcc-careers': { img: '/img/industry/gcc-careers.svg', alt: 'HUD diagram: contract engineers placed into an existing GCC delivery team' },
+  contracts: { img: '/img/industry/contracts.svg', alt: 'HUD diagram: engagement models mapped to scope, duration and delivery responsibility' },
   careers: { img: '/img/industry/careers.svg', alt: 'HUD diagram: capability domains feeding a role scorecard that assembles into a mobilised delivery pod' },
   '/gcc-technology-teams': { img: '/img/industry/staff-augmentation.svg', alt: 'Schematic of specialised technology capability domains forming a GCC team' },
   healthcare:       { img: '/img/industry/healthcare.svg',     alt: 'Heartbeat trace running through a neural network, representing AI in healthcare' },

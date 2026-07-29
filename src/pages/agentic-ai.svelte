@@ -163,7 +163,7 @@
   cta="Assess an Agentic Workflow"
   ctaHref="/contactus?intent=agentic-ai-workflow-assessment"
   bandKicker="Start with one workflow"
-  bandHeading="Bring us one workflow, one owner and one measurable outcome."
+  bandHeading="Bring us one workflow, one accountable owner and one measurable outcome."
   heroImage={PAGE_ART['agentic-ai']}
   {faqs}
 >
@@ -473,9 +473,9 @@
   .row-b { font-size: 14.5px; line-height: 1.55; color: #40434a; }
   .row-c { font-size: 11.5px; line-height: 1.5; color: var(--muted); }
 
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1px;
-    margin-top: 14px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-  .card { background: #fff; padding: 18px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px; margin-top: 14px; }
+  .card { background: #fff; padding: 18px; border: 1px solid var(--line); border-radius: 8px; }
   .card h3 { margin: 0 0 7px; font-size: 15.5px; font-weight: var(--w-heading); color: var(--ink); }
   .card p { margin: 0; font-size: 14px; line-height: 1.6; color: #40434a; }
 

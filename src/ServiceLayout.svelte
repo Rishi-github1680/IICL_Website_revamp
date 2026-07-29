@@ -18,8 +18,10 @@
     // The closing band used to hard-code "Start with one day" and a 1-day-workshop CTA.
     // Spec E section 2 forbids that fixed-duration message on the Agentic AI page, and
     // it was wrong on several others too, so pages now supply their own closing copy.
-    bandKicker = 'Start with one process',
-    bandHeading = "Bring us one process. We'll show you what an agent does with it.",
+    // Neutral fallback. Every page sets its own — the previous default pitched an AI
+    // agent on legal notices, careers and the sitemap alike.
+    bandKicker = 'Talk to us',
+    bandHeading = 'Tell us what the work looks like today.',
     // Pages that still write their own .faq-list markup opt out, so the questions are
     // not rendered twice. New pages should leave this on.
     autoFaq = true,
@@ -103,7 +105,7 @@
 
   <header class="svc-hero">
     {#if heroImage}
-      <img bind:this={photoEl} class="svc-photo" src={heroImage.img} alt={heroImage.alt} fetchpriority="high" decoding="async" />
+      <img decoding="async" bind:this={photoEl} class="svc-photo" src={heroImage.img} alt={heroImage.alt} fetchpriority="high" />
     {/if}
     <div class="svc-scrim"></div>
     <div class="svc-hero-inner">
@@ -203,14 +205,18 @@
     background:
       linear-gradient(90deg, rgba(6,6,6,0.86) 0%, rgba(6,6,6,0.62) 38%, rgba(6,6,6,0.2) 68%, rgba(6,6,6,0.04) 100%),
       linear-gradient(180deg, rgba(6,6,6,0.42) 0%, rgba(6,6,6,0) 24%, rgba(6,6,6,0.5) 100%); }
+  /* Same 220px + 44px offset as .svc-body, so the H1 and the prose below it sit on one
+     rail. Without it the hero copy started 264px left of every section heading. */
   .svc-hero-inner { position: relative; z-index: 2; max-width: var(--wrap-max); width: 100%; margin: 0 auto;
-    padding: 0 var(--wrap-pad) 40px; box-sizing: border-box; }
+    padding: 0 var(--wrap-pad) 40px; box-sizing: border-box;
+    display: grid; grid-template-columns: 220px 1fr; gap: 44px; }
+  .svc-hero-inner > * { grid-column: 2; }
   .svc-kicker { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--red);
     font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 22px; }
   :global(.tick) { width: 22px; height: 2px; background: var(--red); display: inline-block; }
   .svc-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.035em;
-    font-weight: 600; color: #fff; max-width: 18ch; text-shadow: 0 2px 30px rgba(0,0,0,0.55); }
-  .svc-lede { margin: 16px 0 0; max-width: 56ch; font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.74); }
+    font-weight: var(--w-light); color: #fff; max-width: 28ch; text-wrap: pretty; text-shadow: 0 2px 30px rgba(0,0,0,0.55); }
+  .svc-lede { margin: 16px 0 0; max-width: 66ch; font-weight: var(--w-light); font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.74); }
   .svc-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
 
   /* ── Body: sticky index rail beside the content column ── */
@@ -255,12 +261,31 @@
     background-image: linear-gradient(rgba(8,8,8,0.86), rgba(8,8,8,0.94)), url('/img/banners/A1-og-default.png');
     background-size: cover; background-position: center; }
   .cta-kicker { color: var(--red); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
-  .cta-h2 { margin: 16px auto 26px; max-width: 20ch; font-size: var(--fs-h1); line-height: 1.1;
+  .cta-h2 { margin: 16px auto 26px; max-width: 30ch; text-wrap: pretty; font-size: var(--fs-h1); line-height: 1.1;
     letter-spacing: -0.02em; font-weight: 600; }
   .cta-big { padding: 18px 38px; }
 
-  
-  
+  @media (max-width: 1040px) {
+    .svc-body, .svc-hero-inner { grid-template-columns: 1fr; gap: 0; }
+    /* Index becomes a horizontal strip that sticks under the nav. */
+    .svc-index { position: sticky; top: 64px; padding: 0; z-index: 20; background: #fff;
+      border-bottom: 1px solid var(--line); margin: 0 calc(var(--wrap-pad) * -1);
+      /* A grid item defaults to min-width:auto, so the rail grew to fit its own
+         content and overflow-x had nothing to clip. This lets it scroll instead. */
+      min-width: 0; }
+    .idx-inner { overflow-x: auto; padding: 12px var(--wrap-pad); }
+    .idx-title { display: none; }
+    .svc-index ol { display: flex; gap: 6px; border-left: 0; }
+    .idx-btn { width: auto; white-space: nowrap; border-left: 0; border-bottom: 2px solid transparent;
+      margin-left: 0; padding: 8px 12px; }
+    .idx-btn.active { border-left-color: transparent; border-bottom-color: var(--red); }
+    .idx-label { -webkit-line-clamp: 1; max-width: 26ch; }
+    .svc-content { padding-top: 40px; }
+  }
+  @media (max-width: 760px) {
+    .svc-h1 { max-width: none; }
+    .svc-hero { padding-top: 84px; min-height: 0; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .svc-content :global(.page-section.reveal) { opacity: 1; transform: none; transition: none; }
     .svc-photo { transform: none; }
@@ -268,5 +293,7 @@
 
   /* On a narrow phone the CTA label is wider than the gutter allows, and
      white-space: nowrap turned that into a horizontal scrollbar. Let it wrap. */
-  
+  @media (max-width: 560px) {
+    .cta, .cta-big { white-space: normal; max-width: 100%; padding: 14px 22px; font-size: 15px; text-align: center; }
+  }
 </style>

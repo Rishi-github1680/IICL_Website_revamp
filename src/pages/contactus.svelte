@@ -54,9 +54,10 @@
   lede="Talk to IICL about AI agents, voice AI, WhatsApp automation, ERP, application development or staffing. Offices in Hyderabad, India and the USA."
   heroImage={PAGE_ART["contactus"]}
   path="/contactus"
-  cta="Send an enquiry"
+  cta="Send Enquiry"
   ctaHref="#enquiry"
->
+  bandKicker="Send an enquiry"
+  bandHeading="Describe the work, not the technology. The more concrete the process, the more useful our first reply.">
   <section class="page-section">
     <div class="wrap">
       <h2 class="section-h"><span class="tick"></span>Describe the work, not the technology.</h2>
@@ -206,5 +207,7 @@
   .office h3 { margin: 0 0 12px; font-size: 19px; font-weight: 600; color: #16171a; }
   .office a { color: #b81c1c; text-decoration: none; }
   .office a:hover { text-decoration: underline; }
-  
+  @media (max-width: 760px) {
+    .row, .offices { grid-template-columns: 1fr; }
+  }
 </style>

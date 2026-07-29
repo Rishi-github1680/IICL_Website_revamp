@@ -129,9 +129,10 @@
   h1="Build the systems people actually talk to"
   lede="We build voice agents, WhatsApp commerce and enterprise AI from Hyderabad and Raleigh. Small teams, real customers, work you can point at."
   path="/careers"
-  cta="Apply Now"
+  cta="Apply for a Verified Open Role"
   ctaHref="mailto:reachus@iicl.in?subject=Application%20—%20General"
->
+  bandKicker="Open roles"
+  bandHeading="See a role that fits? Apply against the verified opening rather than a general enquiry.">
   <section class="page-section deck-sec">
     <div class="wrap">
       <div class="deck-head">
@@ -278,7 +279,17 @@
   .cta-inline:hover { background: #d61f1e; }
 
   /* ── Narrow screens: the fan becomes a plain grid, every Apply visible ── */
-  
+  @media (max-width: 900px) {
+    .stage-outer { padding: 30px var(--wrap-pad); }
+    .stage { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px; height: auto; perspective: none; overflow: visible; padding-inline: 0;
+      scroll-snap-type: none; cursor: default; }
+    .card { position: static; flex: none; width: auto; height: auto; min-height: 340px;
+      transform: none !important; opacity: 1 !important; filter: none !important; z-index: auto !important; }
+    .card:not(.is-active) .card-apply { opacity: 1; pointer-events: auto; }
+    .deck-ctrl, .deck-live { display: none; }
+    .stage { cursor: default; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .card, .card-apply, .dot { transition: none; }
   }

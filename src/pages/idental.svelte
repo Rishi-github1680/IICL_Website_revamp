@@ -19,7 +19,7 @@
     { q: "Who is it built for?", a: "Individual dentists, multi-chair clinics and dental chains. The same system covers a single practice and a group with several locations." },
     { q: "What does it cover day to day?", a: "Appointments, patient records, treatment plans, billing, reminders and reporting, in one place rather than across a diary, a spreadsheet and a billing tool." },
     { q: "How does patient communication work?", a: "Confirmations, reminders and follow-ups go out over WhatsApp, which is where most patients will actually read them." },
-    { q: "How is patient data protected?", a: "Role-based access, encryption in transit and at rest, audit logs and backups. Controls are designed to support your obligations under HIPAA and GDPR; we will walk your compliance lead through them before you commit." },
+    { q: "How is patient data protected?", a: "Role-based access, encryption in transit and at rest, audit logs and backups. These controls are designed to support your obligations under HIPAA and GDPR — they do not discharge them, and the assessment remains yours. We will walk your compliance lead through what is covered before you commit." },
     { q: "Can we move our existing patient records in?", a: "Yes. Migration is scoped after we see the format your records are in, and run in stages so you can verify each batch." },
   ]}
 >

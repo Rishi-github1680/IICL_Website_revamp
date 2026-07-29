@@ -10,7 +10,7 @@
   h1="WhatsApp Business API Integration for Sales and Customer Service"
   lede="Connect WhatsApp to your website, CRM, ERP and payment gateway to generate leads, take orders, send updates and automate customer support."
   path="/whatsapp-business"
-  cta="Request WhatsApp Automation Demo"
+  cta="Discuss a Defined Requirement"
   heroImage={PAGE_ART["whatsapp-business"]}
   specs={[
     { k: "Official", v: "Meta WhatsApp Business API" },
@@ -24,7 +24,9 @@
     { q: "What are the rules on messaging customers?", a: "You need consent before initiating a conversation, and initiated messages must use approved templates. Replies inside an open customer-service window are freer. We build the opt-in handling into the flow." },
     { q: "How does this relate to iWac?", a: "The API integration is the service; iWac is our packaged platform built on it. If your requirement fits iWac, deploying it is faster and cheaper than a custom integration." },
   ]}
->
+  bandKicker="Define the requirement"
+  bandHeading="Bring us your WhatsApp use case and we will set out onboarding, templates, consent and integration responsibilities."
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap">
       <h2 class="section-h"><span class="tick"></span>WhatsApp Business API</h2>

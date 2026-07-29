@@ -11,7 +11,10 @@
   heroBanner="/img/banners/A10-banner-blog.png"
   path="/blog-ai-integration-reality"
   article
->
+  bandKicker="Read next"
+  bandHeading="Bring us the integration you are planning and we will tell you what it actually involves."
+  cta="Discuss the Related Workflow"
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap">
       <div class="section-body">

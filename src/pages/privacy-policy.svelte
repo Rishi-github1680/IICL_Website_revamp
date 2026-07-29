@@ -9,7 +9,9 @@
   lede="Privacy Policy for IICL (Intelligence India.Com Limited). Learn how we collect, use, and protect your personal information when you use our AI solutions and services."
   heroBanner="/img/banners/A1-og-default.png"
   path="/privacy-policy"
->
+  bandKicker="Privacy"
+  bandHeading="Questions about how we handle personal information go straight to the privacy owner."
+  cta="Contact the Privacy Owner">
   <section class="page-section">
     <div class="wrap">
       <div class="section-body">

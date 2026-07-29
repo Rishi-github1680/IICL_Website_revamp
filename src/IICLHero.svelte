@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import { get3D } from './prefs.js';
   import { can3D, READY_TIMEOUT_MS } from './can3d.js';
+  import { snapStory } from './scrollsnap.js';
   import Backdrop from './Backdrop.svelte';
 
   // Read once at construction: the switch reloads the page, so this never goes stale.
@@ -69,22 +70,22 @@
   // used to sit here is withdrawn under the Q7 default until the commercial owner
   // confirms it is a public fixed-fee offer.
   const faqs = [
-    { q: 'What enterprise AI services does IICL provide?',
+    { q: 'What enterprise AI services does IICL provide?', group: 'Enterprise AI',
       a: 'Consulting and implementation across AI agents, Generative AI applications, enterprise RAG, document intelligence, predictive analytics and intelligent automation — from identifying the use case through to a governed production service.' },
-    { q: 'How does IICL identify a suitable AI use case?',
+    { q: 'How does IICL identify a suitable AI use case?', group: 'Enterprise AI',
       a: 'We start from the business process rather than the technology: the current baseline, who owns the decision, what information is approved for use, which systems are involved and what a measurable improvement would look like. Some processes come out of that conversation better suited to deterministic automation than to AI.' },
-    { q: 'Can IICL integrate AI with our existing enterprise systems?',
+    { q: 'Can IICL integrate AI with our existing enterprise systems?', group: 'Enterprise AI',
       a: 'Yes — CRM, ERP, HR and finance platforms, databases and approved knowledge repositories, cloud and identity services, and web, chat, email and voice channels. Your applications remain the systems of record; the AI works through controlled interfaces.' },
-    { q: 'How are data access, security, human approval and production readiness addressed?',
+    { q: 'How are data access, security, human approval and production readiness addressed?', group: 'Enterprise AI',
       a: 'Approved data, users, systems and purposes are defined before implementation, with access control, testing, audit evidence, monitoring and human approval designed around the specific workflow. Security and compliance depend on the final architecture, your environment and your own authorised functions — no solution is secure or compliant by default.' },
 
-    { q: 'Which technology capabilities can IICL help GCCs build?',
+    { q: 'Which technology capabilities can IICL help GCCs build?', group: 'GCC Technology Teams',
       a: 'AI & GenAI, Data Platforms, Cloud & SRE, Cybersecurity, Product Engineering and Enterprise Platforms. The role mix, seniority, location and assessment approach are defined against your capability roadmap.' },
-    { q: 'Which engagement models are available for GCC team expansion?',
+    { q: 'Which engagement models are available for GCC team expansion?', group: 'GCC Technology Teams',
       a: 'Permanent hiring, flexible technology teams, dedicated talent pods and project-based teams. Contract-to-hire may be considered where the minimum period, conversion terms and responsibilities are agreed in advance.' },
-    { q: 'How quickly can IICL provide the first qualified shortlist?',
+    { q: 'How quickly can IICL provide the first qualified shortlist?', group: 'GCC Technology Teams',
       a: 'Shortlist timing is confirmed at requirement alignment, once the role scorecard, location, work mode, commercial range and assessment process are agreed. Niche complexity, scale, candidate availability and market conditions all affect it, so we give you a plan for your specific role rather than a general figure.' },
-    { q: 'Can IICL support dedicated pods, project teams and hiring across India?',
+    { q: 'Can IICL support dedicated pods, project teams and hiring across India?', group: 'GCC Technology Teams',
       a: 'Yes, where the roles, scope, delivery responsibilities, interfaces and governance model can be agreed. Our primary delivery and talent relationships include Hyderabad and Bengaluru, with sourcing across India according to role fit, your location, work mode and contract scope.' },
   ];
 
@@ -125,6 +126,10 @@
       // If nothing renders in time, stop waiting and keep the backdrop. No blank box.
       readyTimer = setTimeout(() => { ready3D = false; }, READY_TIMEOUT_MS + 4000);
     }
+
+    // Settle onto a stage when scrolling stops, so a chapter is never left frozen
+    // half-way through its transition. Centres of the hero + four chapter windows.
+    const stopSnap = snapStory(journeyEl, [0.02, 0.255, 0.455, 0.66, 0.92]);
 
     const idle = window.requestIdleCallback || ((f) => setTimeout(f, 600));
     const arm3D = () => idle(() => { ready3D = true; }, { timeout: 2500 });
@@ -239,16 +244,31 @@
         for (const m of models()) if (!m.el._pause) post(m.el, p);
       }
     };
-    // Lerp displayed opacity toward the scroll-derived target — smooths wheel steps.
-    const ease = (el, target, k) => {
-      el._disp = el._disp === undefined ? target : el._disp + (target - el._disp) * k;
+    // Ease displayed opacity toward the scroll-derived target. Time-based, not
+    // per-frame: a fixed lerp factor converges at whatever rate the display refreshes,
+    // so a 30 Hz device lagged and stages ghosted over each other. `rate` is the decay
+    // constant in units of 1/second, so the settle looks the same on any panel.
+    let lastT = performance.now();
+    let dt = 1 / 60;
+    const tick = () => {
+      const now = performance.now();
+      // Clamp: a backgrounded tab returns one enormous delta on wake.
+      dt = Math.min((now - lastT) / 1000, 0.05);
+      lastT = now;
+    };
+    const ease = (el, target, rate) => {
+      if (el._disp === undefined) el._disp = target;
+      else el._disp += (target - el._disp) * (1 - Math.exp(-rate * dt));
       return el._disp;
     };
     const fadePanels = (J) => {
       for (const p of panels()) {
-        const inE = smooth((J - p.w0) / 0.07);
-        const outE = 1 - smooth((J - (p.w1 - 0.07)) / 0.07);
-        const o = ease(p.el, Math.max(0, Math.min(inE, outE)), 0.16);
+        // Ramp deliberately shorter than half the window, so every chapter has a
+        // plateau where it is fully opaque and readable rather than always fading.
+        const RAMP = 0.035;
+        const inE = smooth((J - p.w0) / RAMP);
+        const outE = 1 - smooth((J - (p.w1 - RAMP)) / RAMP);
+        const o = ease(p.el, Math.max(0, Math.min(inE, outE)), 10.5);
         const drift = ((1 - o) * 14).toFixed(2);
         p.el.style.opacity = o.toFixed(3);
         p.el.style.transform = p.el.classList.contains('chapter')
@@ -278,18 +298,21 @@
         // Then load each model ~0.2 of scroll before it is shown, so only one 3D
         // context spins up at a time rather than four at once.
         if (near && m.el.dataset.src && J > m.i0 - 0.2) { m.el.src = m.el.dataset.src; delete m.el.dataset.src; }
-        const H = 0.07; // handoff half-width in journey progress — wider = softer overlap of the two clouds
-        const inE = m.i0 < 0 ? 1 : smooth((J - (m.i0 - 0.5 * H)) / (2 * H));
-        const outE = m.i1 > 2 ? 1 : 1 - smooth((J - (m.i1 - 1.5 * H)) / (2 * H));
-        const o = ease(m.el, Math.max(0, Math.min(inE, outE)), 0.11);
+        // Handoff half-width. Each boundary is shared by two models, and both windows
+        // are centred on it, so one rises exactly as the other falls — no gap, no dip.
+        const H = 0.055;
+        const inE = m.i0 < 0 ? 1 : smooth((J - (m.i0 - H)) / (2 * H));
+        const outE = m.i1 > 2 ? 1 : 1 - smooth((J - (m.i1 - H)) / (2 * H));
+        const o = ease(m.el, Math.max(0, Math.min(inE, outE)), 7);
         const peak = typeof m.peak === 'function' ? m.peak(J) : (m.peak ?? 0.82);
         m.el.style.opacity = (o * peak).toFixed(3); // hold the models back so the text reads cleanly
         m.el.style.transform = 'scale(' + (0.96 + 0.04 * o).toFixed(4) + ')';
-        m.el.style.visibility = o < 0.01 ? 'hidden' : 'visible';
-        const pause = offscreen || o < 0.01;
+        m.el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
+        const pause = offscreen || o < 0.002;
         if (m.el._pause !== pause) { m.el._pause = pause; post(m.el, { iiclPause: pause }); }
-        // Scatter leads the fade (pow < 1), so the dissolve is clearly visible while still opaque.
-        const s = Math.round(Math.pow(1 - o, 0.6) * 100) / 100;
+        // Scatter tracks the fade rather than leading it. A pow < 1 made the model
+        // disintegrate well before it dimmed, which read as a separate event.
+        const s = Math.round((1 - o) * 100) / 100;
         if (m.el._scatter !== s) { m.el._scatter = s; post(m.el, { iiclScatter: s }); }
         // Scroll-driven zoom, mapped to each model's own stage span — every model flies in, then hands off
         // to the next while dispersing, so the stages read as one continuous motion.
@@ -302,6 +325,7 @@
     };
     let raf;
     const frame = () => {
+      tick();
       const J = journeyP();
       fadeModels(J);
       fadePanels(J);
@@ -348,6 +372,7 @@
     window.addEventListener('message', onExploreDone);
 
     return () => {
+      stopSnap();
       window.removeEventListener('message', onReady);
       clearTimeout(readyTimer);
       cancelAnimationFrame(raf);
@@ -454,7 +479,7 @@
           <span class="tick"></span>
         </div>
         <h2 class="chapter-h2">A product suite, across the industries we serve.</h2>
-        <p class="chapter-p">Delivered from Hyderabad and Raleigh — WhatsApp commerce, legal AI, workforce, finance and more, run in production for enterprise and mid-market teams.</p>
+        <p class="chapter-p">Delivered from Hyderabad and Raleigh — WhatsApp commerce, voice AI, service management and enterprise workflows, built for enterprise and mid-market teams.</p>
         <a href="#journey" class="chapter-link" onclick={enterExplore}>See all products <span class="mono">→</span></a>
       </div>
     </div>
@@ -642,14 +667,22 @@
         <div class="label-row"><span class="tick"></span><span class="label">FAQ</span></div>
         <h2 class="section-h2 section-h2-m0">Before you write to us.</h2>
       </div>
-      <div data-reveal class="faq-list">
-        {#each faqs as q}
-          <details class="faq-item">
-            <summary class="faq-q">{q.q}<span class="mono faq-plus">+</span></summary>
-            <p class="faq-a">{q.a}</p>
-          </details>
-        {/each}
-        <div class="faq-cap"></div>
+      <!-- Grouped by commercial pillar, so a reader scanning for one pathway is not
+           filtering the other one out of a single undifferentiated list. -->
+      <div class="faq-groups">
+      {#each ['Enterprise AI', 'GCC Technology Teams'] as group}
+        <div data-reveal class="faq-group">
+          <h3 class="faq-group-h mono">{group}</h3>
+          <div class="faq-list">
+            {#each faqs.filter((q) => q.group === group) as q}
+              <details class="faq-item" name="faq">
+                <summary class="faq-q">{q.q}<span class="faq-mark" aria-hidden="true"></span></summary>
+                <div class="faq-a"><p class="para">{q.a}</p></div>
+              </details>
+            {/each}
+          </div>
+        </div>
+      {/each}
       </div>
     </div>
   </div>
@@ -736,8 +769,8 @@
   /* The approved brand line stays visible without becoming a second H1 (Spec B8). */
   .hero-brand { display: block; font-size: clamp(15px, 1.5vw, 19px); font-weight: 500;
     letter-spacing: .01em; color: rgba(244,242,238,.72); margin-bottom: 14px; }
-  .hero-h1 { font-weight: 600; font-size: clamp(34px, 4.6vw, 62px); line-height: 1.06; letter-spacing: -0.025em; margin: 0 0 20px; max-width: 20ch; color: #fff; text-wrap: balance; text-shadow: 0 2px 40px rgba(12,17,23,0.8); }
-  .hero-lede { font-size: clamp(17px, 1.5vw, 20px); line-height: 1.6; color: rgba(243,243,244,0.68); max-width: 46ch; margin: 0 0 36px; text-wrap: pretty; text-shadow: 0 1px 24px rgba(12,17,23,0.9); }
+  .hero-h1 { font-weight: var(--w-light); font-size: clamp(34px, 4.6vw, 62px); line-height: 1.06; letter-spacing: -0.025em; margin: 0 0 20px; max-width: 30ch; color: #fff; text-wrap: pretty; text-shadow: 0 2px 40px rgba(12,17,23,0.8); }
+  .hero-lede { font-weight: var(--w-light); font-size: clamp(17px, 1.5vw, 20px); line-height: 1.6; color: rgba(243,243,244,0.68); max-width: 46ch; margin: 0 0 36px; text-wrap: pretty; text-shadow: 0 1px 24px rgba(12,17,23,0.9); }
   .hero-actions { display: flex; align-items: center; gap: 14px; pointer-events: auto; }
   .scroll-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.22em; color: rgba(243,243,244,0.45); }
 
@@ -747,8 +780,8 @@
   .chapter-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
   .chapter-eyebrow-right { justify-content: flex-end; }
   .chapter-kicker { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(243,243,244,0.6); }
-  .chapter-h2 { font-weight: 600; font-size: clamp(28px, 3vw, 42px); line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 16px; color: #fff; text-wrap: balance; }
-  .chapter-p { font-size: 17px; line-height: 1.65; color: rgba(243,243,244,0.68); margin: 0 0 24px; text-wrap: pretty; }
+  .chapter-h2 { font-weight: var(--w-body); font-size: clamp(28px, 3vw, 42px); line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 16px; color: #fff; text-wrap: pretty; }
+  .chapter-p { font-size: 17px; font-weight: var(--w-light); line-height: 1.65; color: rgba(243,243,244,0.72); margin: 0 0 24px; text-wrap: pretty; }
   .chapter-link { pointer-events: auto; display: inline-flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; font-weight: 600; font-size: 15.5px; border-bottom: 2px solid #ee2f2e; padding-bottom: 4px; transition: color .2s; }
   .chapter-right .chapter-link { justify-content: flex-end; }
   .chapter-link:hover { color: #ee2f2e; }
@@ -762,7 +795,7 @@
   .section-head { max-width: 68ch; }
   .label-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
   .label { font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: #ee2f2e; }
-  .section-h2 { font-weight: var(--w-heading); font-size: var(--fs-h2); line-height: 1.22; letter-spacing: -0.02em; margin: 0 0 var(--space-head); color: var(--ink); text-wrap: balance; }
+  .section-h2 { font-weight: var(--w-heading); font-size: var(--fs-h2); line-height: 1.22; letter-spacing: -0.02em; margin: 0 0 var(--space-head); color: var(--ink); text-wrap: pretty; }
   .section-h2-wide { margin-bottom: 34px; }
   .section-h2-m0 { margin: 0; }
 
@@ -775,15 +808,14 @@
   .def-p { margin: 0; font-size: var(--fs-body); line-height: 1.7; color: #40434a; }
   .proof-pending { color: #55585e; padding-left: 14px; border-left: 2px solid #e6e3de; }
 
-  .outcomes { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px;
-    background: #e6e3de; border: 1px solid #e6e3de; border-radius: 8px; overflow: hidden; }
-  .outcome { background: #fff; padding: 18px 20px; display: grid;
+  .outcomes { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .outcome { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; display: grid;
     grid-template-columns: minmax(180px, 0.9fr) minmax(200px, 1.2fr) minmax(200px, 1.1fr);
     gap: 6px 24px; align-items: baseline; }
   .outcome-cond { font-size: 15.5px; font-weight: var(--w-heading); color: #16171a; }
   .outcome-resp { font-size: 14.5px; line-height: 1.55; color: #40434a; }
   .outcome-ev { font-size: 11.5px; line-height: 1.5; color: #55585e; }
-  
+  @media (max-width: 900px) { .outcome { grid-template-columns: 1fr; gap: 4px; } }
 
   /* -- Two equal commercial pathways. Identical cards: the equality is the point. ── */
   .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -801,14 +833,17 @@
     line-height: 1.65; color: #55585e; padding-left: 14px; border-left: 2px solid #e6e3de; }
 
   /* ── Closing conversion: two equal paths, not a primary and a fallback. ── */
-  .conv { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 30px 0 22px; text-align: left; }
-  .conv-card { border: 1px solid rgba(255,255,255,.16); border-radius: 12px; padding: 24px;
-    display: flex; flex-direction: column; gap: 10px; transition: border-color .25s; }
-  .conv-card:hover { border-color: rgba(238,47,46,.6); }
-  .conv-h { margin: 0; font-size: 19px; font-weight: var(--w-heading); color: #fff; }
-  .conv-p { margin: 0; font-size: 14.5px; line-height: 1.6; color: rgba(244,242,238,.66); flex: 1; }
+  /* The closing band is a light surface, so these read as ink on paper. Full width of
+     the wrap, so the two cards sit on the same rail as everything above them. */
+  .conv { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    margin: 30px 0 22px; text-align: left; }
+  .conv-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 26px;
+    display: flex; flex-direction: column; gap: 10px; transition: border-color .25s, transform .25s; }
+  .conv-card:hover { border-color: #ee2f2e; transform: translateY(-3px); }
+  .conv-h { margin: 0; font-size: 19px; font-weight: var(--w-heading); color: var(--ink); }
+  .conv-p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--muted); flex: 1; }
   .conv-card .cta { align-self: flex-start; font-size: 15px; padding: 13px 22px; }
-  .conv-safety { margin: 0; font-size: 12.5px; line-height: 1.6; color: rgba(244,242,238,.5); max-width: 78ch; }
+  .conv-safety { margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--muted); max-width: 78ch; }
   .section-lede { font-size: var(--fs-body); font-weight: var(--w-body); line-height: 1.65; color: var(--muted); margin: 0 0 32px; max-width: 62ch; text-wrap: pretty; }
 
   /* Services — two columns of hairline rows, deliberately a different rhythm. */
@@ -851,27 +886,50 @@
   .ind-chip:hover { border-color: #ee2f2e; color: #fff; background: #ee2f2e; }
 
   /* FAQ */
-  .faq-wrap { display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; }
-  .faq-list { display: flex; flex-direction: column; }
-  .faq-item { border-top: 1px solid var(--line); padding: 0; }
-  .faq-q { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 20px 0; font-size: 17px; font-weight: 600; color: var(--ink); }
-  .faq-q::-webkit-details-marker { display: none; }
-  .faq-plus { color: #ee2f2e; }
-  .faq-a { margin: 0; padding: 0 0 22px; font-size: 15.5px; line-height: 1.65; color: var(--muted); max-width: 62ch; }
-  .faq-cap { border-top: 1px solid var(--line); }
+  .faq-wrap { display: block; }
+  .faq-wrap > :global(:first-child) { margin-bottom: 26px; }
+  /* The two pillars sit side by side, so a reader can see both sets at once rather
+     than scrolling past one to reach the other. */
+  .faq-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: start; }
+  .faq-groups :global(.faq-list) { max-width: none; }
+  .faq-group-h { margin: 0 0 10px; font-size: 10.5px; letter-spacing: .22em;
+    text-transform: uppercase; color: #b81c1c; }
 
   /* CTA */
   .cta-wrap { text-align: center; display: flex; flex-direction: column; align-items: center; }
-  .cta-inner { display: flex; flex-direction: column; align-items: center; }
+  .cta-inner { width: 100%; display: flex; flex-direction: column; align-items: center; }
   .cta-kicker { font-size: 12.5px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: #ee2f2e; margin-bottom: 20px; }
-  .cta-h2 { font-weight: 600; font-size: clamp(30px, 3.6vw, 46px); line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 20px; color: var(--ink); max-width: 24ch; text-wrap: balance; }
+  .cta-h2 { font-weight: var(--w-body); font-size: clamp(30px, 3.6vw, 46px); line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 20px; color: var(--ink); max-width: 32ch; text-wrap: pretty; }
   .cta-p { font-size: 17px; line-height: 1.6; color: var(--muted); max-width: 52ch; margin: 0 0 36px; text-wrap: pretty; }
+  .cta-big { font-size: 16.5px; padding: 17px 38px; }
 
   /* ── Responsive. The homepage had no breakpoints at all: every grid was a fixed
      column count, so it overflowed below ~900px. ── */
-  
+  @media (max-width: 1040px) {
+    .paths, .conv { grid-template-columns: 1fr; }
+    .track { grid-template-columns: 1fr; gap: 32px; }
+    .step::before { display: none; }
+
+  }
   /* Tablet / iPad: the journey keeps its animation but needs a shorter scroll and
      chapters that sit inside the gutter rather than against a 580px half-measure. */
-  
-  
+  @media (max-width: 1040px) {
+    .journey { height: 380vh; }
+    .chapter { max-width: min(440px, 62vw); }
+  }
+  @media (max-width: 720px) {
+    .svc-cols { grid-template-columns: 1fr; gap: 0; }
+    /* Phone: the journey still animates — the chapters simply stack over the model
+       and the scroll distance shortens so each stage is reachable with a thumb. */
+    .journey { height: 320vh; }
+    .chapter { max-width: none; top: auto; bottom: 12vh; transform: none; }
+    .chapter-left, .chapter-right { left: var(--wrap-pad); right: var(--wrap-pad); text-align: left; }
+    .chapter-right .chapter-eyebrow, .chapter-right .chapter-link { justify-content: flex-start; }
+    .chapter-h2 { font-size: var(--fs-h2); }
+    .chapter-p { font-size: var(--fs-body); }
+    .hero-actions { flex-direction: column; align-items: stretch; width: 100%; max-width: 320px; }
+    .cta, .ghost { justify-content: center; }
+    /* Keep the model visible behind the text rather than letting it fill the screen. */
+    .journey-model { opacity: .55; }
+  }
 </style>

@@ -11,7 +11,7 @@
   heroImage={PAGE_ART["manufacturing"]}
   path="/manufacturing"
   schemaType="Service"
-  cta="Discuss a Manufacturing AI Pilot"
+  cta="Assess an Industry Workflow"
   faqs={[
     { q: "What data do you need to start?", a: "Machine data where it exists, plus maintenance records, quality records and whatever your ERP holds. If the records are on paper, that is worth knowing early because it changes the approach." },
     { q: "Does plant data have to leave the site?", a: "Not necessarily. On-premise and air-gapped deployments are available where site policy or connectivity requires it." },
@@ -19,7 +19,9 @@
     { q: "Who operates it once it is live?", a: "Your team. We train the operators and maintenance staff who will use it daily, and document the escalation route for when it flags something unexpected." },
   ]}
   autoFaq
->
+  bandKicker="Assess a workflow"
+  bandHeading="Bring us one plant or planning workflow. We will tell you what it actually needs."
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
@@ -64,4 +66,47 @@
       <a class="cta-link" href="/contactus">See what your data supports <span class="arw">→</span></a>
     </div>
   </section>
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Systems, ownership and boundaries</h2>
+      <div class="section-body">
+        <p class="para">Before anything is designed we agree which systems hold the truth, who owns each decision, and what the system is never permitted to decide. That boundary is written down and does not move without your approval.</p>
+      </div>
+      <dl class="sysgrid">
+        <div class="sysrow"><dt>Systems of record</dt><dd>MES, ERP and the SCADA or historian layer; IoT gateways where sensors are already deployed</dd></div>
+        <div class="sysrow"><dt>Deployment</dt><dd>Edge where latency or connectivity demands it, cloud where it does not</dd></div>
+        <div class="sysrow"><dt>Human owner</dt><dd>Plant supervisors and quality engineers; the operator retains override</dd></div>
+        <div class="sysrow"><dt>Never automated</dt><dd>Safety interlocks, shutdown decisions and anything governed by a safety case</dd></div>
+        <div class="sysrow"><dt>Data prerequisite</dt><dd>Labelled defect examples for vision, and maintenance history for prediction</dd></div>
+        <div class="sysrow"><dt>Escalation</dt><dd>Low-confidence detections queue for operator review rather than acting</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>What we would measure</h2>
+      <div class="section-body">
+        <p class="para measures-note"><strong>Measures to validate, not results achieved.</strong> These are the measures we would agree during discovery and baseline before go-live. We publish figures only with a baseline, a measurement period, a calculation method and the customer&rsquo;s approval.</p>
+        <ul class="list">
+          <li>Unplanned downtime attributable to the covered assets</li>
+          <li>Defect escape rate at the inspected station</li>
+          <li>Forecast error against the current planning baseline</li>
+          <li>Operator override rate, as a signal of model trust</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Related paths</h2>
+      <ul class="pathlist">
+          <li><a href="/supply-chain">Supply chain planning</a><span>demand, inventory and transport planning</span></li>
+          <li><a href="/ai-genai-services">Enterprise AI &amp; GenAI</a><span>how a use case is scoped and taken to production</span></li>
+          <li><a href="/gcc-technology-teams">GCC Technology Teams</a><span>building the data and platform capability in-house</span></li>
+      </ul>
+    </div>
+  </section>
+
 </Layout>

@@ -209,7 +209,8 @@ let driftA = 0; // slow circling while flying alongside a star
 // -party stylesheet into an iframe that had no other network dependency, and asked for
 // IBM Plex Sans — a third family the design system does not use.
 const MONO = "'IBM Plex Mono',ui-monospace,monospace";
-const SANS = "'Inter',system-ui,-apple-system,sans-serif";
+// Reads the token so the galaxy card follows the site face automatically.
+const SANS = "var(--font-display)";
 
 // Clear any earlier instances (dev HMR re-evaluates this module).
 for (const id of ["iicl-explore-card", "iicl-explore-hint", "iicl-explore-labels"]) {

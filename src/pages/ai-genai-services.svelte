@@ -102,7 +102,8 @@
   ctaHref="/contactus?intent=ai-discovery-workshop"
   heroImage={PAGE_ART['ai-genai-services']}
   {faqs}
->
+  bandKicker="Start with one process"
+  bandHeading="Start with a defined process, a baseline and a measurable outcome.">
   <!-- Scope signal + the first-fold trust language C2 specifies. -->
   <section class="page-section">
     <div class="wrap">
@@ -322,9 +323,11 @@
   .row-b { font-size: 14.5px; line-height: 1.55; color: #40434a; }
   .row-c { font-size: 11.5px; line-height: 1.5; color: var(--muted); }
 
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px;
-    margin-top: 16px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-  .card { background: #fff; padding: 18px; }
+  /* Real gaps, borders on the cards. A 1px gap over a background drew the dividers
+     but showed as a grey block wherever the last row was not full. */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px; margin-top: 16px; }
+  .card { background: #fff; padding: 18px; border: 1px solid var(--line); border-radius: 8px; }
   .card h3 { margin: 0 0 8px; font-size: 16px; font-weight: var(--w-heading); color: var(--ink); }
   .card p { margin: 0; font-size: 14.5px; line-height: 1.6; color: #40434a; }
   .card-c { display: block; margin-top: 12px; font-size: 11.5px; line-height: 1.55; color: var(--muted); }
@@ -333,9 +336,9 @@
   .out { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
   .out span { color: var(--brand); margin-right: 6px; }
 
-  .gov { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 1px;
-    background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-  .gov li { background: #fff; padding: 13px 16px; display: flex; gap: 12px; align-items: baseline;
+  .gov { list-style: none; margin: 16px 0 0; padding: 0; display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .gov li { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 13px 16px; display: flex; gap: 12px; align-items: baseline;
     font-size: 14.5px; color: #40434a; }
   .gov span { font-size: 11px; color: var(--brand); }
 

@@ -10,6 +10,7 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PAGES } from "../src/pages.config.js";
+import { altFor } from "./gen-og.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -58,7 +59,11 @@ function robotsAndCanonical(p, canonical) {
 function social(p, canonical) {
   if (p.kind === "model" || p.index === false) return "";
   const url = SITE + canonical;
-  const img = SITE + (p.ogImage || "/img/banners/A1-og-default.png");
+  // One card per route (scripts/gen-og.mjs). Every page previously shared a single
+  // 1.42 MB 1729x910 file, so a link to the Privacy Policy previewed identically to the
+  // homepage and cost 1.4 MB to fetch.
+  const img = SITE + (p.ogImage || `/img/og/${p.slug}.png`);
+  const imgAlt = altFor(p);
   const d = p.description || "";
   return [
     `    <meta property="og:type" content="website" />`,
@@ -67,18 +72,21 @@ function social(p, canonical) {
     d ? `    <meta property="og:description" content="${esc(d)}" />` : "",
     `    <meta property="og:url" content="${url}" />`,
     `    <meta property="og:image" content="${img}" />`,
-    `    <meta property="og:image:alt" content="${esc(p.ogAlt || p.title)}" />`,
+    `    <meta property="og:image:width" content="1200" />`,
+    `    <meta property="og:image:height" content="630" />`,
+    `    <meta property="og:image:alt" content="${esc(p.ogAlt || imgAlt)}" />`,
     `    <meta name="twitter:card" content="summary_large_image" />`,
     `    <meta name="twitter:title" content="${esc(p.title)}" />`,
     d ? `    <meta name="twitter:description" content="${esc(d)}" />` : "",
     `    <meta name="twitter:image" content="${img}" />`,
+    `    <meta name="twitter:image:alt" content="${esc(p.ogAlt || imgAlt)}" />`,
   ].filter(Boolean).join("\n") + "\n";
 }
 
 function head(p, extra = "") {
   const canonical = p.slug === "index" ? "/" : "/" + p.slug;
   return `    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1440" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="${p.theme || "#ffffff"}" />
     <title>${esc(p.title)}</title>
 ${p.description ? `    <meta name="description" content="${esc(p.description)}" />

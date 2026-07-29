@@ -191,6 +191,65 @@ const B = (id) => `filter="url(#bloom-${id})"`;
 
 const MOTIF = {
 
+  "gcc-careers": (r, id) => {
+    // Contract specialists slotting into seats in an existing team, each with a term.
+    const CX = 1060, CY = 440;
+    const seats = [];
+    for (let i = 0; i < 8; i++) {
+      const a = -Math.PI / 2 + (i / 8) * Math.PI * 2;
+      const x = n(CX + Math.cos(a) * 190), y = n(CY + Math.sin(a) * 190);
+      const filled = i < 5;
+      seats.push(`<circle cx="${x}" cy="${y}" r="26" fill="none" stroke="${C.red}" stroke-width="2.2" opacity="${filled ? .8 : .3}" ${filled ? "" : 'stroke-dasharray="4 8"'}/>`);
+      if (filled) seats.push(`<circle cx="${x}" cy="${y}" r="8" fill="${C.ember}" ${B(id)}/>`);
+      seats.push(`<line x1="${n(CX + Math.cos(a) * 96)}" y1="${n(CY + Math.sin(a) * 96)}" x2="${n(x - Math.cos(a) * 28)}" y2="${n(y - Math.sin(a) * 28)}" stroke="${C.red}" stroke-width="1.8" opacity="${filled ? .45 : .18}"/>`);
+    }
+    // Contract terms arriving from the left.
+    const feed = [];
+    for (let i = 0; i < 5; i++) {
+      const y = 250 + i * 76;
+      feed.push(`<rect x="660" y="${y - 15}" width="150" height="30" rx="5" fill="none" stroke="${C.red}" stroke-width="2" opacity="${n(.72 - i * .08)}"/>`);
+      feed.push(`<text x="676" y="${y + 5}" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.5" fill="${C.ember}" opacity=".85">TERM ${String(i + 1).padStart(2, "0")}</text>`);
+      feed.push(`<path d="M810 ${y} C 880 ${y}, 900 ${CY}, ${CX - 96} ${CY}" fill="none" stroke="${C.red}" stroke-width="2" opacity="${n(.5 - i * .05)}"/>`);
+    }
+    return `${feed.join("")}
+      <circle cx="${CX}" cy="${CY}" r="96" fill="none" stroke="${S(id)}" stroke-width="4.6" opacity=".9" ${B(id)}/>
+      <text x="${CX}" y="${CY - 2}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" letter-spacing="2.4" fill="${C.ember}">EXISTING</text>
+      <text x="${CX}" y="${CY + 20}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" letter-spacing="2.4" fill="${C.ember}">GCC TEAM</text>
+      ${seats.join("")}`;
+  },
+
+
+  contracts: (r, id) => {
+    // Engagement models plotted against scope certainty and duration: six markers on a
+    // grid, with the delivery-responsibility split shown as a divided bar.
+    const X0 = 700, Y0 = 200, W2 = 640, H2 = 380;
+    const pts = [[0.18,0.24,"FIXED SCOPE"],[0.52,0.20,"POD"],[0.32,0.62,"FLEX TEAM"],
+                 [0.70,0.52,"C2H"],[0.84,0.30,"MANAGED"],[0.62,0.80,"ADVISORY"]];
+    const grid = [];
+    for (let i = 0; i <= 4; i++) {
+      grid.push(`<line x1="${X0}" y1="${n(Y0 + (i / 4) * H2)}" x2="${X0 + W2}" y2="${n(Y0 + (i / 4) * H2)}" stroke="${C.red}" stroke-width="1" opacity=".16"/>`);
+      grid.push(`<line x1="${n(X0 + (i / 4) * W2)}" y1="${Y0}" x2="${n(X0 + (i / 4) * W2)}" y2="${Y0 + H2}" stroke="${C.red}" stroke-width="1" opacity=".16"/>`);
+    }
+    const marks = pts.map(([px, py, label], i) => {
+      const x = n(X0 + px * W2), y = n(Y0 + py * H2);
+      return `<g>
+        <circle cx="${x}" cy="${y}" r="${28 - i * 2}" fill="none" stroke="${C.red}" stroke-width="2.2" opacity=".55"/>
+        <circle cx="${x}" cy="${y}" r="6" fill="${C.ember}" ${B(id)}/>
+        <text x="${x + 20}" y="${y - 14}" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.6" fill="${C.ember}" opacity=".9">${label}</text>
+      </g>`;
+    }).join("");
+    // Responsibility split bar.
+    const bar = `<g>
+      <rect x="${X0}" y="${Y0 + H2 + 48}" width="${W2}" height="16" rx="8" fill="none" stroke="${C.red}" stroke-width="2" opacity=".5"/>
+      <rect x="${X0 + 2}" y="${Y0 + H2 + 50}" width="${n(W2 * 0.46)}" height="12" rx="6" fill="${C.red}" opacity=".55"/>
+      <text x="${X0}" y="${Y0 + H2 + 38}" font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="2.2" fill="${C.ember}" opacity=".75">IICL RESPONSIBILITY</text>
+      <text x="${X0 + W2}" y="${Y0 + H2 + 38}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="2.2" fill="#ffffff" opacity=".45">CUSTOMER</text>
+    </g>`;
+    return `${grid.join("")}${marks}${bar}
+      <text x="${X0 - 14}" y="${Y0 - 16}" font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="2.4" fill="#ffffff" opacity=".4">SCOPE CERTAINTY</text>`;
+  },
+
+
   careers: (r, id) => {
     // Capability domains -> role scorecard -> mobilised pod.
     const CX = 1040, CY = 450;
@@ -552,6 +611,8 @@ const MOTIF = {
 // HUD content per page: where the reticle sits, what the readout says, and callouts.
 // Labels are sector language, not decoration — they should look like real instrumentation.
 const HUD = {
+  "gcc-careers":   { ret: [1060, 440, 190], rd: [1200, 116, "PLACEMENT", ["DOMAIN", "TERM", "REVIEW"]], cal: [[880, 640, 800, 720, "CONTRACT"]] },
+  contracts:       { ret: [1020, 390, 200], rd: [1190, 116, "ENGAGEMENT", ["SCOPE", "DURATION", "OWNERSHIP"]], cal: [[1180, 640, 1268, 720, "AGREED"]] },
   careers:         { ret: [1040, 450, 152], rd: [1186, 128, "TEAM BUILD", ["DOMAINS", "ROLES", "MOBILISE"]], cal: [[1418, 600, 1500, 700, "POD READY"]] },
   healthcare:      { ret: [1010, 470, 250], rd: [1188, 116, "PATIENT FLOW", ["TRIAGE", "BOOKING", "REMINDERS"]], cal: [[1272, 604, 1352, 690, "ESCALATION"]] },
   manufacturing:   { ret: [1080, 400, 190], rd: [1176, 116, "LINE STATUS", ["UPTIME", "YIELD", "MAINT"]], cal: [[700, 600, 636, 690, "ROBOT ARM"]] },
@@ -583,7 +644,7 @@ const SEEDS = {
   logistics: 67, "supply-chain": 79, "contact-centre": 89, hr: 97,
   "ai-genai-services": 103, "agentic-ai": 109, "web-mobile-dev": 127,
   "whatsapp-business": 131, "erp-services": 149, "staff-augmentation": 157, helpdesk: 163,
-  aboutus: 173, blog: 179, "use-cases": 191, contactus: 197, careers: 211,
+  aboutus: 173, blog: 179, "use-cases": 191, contactus: 197, careers: 211, contracts: 223, "gcc-careers": 227,
 };
 
 mkdirSync(OUT, { recursive: true });

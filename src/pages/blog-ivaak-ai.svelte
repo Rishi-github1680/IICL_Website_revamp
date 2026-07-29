@@ -7,7 +7,7 @@
 
 <Layout
   kicker="Blog"
-  h1="iVaak AI: How AI Voice Agents Are Revolutionizing Customer Engagement & Business Communication"
+  h1="How AI voice agents change customer engagement"
   lede="Why customer expectations outgrew IVR menus, and how enterprise-grade AI voice agents now handle real conversations end to end."
   heroBanner="/img/banners/A10-banner-blog.png"
   faqs={[
@@ -15,7 +15,10 @@
   ]}
   path="/blog-ivaak-ai"
   article
->
+  bandKicker="Read next"
+  bandHeading="Bring us the calls you are handling today and we will tell you which of them a voice agent should take."
+  cta="Discuss the Related Workflow"
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
@@ -87,14 +90,7 @@
       <h2 class="section-h"><span class="tick"></span>Communication Channels Are Fragmented</h2>
       <div class="section-body">
         <p class="para">Businesses often manage calls, WhatsApp, emails, chat support, and CRM updates through disconnected systems. This results in inconsistent customer experiences and operational inefficiencies. iVaak AI solves all of these challenges through intelligent AI-powered conversational automation.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>1. AI Voice Agents with Human-Like Conversations</h2>
-      <div class="section-body">
+        <h3 class="sub-h">AI Voice Agents with Human-Like Conversations</h3>
         <p class="para">At the core of iVaak AI are advanced AI Voice Agents capable of conducting natural, real-time conversations with customers. The AI can:</p>
         <p class="para">Unlike traditional bots, the conversations feel highly natural and contextual. Customers can speak normally. The AI understands.</p>
         <ul class="list">
@@ -106,36 +102,16 @@
           <li>Maintain contextual memory</li>
           <li>Generate intelligent responses instantly</li>
         </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>2. Context-Aware Knowledge Intelligence</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Context-Aware Knowledge Intelligence</h3>
         <p class="para">iVaak AI integrates directly with product catalogs, FAQs, knowledge bases, SOP documents, websites, and internal databases using Retrieval-Augmented Generation (RAG). This enables the AI to provide highly accurate and business-specific responses grounded in real company knowledge, and the platform continuously learns and improves from customer interactions.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>3. Omnichannel Customer Engagement</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Omnichannel Customer Engagement</h3>
         <p class="para">Modern customers move fluidly between channels. A conversation may begin through voice and continue through WhatsApp or email. iVaak AI synchronizes customer interactions across voice, WhatsApp, web chat, email, and mobile applications — ensuring contextual continuity across every customer touchpoint.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>4. CRM &amp; Workflow Automation</h2>
-      <div class="section-body">
+        <h3 class="sub-h">CRM &amp; Workflow Automation</h3>
         <p class="para">The platform integrates directly with Salesforce, HubSpot, Zoho, ERP systems, scheduling platforms, ticketing tools, and payment gateways. This enables automatic lead capture, appointment scheduling, follow-up workflows, ticket creation, customer updates, and CRM synchronization.</p>
       </div>
     </div>
   </section>
+
 
   <section class="page-section shade">
     <div class="wrap">
@@ -152,54 +128,20 @@
           <li>Better scalability</li>
           <li>Reduced agent workload</li>
         </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>1. Healthcare &amp; Patient Communication</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Healthcare &amp; Patient Communication</h3>
         <p class="para">iVaak AI enables healthcare providers to deploy AI-powered virtual patient assistants that can book appointments automatically, send reminders via WhatsApp, explain procedures and schedules, route emergency cases appropriately, and support multilingual patient communication — handling appointment scheduling, billing questions, prescription refills, insurance inquiries, follow-up reminders, and test result coordination. Business impact: reduced front-desk workload, lower patient no-show rates, improved patient experience, and better operational efficiency.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>2. Real Estate Lead Qualification</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Real Estate Lead Qualification</h3>
         <p class="para">iVaak AI automates property inquiry handling, lead qualification, budget analysis, site visit scheduling, WhatsApp brochure sharing, and CRM lead updates — holding natural conversations with prospects while continuously evaluating purchase intent. Business impact: faster lead response times, increased conversion rates, reduced sales workload, and improved lead quality.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>3. E-Commerce Customer Support</h2>
-      <div class="section-body">
+        <h3 class="sub-h">E-Commerce Customer Support</h3>
         <p class="para">iVaak AI enables retailers to automate support for order tracking, returns, refunds, shipping updates, and product recommendations through conversational AI voice and chat agents — even proactively recommending products and upselling based on conversation context. Business impact: reduced support costs, faster response times, higher satisfaction, and improved retention.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>4. Banking &amp; Financial Services</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Banking &amp; Financial Services</h3>
         <p class="para">iVaak AI enables secure, compliant AI-driven engagement for loans, insurance, EMI calculations, onboarding, account services, and KYC workflows — explaining products, guiding customers through onboarding, and escalating sensitive requests appropriately. Business impact: improved onboarding efficiency, reduced call center load, higher conversion rates, and better customer accessibility.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>5. Education &amp; Admissions</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Education &amp; Admissions</h3>
         <p class="para">iVaak AI automates admission inquiry handling, course explanation, fee structure communication, counselling scheduling, student follow-ups, and WhatsApp-based communication. Business impact: improved admission conversions, reduced inquiry leakage, faster communication workflows, and better student engagement.</p>
       </div>
     </div>
   </section>
+
 
   <section class="page-section shade">
     <div class="wrap">
@@ -212,7 +154,7 @@
 
   <section class="page-section">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>The Future of Business Communication is AI-Powered</h2>
+      <h2 class="section-h"><span class="tick"></span>What this means for your next decision</h2>
       <div class="section-body">
         <p class="para">AI Voice Agents are no longer experimental technology — they are rapidly becoming the foundation of modern customer engagement. Businesses that adopt conversational AI today gain faster customer response times, better customer experiences, lower operational costs, improved scalability, stronger customer relationships, and higher revenue opportunities.</p>
       </div>
@@ -221,7 +163,7 @@
 
   <section class="page-section shade">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>Final Thoughts</h2>
+      <h2 class="section-h"><span class="tick"></span>Where to start</h2>
       <div class="section-body">
         <p class="para">The future of customer engagement belongs to businesses that can communicate intelligently, instantly, and at scale. Traditional support systems and IVRs are no longer enough. From healthcare and real estate to banking, education, and e-commerce, iVaak AI enables businesses to automate customer communication while improving customer satisfaction, operational efficiency, and business growth.</p>
       </div>

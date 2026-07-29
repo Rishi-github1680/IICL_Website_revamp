@@ -28,7 +28,7 @@
     <div class="cs-stage" style="transform: translate3d({dx}px, {dy}px, 0)">
       <span class="cs-ring r1" aria-hidden="true"></span>
       <span class="cs-ring r2" aria-hidden="true"></span>
-      <img class="cs-logo" src="/iicl_logo.png" alt="IICL logo" />
+      <img class="cs-logo" src="/iicl_logo.png" alt="IICL logo" loading="lazy" decoding="async" />
     </div>
     <span class="cs-kicker mono">{kicker}</span>
     <h1 class="cs-h1">{h1}<span class="cs-caret" aria-hidden="true">_</span></h1>

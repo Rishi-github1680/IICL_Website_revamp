@@ -46,8 +46,9 @@
   h1="Sitemap"
   lede="Every page on this site, in one list."
   path="/sitemap"
-  cta="Talk to us"
->
+  cta="Navigate to a Relevant Page"
+  bandKicker="Everything in one list"
+  bandHeading="Every indexable page on the IICL website.">
   <section class="page-section">
     <div class="wrap">
       <div class="sm-grid">
@@ -86,6 +87,6 @@
     color: var(--brand); border: 1px solid color-mix(in srgb, var(--brand) 40%, transparent);
     border-radius: 999px; padding: 1px 6px; margin-left: 4px; }
 
-  
-  
+  @media (max-width: 900px) { .sm-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .sm-grid { grid-template-columns: 1fr; } }
 </style>

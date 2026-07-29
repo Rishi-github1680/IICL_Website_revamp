@@ -8,7 +8,9 @@
   h1="Thank You"
   lede="Your enquiry has reached IICL. Here is what happens next."
   heroBanner="/img/banners/A12-banner-thankyou.png"
->
+  bandKicker="While you wait"
+  bandHeading="Have a look at how we scope and run a project."
+  cta="Read the Journal">
   <section class="page-section">
     <div class="wrap">
       <h2 class="section-h"><span class="tick"></span>Your enquiry has reached us.</h2>

@@ -21,7 +21,7 @@
   <div class="ft-wrap">
     <div class="ft-top">
       <div class="ft-brand">
-        <img class="ft-logo" src="/img/logo-footer.svg" alt="Intelligence India.Com Limited (IICL) logo" />
+        <img class="ft-logo" src="/img/logo-footer.svg" alt="Intelligence India.Com Limited (IICL) logo" loading="lazy" decoding="async" />
         <p class="ft-legal-name">Intelligence India.Com Limited</p>
         <p class="ft-addr-blk">
           <a href="https://www.google.com/maps/search/?api=1&query=1%20Glenwood%20Ave%20%235%2C%20Raleigh%2C%20NC%2027603" target="_blank" rel="noopener">
@@ -202,7 +202,10 @@
   .ft-bottom { margin-top: 16px; padding: 16px 0 0; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; }
   .ft-bottom span { font-size: 13px; color: rgba(255,255,255,0.5); }
 
-  
-  
-  
+  @media (max-width: 1080px) { .ft-top { grid-template-columns: 1.2fr 1fr 1fr; } }
+  @media (max-width: 780px) { .ft-top { grid-template-columns: 1fr 1fr; gap: 28px; } }
+  @media (max-width: 560px) {
+    .ft-top { grid-template-columns: 1fr; }
+    .ft-actions { justify-content: space-between; }
+  }
 </style>

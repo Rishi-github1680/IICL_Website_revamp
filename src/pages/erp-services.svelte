@@ -10,7 +10,7 @@
   h1="ERP Consulting, Implementation and Integration"
   lede="ERP consulting, implementation, customisation, migration and support, connecting finance, HR, procurement, inventory and sales in one system."
   path="/erp-services"
-  cta="Request an ERP Assessment"
+  cta="Discuss a Defined Requirement"
   heroImage={PAGE_ART["erp-services"]}
   specs={[
     { k: "Services", v: "Consulting to rollout and support" },
@@ -24,7 +24,9 @@
     { q: "Do you work with our existing ERP?", a: "Yes. Much of our ERP work is integration and extension rather than replacement, connecting the ERP to your CRM, website, WhatsApp, mobile apps and reporting tools." },
     { q: "Who trains our team?", a: "We do, before go-live, with documentation written for the people doing the work rather than for the system administrator." },
   ]}
->
+  bandKicker="Define the requirement"
+  bandHeading="Bring us a defined ERP requirement and we will scope it against your systems, data and cutover constraints."
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap">
       <h2 class="section-h"><span class="tick"></span>ERP Services</h2>

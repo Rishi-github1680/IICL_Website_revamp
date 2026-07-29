@@ -4,17 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "gen": "node scripts/gen-pages.mjs",
-    "dev": "npm run gen && vite --host 0.0.0.0",
+    "gen": "node scripts/gen-pages.mjs && node scripts/gen-og.mjs",
+    "dev": "npm run gen && vite --host 0.0.0.0 --port 5174",
     "build": "npm run gen && vite build && npm run build:ssr && npm run prerender",
-    "preview": "npm run gen && vite preview --host 0.0.0.0",
+    "preview": "npm run gen && vite preview --host 0.0.0.0 --port 5174",
     "build:ssr": "vite build --config vite.config.ssr.js",
-    "prerender": "node scripts/prerender.mjs"
+    "prerender": "node scripts/prerender.mjs",
+    "og": "node scripts/gen-og.mjs"
   },
   "dependencies": {
     "three": "0.179.1"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@sveltejs/vite-plugin-svelte": "^6.2.4",
     "svelte": "^5.56.7",
     "vite": "7.1.5"

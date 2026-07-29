@@ -11,7 +11,7 @@
   heroImage={PAGE_ART["supply-chain"]}
   path="/supply-chain"
   schemaType="Service"
-  cta="Request a Supply Chain Data Assessment"
+  cta="Assess an Industry Workflow"
   faqs={[
     { q: "How much history do you need to forecast?", a: "Generally two to three years of sales history, plus stock, order, supplier and transport data. We assess what you hold before promising anything about accuracy." },
     { q: "What if our data is messy?", a: "That is the normal starting point. The data assessment exists to establish what is usable, and it comes before any forecasting work." },
@@ -20,7 +20,9 @@
     { q: "Does this replace our planning team?", a: "No. It removes the spreadsheet work so planners spend their time on exceptions and supplier decisions." },
   ]}
   autoFaq
->
+  bandKicker="Assess a workflow"
+  bandHeading="Bring us one planning workflow. We will start from the data you already hold."
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
@@ -65,4 +67,47 @@
       <a class="cta-link" href="/contactus">See what your history supports <span class="arw">→</span></a>
     </div>
   </section>
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Systems, ownership and boundaries</h2>
+      <div class="section-body">
+        <p class="para">Before anything is designed we agree which systems hold the truth, who owns each decision, and what the system is never permitted to decide. That boundary is written down and does not move without your approval.</p>
+      </div>
+      <dl class="sysgrid">
+        <div class="sysrow"><dt>Systems of record</dt><dd>ERP, WMS and TMS; supplier and demand history as held today</dd></div>
+        <div class="sysrow"><dt>Data prerequisite</dt><dd>Enough clean demand history to evaluate a forecast — assessed before anything is built</dd></div>
+        <div class="sysrow"><dt>Human owner</dt><dd>The planner; the system proposes and the planner commits</dd></div>
+        <div class="sysrow"><dt>Never automated</dt><dd>Purchase commitment, supplier selection and allocation under shortage</dd></div>
+        <div class="sysrow"><dt>Override</dt><dd>Planner overrides are captured as signal, not treated as error</dd></div>
+        <div class="sysrow"><dt>Escalation</dt><dd>Forecast drift and unusual demand patterns raise to the planning owner</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>What we would measure</h2>
+      <div class="section-body">
+        <p class="para measures-note"><strong>Measures to validate, not results achieved.</strong> These are the measures we would agree during discovery and baseline before go-live. We publish figures only with a baseline, a measurement period, a calculation method and the customer&rsquo;s approval.</p>
+        <ul class="list">
+          <li>Forecast error against your current planning baseline</li>
+          <li>Stock cover and shortage frequency on the covered SKUs</li>
+          <li>Planner time spent on exceptions versus routine review</li>
+          <li>Override rate and the reasons behind it</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Related paths</h2>
+      <ul class="pathlist">
+          <li><a href="/logistics">Logistics operations</a><span>where the constraint is execution rather than planning</span></li>
+          <li><a href="/manufacturing">Manufacturing</a><span>where planning meets the plant floor</span></li>
+          <li><a href="/ai-genai-services">Enterprise AI &amp; GenAI</a><span>how a use case is scoped and taken to production</span></li>
+      </ul>
+    </div>
+  </section>
+
 </Layout>

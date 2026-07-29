@@ -11,7 +11,7 @@
   heroImage={PAGE_ART["contact-centre"]}
   path="/contact-centre"
   schemaType="Service"
-  cta="Request an AI Contact Centre Demo"
+  cta="Assess an Industry Workflow"
   faqs={[
     { q: 'Will customers be stuck talking to a bot?', a: 'No. Handover rules are set by you, and the transfer carries the conversation context so the customer does not repeat themselves.' },
     { q: 'Which contacts should stay with people?', a: 'Complaints, anything sensitive, and anything where a judgement call matters. Routine status and information requests are the ones worth automating first.' },
@@ -20,7 +20,9 @@
     { q: 'Does it work in more than one language?', a: 'Multilingual handling is supported. We confirm the specific languages for your deployment and demonstrate them rather than quoting a number.' }
   ]}
   autoFaq
->
+  bandKicker="Assess a workflow"
+  bandHeading="Bring us one contact type. We will show you what can be handled and where a person takes over."
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
@@ -94,6 +96,50 @@
           </ul>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Systems, ownership and boundaries</h2>
+      <div class="section-body">
+        <p class="para">Before anything is designed we agree which systems hold the truth, who owns each decision, and what the system is never permitted to decide. That boundary is written down and does not move without your approval.</p>
+      </div>
+      <dl class="sysgrid">
+        <div class="sysrow"><dt>Systems of record</dt><dd>CCaaS or telephony platform and the CRM or help desk of record</dd></div>
+        <div class="sysrow"><dt>Channels</dt><dd>Voice, chat, email and WhatsApp, with one conversation history across them</dd></div>
+        <div class="sysrow"><dt>Human owner</dt><dd>Team leaders and agents; the agent-assist layer never replaces the decision</dd></div>
+        <div class="sysrow"><dt>Never automated</dt><dd>Complaint outcomes, goodwill decisions and anything a regulator treats as advice</dd></div>
+        <div class="sysrow"><dt>Consent and disclosure</dt><dd>Callers are told they are speaking to an automated system, and recording consent is captured</dd></div>
+        <div class="sysrow"><dt>Escalation</dt><dd>Handover carries the full transcript and context so the customer never repeats themselves</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>What we would measure</h2>
+      <div class="section-body">
+        <p class="para measures-note"><strong>Measures to validate, not results achieved.</strong> These are the measures we would agree during discovery and baseline before go-live. We publish figures only with a baseline, a measurement period, a calculation method and the customer&rsquo;s approval.</p>
+        <ul class="list">
+          <li>Share of contacts fully handled without a person</li>
+          <li>Wait time on routine contacts</li>
+          <li>Handover rate and what triggers it</li>
+          <li>Quality scores on automated versus assisted contacts</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Related paths</h2>
+      <ul class="pathlist">
+          <li><a href="/ivaak">iVaak.ai</a><span>the voice agent handling inbound and outbound calls</span></li>
+          <li><a href="/icognito">iCognito.ai</a><span>conversational AI across channels</span></li>
+          <li><a href="/trufix">TruFix.ai</a><span>where resolution has to be verified, not just recorded</span></li>
+          <li><a href="/gcc-technology-teams">GCC Technology Teams</a><span>building the CX engineering capability in-house</span></li>
+      </ul>
     </div>
   </section>
 

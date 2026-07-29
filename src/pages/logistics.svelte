@@ -11,7 +11,7 @@
   heroImage={PAGE_ART["logistics"]}
   path="/logistics"
   schemaType="Service"
-  cta="Discuss Your Logistics Process"
+  cta="Assess an Industry Workflow"
   faqs={[
     { q: "Does this work with our existing TMS or WMS?", a: "Yes. Most of this work is integration with the systems you run, including TMS, WMS, GPS feeds, ERP and customer portals." },
     { q: "What if drivers have no signal?", a: "Mobile capture works offline and syncs when connectivity returns, which matters for proof of delivery on rural routes." },
@@ -20,7 +20,9 @@
     { q: "Can customers track shipments themselves?", a: "Yes, through a portal or WhatsApp updates, which is usually what removes the status-chasing calls." },
   ]}
   autoFaq
->
+  bandKicker="Assess a workflow"
+  bandHeading="Bring us one movement or exception workflow. We will tell you what it actually needs."
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
@@ -65,4 +67,47 @@
       <a class="cta-link" href="/contactus">See where the chasing stops <span class="arw">→</span></a>
     </div>
   </section>
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Systems, ownership and boundaries</h2>
+      <div class="section-body">
+        <p class="para">Before anything is designed we agree which systems hold the truth, who owns each decision, and what the system is never permitted to decide. That boundary is written down and does not move without your approval.</p>
+      </div>
+      <dl class="sysgrid">
+        <div class="sysrow"><dt>Systems of record</dt><dd>TMS and WMS; GPS and telematics feeds where fitted</dd></div>
+        <div class="sysrow"><dt>Field capture</dt><dd>Proof of delivery works offline and reconciles when the device reconnects</dd></div>
+        <div class="sysrow"><dt>Human owner</dt><dd>Control-tower and depot staff; drivers are never assessed automatically</dd></div>
+        <div class="sysrow"><dt>Never automated</dt><dd>Route commitment to a customer, penalty decisions and driver performance judgements</dd></div>
+        <div class="sysrow"><dt>Confidence</dt><dd>ETA predictions carry a confidence band, and low-confidence estimates are not sent to customers</dd></div>
+        <div class="sysrow"><dt>Escalation</dt><dd>Exceptions raise to a named controller with the shipment context attached</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>What we would measure</h2>
+      <div class="section-body">
+        <p class="para measures-note"><strong>Measures to validate, not results achieved.</strong> These are the measures we would agree during discovery and baseline before go-live. We publish figures only with a baseline, a measurement period, a calculation method and the customer&rsquo;s approval.</p>
+        <ul class="list">
+          <li>Proof-of-delivery capture rate and dispute volume</li>
+          <li>ETA accuracy against actual arrival</li>
+          <li>Billing accuracy on the covered lanes</li>
+          <li>Exception resolution time</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Related paths</h2>
+      <ul class="pathlist">
+          <li><a href="/supply-chain">Supply chain planning</a><span>where the constraint is planning rather than movement</span></li>
+          <li><a href="/ai-genai-services">Enterprise AI &amp; GenAI</a><span>how a use case is scoped and taken to production</span></li>
+          <li><a href="/gcc-technology-teams">GCC Technology Teams</a><span>building the logistics-tech capability in-house</span></li>
+      </ul>
+    </div>
+  </section>
+
 </Layout>

@@ -9,8 +9,9 @@
   h1="Terms and Conditions"
   lede="The terms covering use of this website and our services."
   path="/terms"
-  cta="Talk to us"
->
+  cta="Contact IICL"
+  bandKicker="Terms"
+  bandHeading="These terms are under legal review.">
   <section class="page-section">
     <div class="wrap">
       <h2 class="section-h"><span class="tick"></span>Being prepared</h2>

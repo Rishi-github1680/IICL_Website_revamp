@@ -7,7 +7,7 @@
 
 <Layout
   kicker="Blog"
-  h1="TruFix AI: The Future of AI-Powered IT Support, Ticket Resolution & Customer Trust"
+  h1="AI ticket resolution verification for IT support"
   lede="Why traditional ticketing systems close tickets that were never really fixed, and how AI resolution verification rebuilds trust in IT support."
   heroBanner="/img/banners/A10-banner-blog.png"
   faqs={[
@@ -15,7 +15,10 @@
   ]}
   path="/blog-trufix-ai"
   article
->
+  bandKicker="Read next"
+  bandHeading="Bring us your ticket flow and we will define what &quot;verified&quot; has to mean for each type."
+  cta="Discuss the Related Workflow"
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <section class="page-section">
     <div class="wrap section-split">
       <div class="split-text">
@@ -60,45 +63,18 @@
           <li>CSAT metrics fail to capture unresolved frustration</li>
           <li>Leadership lacks visibility into real-world resolution quality</li>
         </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>1. AI-Powered Multi-Channel Ticket Ingestion</h2>
-      <div class="section-body">
+        <h3 class="sub-h">AI-Powered Multi-Channel Ticket Ingestion</h3>
         <p class="para">TruFix AI unifies voice calls, WhatsApp, email, in-app chat, mobile apps, and APIs into a centralized AI-powered ticketing ecosystem. The moment a customer interaction occurs, the platform detects intent, understands urgency, classifies the issue category, determines sentiment, predicts SLA risk, and creates structured tickets automatically. For example, if a caller reports "There's a burning smell near the electrical socket," the AI instantly recognizes this as a high-risk electrical safety issue and escalates it as a Priority-1 incident automatically — no human operator required.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>2. AI Voice Agents for Real-Time Support</h2>
-      <div class="section-body">
+        <h3 class="sub-h">AI Voice Agents for Real-Time Support</h3>
         <p class="para">TruFix AI replaces outdated IVRs with conversational AI voice agents capable of understanding natural speech, handling multilingual conversations, detecting urgency and emotion, asking contextual follow-up questions, providing ticket IDs instantly, and escalating emergencies automatically — supporting IT support desks, facilities operations, property management, enterprise customer support, healthcare, and hospitality. Customers no longer need to "press 1 for support." They simply speak naturally.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>3. Intelligent Resolution Workflows</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Intelligent Resolution Workflows</h3>
         <p class="para">Once tickets are created, TruFix AI continuously analyzes historical ticket data, similar incidents, knowledge base content, SOP documents, and internal troubleshooting workflows. The AI Resolution Agent then recommends step-by-step troubleshooting actions, technician assignments, escalation workflows, SLA risk mitigation steps, and customer response drafts — dramatically improving First Contact Resolution (FCR), Mean Time to Resolution (MTTR), agent productivity, and operational consistency.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>4. Resolution Verification — The Game Changer</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Resolution verification</h3>
         <p class="para">This is where TruFix AI fundamentally separates itself from every traditional ticketing platform. When a support agent marks a ticket as "Resolved," TruFix AI automatically calls the customer back, uses AI Voice Agents to confirm the issue is truly fixed, sends WhatsApp resolution confirmation requests, records customer responses into an audit ledger, and reopens unresolved incidents automatically. This creates a completely new operational standard: tickets are not closed until customers confirm the fix. This "Trust Layer" transforms customer confidence and operational accountability.</p>
       </div>
     </div>
   </section>
+
 
   <section class="page-section">
     <div class="wrap">
@@ -113,45 +89,18 @@
           <li>Better operational transparency</li>
           <li>More accurate SLA reporting</li>
         </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>1. IT Service Management (ITSM)</h2>
-      <div class="section-body">
+        <h3 class="sub-h">IT Service Management (ITSM)</h3>
         <p class="para">For password resets, VPN failures, software crashes, infrastructure outages, access issues, and hardware incidents, TruFix AI automates ticket creation, classification, escalation, and resolution workflows while continuously monitoring SLA compliance — and verifies whether users can actually access systems after tickets are marked resolved. Business impact: faster IT response times, reduced workload, better SLA compliance, lower costs, and improved employee experience.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>2. Facilities &amp; Building Operations</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Facilities &amp; Building Operations</h3>
         <p class="para">For HVAC, electrical maintenance, plumbing, security infrastructure, civil maintenance, and tenant support, TruFix AI enables voice-first ticket reporting while automating technician coordination and resolution verification. Business impact: faster emergency response, better tenant satisfaction, reduced downtime, and improved operational accountability.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>3. Hospitality &amp; Hotels</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Hospitality &amp; Hotels</h3>
         <p class="para">For AC issues, room maintenance, plumbing, housekeeping, and Wi-Fi complaints, TruFix AI enables hotels to deploy AI-powered guest support and maintenance ticketing — with AI voice agents proactively following up with guests after resolution. Business impact: higher guest satisfaction, reduced complaint escalation, faster maintenance coordination, and better online reviews.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>4. Healthcare &amp; Hospital Operations</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Healthcare &amp; Hospital Operations</h3>
         <p class="para">For biomedical equipment incidents, facility maintenance, patient room support, infrastructure failures, and safety-critical escalations, TruFix AI ensures rapid routing and prioritization of mission-critical issues. Business impact: improved hospital operations, reduced downtime, faster emergency escalation, and better compliance and traceability.</p>
       </div>
     </div>
   </section>
+
 
   <section class="page-section shade">
     <div class="wrap">
@@ -164,7 +113,7 @@
 
   <section class="page-section">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>The Future of Support Operations is AI-Driven</h2>
+      <h2 class="section-h"><span class="tick"></span>What this means for your next decision</h2>
       <div class="section-body">
         <p class="para">Support teams can no longer rely on outdated ticketing systems designed only to log and close issues. Modern organizations need autonomous AI support workflows, voice-first customer engagement, real-time SLA intelligence, customer-confirmed resolutions, operational transparency, and scalable automation. This is exactly what TruFix AI delivers — moving organizations beyond traditional ticket management into a new era of intelligent operational support.</p>
       </div>
@@ -173,7 +122,7 @@
 
   <section class="page-section shade">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>Final Thoughts</h2>
+      <h2 class="section-h"><span class="tick"></span>Where to start</h2>
       <div class="section-body">
         <p class="para">Every ticketing platform claims they resolve tickets. TruFix AI is the platform that proves it. From AI-powered triage and automated escalation to voice callback verification and audit-first resolution tracking, TruFix AI helps organizations deliver faster support, improve trust, reduce operational costs, and transform customer satisfaction. The future of IT support and facilities operations is no longer reactive — it is intelligent, autonomous, transparent, and AI-driven.</p>
       </div>

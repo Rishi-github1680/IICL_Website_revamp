@@ -7,12 +7,15 @@
 
 <Layout
   kicker="Use case"
-  h1="The Future of Real Estate Sales is Conversational AI: How iVaak AI is Transforming Buyer Engagement"
+  h1="AI voice agents for real estate enquiries"
   lede="How real estate teams use iVaak AI voice agents to respond to property enquiries instantly, qualify buyers and schedule site visits."
   heroBanner="/img/banners/A11-banner-usecases.png"
   path="/usecase-ivaak-realestate"
   article
->
+  bandKicker="Read next"
+  bandHeading="Bring us your enquiry sources and we will map qualification and site-visit scheduling."
+  cta="Discuss the Related Workflow"
+  ctaHref="/contactus?intent=enterprise-ai-use-case">
   <!-- G12 classification. Until the baseline, eligible population, measurement period,
        calculation and customer publication approval exist, this page is illustrative and
        must say so above the fold. -->
@@ -73,117 +76,42 @@
       <div class="section-body">
         <p class="para">iVaak AI is an advanced AI Voice Agent and conversational automation platform designed specifically to solve high-volume customer engagement challenges in industries like real estate. The platform combines AI Voice Agents, Large Language Models (LLMs), Conversational AI, Retrieval-Augmented Generation (RAG), CRM automation, WhatsApp engagement, workflow orchestration, and multilingual communication intelligence into one unified customer interaction platform.</p>
         <p class="para">Unlike traditional IVR systems or scripted bots, iVaak AI enables highly natural, context-aware, human-like conversations capable of autonomously engaging, qualifying, and nurturing real estate buyers at scale. Whether the inquiry comes through voice calls, WhatsApp, website chat, property portals, digital campaigns, or social media — iVaak AI can instantly respond, engage, qualify, and guide prospects through the buyer journey. 24/7. Without increasing operational headcount.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>1. Missed Calls Mean Lost Revenue</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Missed Calls Mean Lost Revenue</h3>
         <p class="para">Potential buyers often call multiple developers simultaneously. If your sales team does not respond immediately, the lead moves to the next property option. A missed call today can mean a lost booking tomorrow.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>2. Manual Lead Qualification is Slow</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Manual Lead Qualification is Slow</h3>
         <p class="para">Sales teams waste valuable time speaking with non-serious inquiries, budget-mismatched buyers, duplicate leads, and irrelevant geographic inquiries — reducing productivity and delaying engagement with serious prospects.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>3. Follow-Ups Are Inconsistent</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Follow-Ups Are Inconsistent</h3>
         <p class="para">Many real estate deals require multiple follow-ups over weeks or months. Manual follow-up tracking often leads to missed callbacks, delayed responses, poor customer experience, and reduced conversion rates.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>4. Traditional IVRs Create Frustration</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Traditional IVRs Create Frustration</h3>
         <p class="para">Buyers do not want to navigate robotic menus. They want instant, natural conversations that feel personalized and intelligent.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>5. CRM Systems are Often Underutilized</h2>
-      <div class="section-body">
+        <h3 class="sub-h">CRM Systems are Often Underutilized</h3>
         <p class="para">Many organizations invest heavily in CRMs, yet data updates are inconsistent, lead information remains incomplete, follow-up visibility is poor, and sales intelligence is fragmented. iVaak AI solves all of these challenges through AI-powered conversational automation.</p>
       </div>
     </div>
   </section>
+
 
   <section class="page-section">
     <div class="wrap">
       <h2 class="section-h"><span class="tick"></span>How iVaak AI Works in Real Estate</h2>
       <div class="section-body">
         <p class="para">iVaak AI acts as an intelligent conversational layer between buyers, sales teams, CRMs, and property operations.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>1. AI Voice Agents Answer Every Inquiry Instantly</h2>
-      <div class="section-body">
+        <h3 class="sub-h">AI Voice Agents Answer Every Inquiry Instantly</h3>
         <p class="para">When a potential buyer calls, the AI Voice Agent answers immediately, understands customer intent, engages naturally, collects lead information, explains projects contextually, detects buyer seriousness, and schedules next actions automatically. Unlike traditional IVRs, buyers simply speak naturally — dramatically improving customer experience and reducing inquiry abandonment.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>2. Intelligent Lead Qualification</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Intelligent Lead Qualification</h3>
         <p class="para">iVaak AI automatically qualifies prospects based on budget range, preferred location, property type, purchase timeline, investment intent, financing requirements, and site visit interest. The AI continuously analyzes conversational signals and buyer intent to determine lead quality. High-intent leads are prioritized and escalated to sales teams instantly — ensuring sales executives focus on revenue-generating opportunities instead of repetitive qualification conversations.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>3. AI-Powered Property Information Assistance</h2>
-      <div class="section-body">
+        <h3 class="sub-h">AI-Powered Property Information Assistance</h3>
         <p class="para">Property buyers frequently ask repetitive questions: What is the price? What amenities are available? Is the project RERA approved? What is the possession timeline? iVaak AI uses Retrieval-Augmented Generation (RAG) to retrieve contextual project information directly from brochures, project documents, websites, FAQs, knowledge bases, and CRM data — providing highly accurate and dynamic responses during live conversations. The buyer receives instant answers; the sales team saves valuable time.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>4. Automated Site Visit Scheduling</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Automated Site Visit Scheduling</h3>
         <p class="para">Site visits are one of the most important conversion milestones in real estate sales. iVaak AI automates site visit scheduling, calendar coordination, confirmation workflows, reminder communication, rescheduling workflows, and sales team notifications. The AI can send WhatsApp location maps, share brochures automatically, trigger reminder calls before appointments, and re-engage no-show buyers — dramatically improving appointment conversion rates.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>5. Continuous AI-Powered Follow-Up</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Continuous AI-Powered Follow-Up</h3>
         <p class="para">Real estate sales cycles can extend over several months, and most leads require continuous nurturing before conversion. iVaak AI automates follow-up calls, WhatsApp engagement, brochure sharing, payment reminders, offer notifications, project updates, and EMI campaign communication — ensuring no lead goes cold simply because a salesperson forgot to follow up.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>6. CRM &amp; Workflow Synchronization</h2>
-      <div class="section-body">
+        <h3 class="sub-h">CRM &amp; Workflow Synchronization</h3>
         <p class="para">iVaak AI integrates directly with Salesforce, Zoho CRM, HubSpot, real estate CRMs, ERP systems, WhatsApp Business APIs, and scheduling platforms — enabling automatic lead creation, real-time CRM updates, follow-up tracking, sales pipeline synchronization, and automated workflow execution. The result is a fully connected sales engagement ecosystem.</p>
       </div>
     </div>
   </section>
+
 
   <section class="page-section shade">
     <div class="wrap">
@@ -225,63 +153,22 @@
           <li>Better lead quality visibility</li>
           <li>Higher conversion efficiency</li>
         </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>1. Instant Lead Engagement</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Instant Lead Engagement</h3>
         <p class="para">Real estate buyers expect immediate responses. iVaak AI ensures every inquiry is answered instantly across voice calls, WhatsApp, web chat, and campaign channels — dramatically improving engagement and reducing lead leakage.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>2. 24/7 Buyer Communication</h2>
-      <div class="section-body">
+        <h3 class="sub-h">24/7 Buyer Communication</h3>
         <p class="para">Property buyers often inquire outside standard business hours. The AI Voice Agents remain available around the clock to explain projects, schedule visits, share brochures, answer FAQs, and capture lead details — ensuring businesses never lose opportunities due to timing limitations.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>3. Multilingual Buyer Engagement</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Multilingual Buyer Engagement</h3>
         <p class="para">India's real estate market is highly regional and multilingual. iVaak AI automatically detects and communicates in the buyer's preferred language while maintaining natural conversational flow and contextual continuity — significantly improving buyer comfort, accessibility, and trust across diverse customer segments.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>4. Faster Site Visit Conversion</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Faster Site Visit Conversion</h3>
         <p class="para">Site visits are critical conversion milestones. The AI automates scheduling, confirmation, reminder communication, and follow-up engagement — improving attendance rates and conversion efficiency.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section shade">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>5. Higher Sales Team Productivity</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Higher Sales Team Productivity</h3>
         <p class="para">Sales teams no longer waste time on repetitive qualification calls. The AI handles initial engagement, buyer qualification, FAQ responses, and follow-up workflows — allowing human sales executives to focus on high-intent buyers.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>6. Improved Customer Experience</h2>
-      <div class="section-body">
+        <h3 class="sub-h">Improved Customer Experience</h3>
         <p class="para">Customers receive faster responses, personalized communication, multilingual engagement, seamless follow-ups, and better accessibility — improving both customer satisfaction and brand perception.</p>
       </div>
     </div>
   </section>
+
 
   <section class="page-section shade">
     <div class="wrap">
@@ -294,7 +181,7 @@
 
   <section class="page-section">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>The Future of Real Estate Sales is AI-Powered</h2>
+      <h2 class="section-h"><span class="tick"></span>What this means for your next decision</h2>
       <div class="section-body">
         <p class="para">The real estate industry is rapidly shifting toward digital-first engagement, AI-powered lead nurturing, conversational automation, omnichannel customer experiences, and data-driven sales workflows. Organizations that adopt AI-powered engagement today will significantly outperform competitors still relying on manual communication models. AI Voice Agents are no longer optional — they are becoming a competitive advantage.</p>
       </div>
@@ -303,7 +190,7 @@
 
   <section class="page-section shade">
     <div class="wrap">
-      <h2 class="section-h"><span class="tick"></span>Final Thoughts</h2>
+      <h2 class="section-h"><span class="tick"></span>Where to start</h2>
       <div class="section-body">
         <p class="para">The future of real estate belongs to organizations that can engage buyers faster, smarter, more personally, more consistently, and at scale. Traditional sales operations alone can no longer manage the speed and complexity of modern buyer expectations. iVaak AI enables real estate businesses to automate customer conversations intelligently while improving lead conversion, sales productivity, customer experience, operational efficiency, and brand engagement. From inbound inquiries and site visits to follow-ups and CRM automation, iVaak AI transforms how real estate organizations engage, nurture, and convert buyers.</p>
       </div>
