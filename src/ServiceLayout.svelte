@@ -178,7 +178,7 @@
 <style>
   /* Off-screen until focused, then a solid, readable target. */
   :global(.skip-link) { position: absolute; left: 8px; top: -60px; z-index: 200;
-    padding: 10px 18px; background: #ee2f2e; color: #fff; text-decoration: none;
+    padding: 10px 18px; background: var(--brand-solid); color: #fff; text-decoration: none;
     font-size: 14px; font-weight: 600; border-radius: 0 0 6px 6px; transition: top .18s ease; }
   :global(.skip-link:focus) { top: 0; }
   .svc-root { --red: #ee2f2e; --ink: #16171a; --muted: #55585e; --line: #e6e3de;
@@ -188,7 +188,7 @@
   .svc-root :global(.mono) { font-family: var(--font-mono); }
   .svc-root :global(.wrap) { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
 
-  .cta { display: inline-flex; align-items: center; gap: 10px; background: var(--red); color: #fff; text-decoration: none;
+  .cta { display: inline-flex; align-items: center; gap: 10px; background: var(--brand-solid); color: #fff; text-decoration: none;
     font-weight: 600; font-size: 16px; padding: 15px 30px; white-space: nowrap; transition: background .2s; }
   .cta:hover { background: #d61f1e; }
   .ghost-light { display: inline-flex; align-items: center; color: #f4f2ee; text-decoration: none; font-weight: 500;
@@ -206,7 +206,7 @@
       linear-gradient(180deg, rgba(6,6,6,0.42) 0%, rgba(6,6,6,0) 24%, rgba(6,6,6,0.5) 100%); }
   .svc-hero-inner { position: relative; z-index: 2; max-width: var(--wrap-max); width: 100%; margin: 0 auto;
     padding: 0 var(--wrap-pad) 40px; box-sizing: border-box; }
-  .svc-kicker { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--red);
+  .svc-kicker { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brand-ink);
     font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 22px; }
   :global(.tick) { width: 22px; height: 2px; background: var(--red); display: inline-block; }
   .svc-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.03em;
@@ -220,7 +220,9 @@
   /* On-page contents as a sticky horizontal strip. It was a 220px left rail, which
      pushed all content 264px right of every other page on the site. */
   .svc-index { position: sticky; top: var(--nav-h, 58px); z-index: 5;
-    background: color-mix(in srgb, #fff 92%, transparent); backdrop-filter: blur(10px);
+    /* Opaque: a translucent strip let whatever scrolled behind it decide the
+       contrast of its own labels. */
+    background: #fff;
     border-bottom: 1px solid var(--line); margin: 0 calc(var(--wrap-pad) * -1);
     padding: 0 var(--wrap-pad); }
   .idx-inner { display: flex; align-items: center; gap: 18px; overflow-x: auto;
@@ -235,8 +237,8 @@
     font: inherit; font-size: 13.5px; line-height: 1.3; color: var(--muted);
     white-space: nowrap; transition: color .2s, background .2s, border-color .2s; }
   .idx-btn:hover { color: var(--ink); background: #f4f2ef; }
-  .idx-btn.active { color: #fff; background: var(--red); border-color: var(--red); }
-  .idx-num { font-size: 10.5px; color: var(--red); flex: none; }
+  .idx-btn.active { color: #fff; background: var(--brand-solid); border-color: var(--red); }
+  .idx-num { font-size: 10.5px; color: var(--brand-ink); flex: none; }
   .idx-btn.active .idx-num { color: rgba(255,255,255,.75); }
   .idx-label { max-width: 26ch; overflow: hidden; text-overflow: ellipsis; }
 
@@ -267,7 +269,7 @@
   .cta-band { position: relative; background: #0a0a0a; color: #f4f2ee; padding: 52px 0; text-align: center;
     background-image: linear-gradient(rgba(8,8,8,0.86), rgba(8,8,8,0.94)), url('/img/banners/A1-og-default.png');
     background-size: cover; background-position: center; }
-  .cta-kicker { color: var(--red); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .cta-kicker { color: var(--brand-ink); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
   .cta-h2 { margin: 16px auto 26px; max-width: 30ch; text-wrap: pretty; font-size: var(--fs-h1); line-height: 1.1;
     letter-spacing: -0.02em; font-weight: 600; }
   .cta-big { padding: 18px 38px; }

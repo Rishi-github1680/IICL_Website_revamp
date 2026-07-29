@@ -76,7 +76,7 @@
       </div>
       <div class="compare">
         <div>
-          <h4>Before</h4>
+          <h3>Before</h3>
           <ul>
             <li>Customers navigate an IVR menu to reach the wrong queue</li>
             <li>Routine status questions consume trained agents' time</li>
@@ -86,7 +86,7 @@
           </ul>
         </div>
         <div>
-          <h4>After</h4>
+          <h3>After</h3>
           <ul>
             <li>Callers state what they want and are routed on intent</li>
             <li>Routine contacts resolve on arrival, day or night</li>

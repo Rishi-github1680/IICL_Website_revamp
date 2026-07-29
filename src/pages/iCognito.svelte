@@ -81,4 +81,50 @@
       <a class="cta-link" href="/contactus">Explore the full capability set <span class="arw">→</span></a>
     </div>
   </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Supported surface</h2>
+      <dl class="sysgrid">
+        <div class="sysrow"><dt>Channels</dt><dd>Web chat, WhatsApp, and email or social channels that expose a supported integration. The matrix is confirmed per deployment</dd></div>
+        <div class="sysrow"><dt>Grounding</dt><dd>Your approved knowledge base, catalogue and documents, retrieved at answer time rather than memorised</dd></div>
+        <div class="sysrow"><dt>Systems</dt><dd>CRM, help desk, order management and scheduling platforms with an available API</dd></div>
+        <div class="sysrow"><dt>Identity</dt><dd>Customer identification through your existing authentication where an answer requires it</dd></div>
+        <div class="sysrow"><dt>Handover</dt><dd>Transfer to a person with the full conversation and any captured fields</dd></div>
+        <div class="sysrow"><dt>Analytics</dt><dd>Volume, deflection and handover reporting; message content excluded from the event payload</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>What it needs from you</h2>
+      <div class="section-body">
+        <p class="para">Grounded answers are only as good as the sources behind them, so source ownership is settled first.</p>
+        <ul class="list">
+          <li>Approved source content, with an owner responsible for keeping it current</li>
+          <li>A defined scope: which enquiry types it answers and which always go to a person</li>
+          <li>API access to the systems it must read from, with a service account and permissions</li>
+          <li>Your escalation rules and the tone and disclosure wording you require</li>
+          <li>A review process for answers, at least during the evaluation period</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Where it stops</h2>
+      <div class="section-body">
+        <ul class="list">
+          <li>It answers from your approved sources; where they do not cover the question it says so and hands over</li>
+          <li>It does not commit to pricing, contractual terms or anything with legal effect</li>
+          <li>It does not act outside the systems and permissions granted</li>
+          <li>Answer quality depends on source quality — poorly maintained content produces confidently wrong answers, which is why source ownership is a prerequisite</li>
+          <li>Outcome measures are defined and baselined with you during discovery</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
 </ProductLayout>

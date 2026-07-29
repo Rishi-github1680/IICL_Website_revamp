@@ -81,4 +81,50 @@
       <a class="cta-link" href="/contactus">Explore the full capability set <span class="arw">→</span></a>
     </div>
   </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Supported surface</h2>
+      <dl class="sysgrid">
+        <div class="sysrow"><dt>Channels</dt><dd>Inbound and outbound telephony. Channel coverage is confirmed against your carrier and numbering during discovery</dd></div>
+        <div class="sysrow"><dt>Languages</dt><dd>Validated per deployment. We demonstrate the specific languages and accents in your call mix rather than publishing a count</dd></div>
+        <div class="sysrow"><dt>Telephony</dt><dd>SIP trunking, and cloud contact-centre platforms that expose a supported integration</dd></div>
+        <div class="sysrow"><dt>Systems</dt><dd>CRM, scheduling and ticketing platforms with an available API</dd></div>
+        <div class="sysrow"><dt>Handover</dt><dd>Warm transfer to a person with the transcript and captured fields attached</dd></div>
+        <div class="sysrow"><dt>Recording</dt><dd>Consent and disclosure configured to your jurisdiction and policy</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>What it needs from you</h2>
+      <div class="section-body">
+        <p class="para">A deployment is straightforward when these are settled and slow when they are not, so we establish them before quoting a timeline.</p>
+        <ul class="list">
+          <li>A defined call scope: which call types the agent handles and which it must never attempt</li>
+          <li>Access to the system of record it will read from and write to, with a service account and permissions</li>
+          <li>Numbers, or authority to port or provision them</li>
+          <li>Your disclosure and consent wording, approved by whoever owns that in your organisation</li>
+          <li>A named owner for escalations and for the evaluation criteria before go-live</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Where it stops</h2>
+      <div class="section-body">
+        <ul class="list">
+          <li>It does not make clinical, credit, legal or employment decisions</li>
+          <li>It does not take an action outside the systems and permissions you have granted</li>
+          <li>Where confidence is low or intent is unrecognised, it hands to a person rather than guessing</li>
+          <li>Accent, line quality and background noise affect recognition; we evaluate against your actual call recordings, not a studio sample</li>
+          <li>Outcome measures are defined and baselined with you during discovery — we do not publish figures without them</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
 </ProductLayout>

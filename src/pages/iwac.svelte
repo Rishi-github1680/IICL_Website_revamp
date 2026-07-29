@@ -81,4 +81,49 @@
       <a class="cta-link" href="/contactus">Explore the full capability set <span class="arw">→</span></a>
     </div>
   </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Supported surface</h2>
+      <dl class="sysgrid">
+        <div class="sysrow"><dt>Platform</dt><dd>WhatsApp Business Platform through an approved Business Solution Provider</dd></div>
+        <div class="sysrow"><dt>Meta approvals</dt><dd>Business verification, display name, templates and the verified badge are granted by Meta, not by IICL. We prepare and manage the application</dd></div>
+        <div class="sysrow"><dt>Opt-in</dt><dd>Consent captured before the first message; the lawful basis remains yours</dd></div>
+        <div class="sysrow"><dt>Messaging</dt><dd>Free-form replies inside the 24-hour service window; approved templates outside it</dd></div>
+        <div class="sysrow"><dt>Payments</dt><dd>Payment link or native flow issued by your provider. IICL does not hold card data</dd></div>
+        <div class="sysrow"><dt>Systems</dt><dd>CRM, order management and catalogue platforms with an available API</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>What it needs from you</h2>
+      <div class="section-body">
+        <ul class="list">
+          <li>Business verification documents and an approved sender identity</li>
+          <li>A number to provision, or authority to migrate an existing one</li>
+          <li>Message content signed off by whoever owns customer communications</li>
+          <li>A consent capture point, and a lawful basis for messaging</li>
+          <li>API access to the systems the conversation reads from and writes to</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Where it stops</h2>
+      <div class="section-body">
+        <ul class="list">
+          <li>Meta controls verification, template approval, quality rating and messaging limits — no supplier can guarantee those outcomes</li>
+          <li>Template rejections and quality-rating drops are possible and are managed, not prevented</li>
+          <li>It does not process payments directly; settlement stays with your provider</li>
+          <li>It does not message anyone who has not opted in, and honours opt-out immediately</li>
+          <li>Outcome measures are defined and baselined with you during discovery</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
 </ProductLayout>

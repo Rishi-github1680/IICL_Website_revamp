@@ -10,33 +10,48 @@
   import Layout from '../Layout.svelte';
   import { PAGE_ART } from '../menu.js';
   import { hpan } from '../hscroll.js';
+  import { jobPostingSchema, jsonLd } from '../seo.js';
 
   const ROLES = [
-    { title: 'AI / ML Engineer', team: 'Engineering', loc: 'Hyderabad', type: 'Full-time',
+    { title: 'AI / ML Engineer', team: 'Engineering', loc: 'Hyderabad', type: 'Full-time', posted: '', validThrough: '',
       blurb: 'Build and ship the models behind our voice and document products, from data through to a monitored production endpoint.',
       skills: ['Python', 'PyTorch', 'RAG', 'MLOps'] },
-    { title: 'Voice AI Engineer', team: 'iVaak', loc: 'Hyderabad', type: 'Full-time',
+    { title: 'Voice AI Engineer', team: 'iVaak', loc: 'Hyderabad', type: 'Full-time', posted: '', validThrough: '',
       blurb: 'Own the conversation layer of iVaak: latency, barge-in, multilingual handling and clean handover to a person.',
       skills: ['ASR / TTS', 'LLMs', 'Telephony', 'WebRTC'] },
-    { title: 'Full-Stack Developer', team: 'Engineering', loc: 'Hyderabad / Remote', type: 'Full-time',
+    { title: 'Full-Stack Developer', team: 'Engineering', loc: 'Hyderabad / Remote', type: 'Full-time', posted: '', validThrough: '',
       blurb: 'Build the product surfaces customers use every day, and the integrations that connect them to real enterprise systems.',
       skills: ['TypeScript', 'Svelte / React', 'Node', 'Postgres'] },
-    { title: 'LLM / Prompt Engineer', team: 'AI Solutions', loc: 'Hyderabad', type: 'Full-time',
+    { title: 'LLM / Prompt Engineer', team: 'AI Solutions', loc: 'Hyderabad', type: 'Full-time', posted: '', validThrough: '',
       blurb: 'Turn messy business processes into grounded, evaluated agent workflows that hold up outside a demo.',
       skills: ['Prompting', 'Evals', 'RAG', 'Guardrails'] },
-    { title: 'QA Engineer', team: 'Delivery', loc: 'Hyderabad', type: 'Full-time',
+    { title: 'QA Engineer', team: 'Delivery', loc: 'Hyderabad', type: 'Full-time', posted: '', validThrough: '',
       blurb: 'Test systems that talk back. Build the harnesses that catch regressions in non-deterministic output.',
       skills: ['Automation', 'Playwright', 'API testing', 'Test design'] },
-    { title: 'Business Development Manager', team: 'Sales', loc: 'Raleigh, NC', type: 'Full-time',
+    { title: 'Business Development Manager', team: 'Sales', loc: 'Raleigh, NC', type: 'Full-time', posted: '', validThrough: '',
       blurb: 'Open and run enterprise conversations across the US, working with the engineers who deliver the work.',
       skills: ['Enterprise sales', 'Discovery', 'SaaS', 'Pipeline'] },
-    { title: 'Customer Success Manager', team: 'Delivery', loc: 'Hyderabad', type: 'Full-time',
+    { title: 'Customer Success Manager', team: 'Delivery', loc: 'Hyderabad', type: 'Full-time', posted: '', validThrough: '',
       blurb: 'Keep deployments healthy after go-live: adoption, measurement and the honest conversations about what to change.',
       skills: ['Onboarding', 'Account health', 'Reporting'] },
-    { title: 'UI / UX Designer', team: 'Product', loc: 'Remote', type: 'Contract',
+    { title: 'UI / UX Designer', team: 'Product', loc: 'Remote', type: 'Contract', posted: '', validThrough: '',
       blurb: 'Design interfaces for systems that are partly autonomous, where showing what the machine did matters as much as what it can do.',
       skills: ['Product design', 'Figma', 'Design systems'] },
   ];
+
+  // One JobPosting per live role. Roles without a posted date contribute nothing —
+  // see jobPostingSchema. Until the dates are supplied this emits no markup at all,
+  // which is correct: an undated or invented posting is worse than none.
+  const jobs = jsonLd(...ROLES.map((r) => jobPostingSchema({
+    title: r.title,
+    description: r.blurb,
+    posted: r.posted,
+    validThrough: r.validThrough,
+    employmentType: /contract/i.test(r.type) ? 'CONTRACTOR' : 'FULL_TIME',
+    location: r.loc.split('/')[0].trim(),
+    remote: /remote/i.test(r.loc),
+    path: '/careers',
+  })));
 
   const apply = (r) => `mailto:reachus@iicl.in?subject=${encodeURIComponent(`Application — ${r.title}`)}`;
 
@@ -123,6 +138,10 @@
   });
 </script>
 
+<svelte:head>
+  {@html jobs ? `<script type="application/ld+json">${jobs}<\/script>` : ''}
+</svelte:head>
+
 <Layout
   kicker="Company"
   heroImage={PAGE_ART['careers']}
@@ -204,20 +223,48 @@
       </div>
     </div>
   </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Equal opportunity</h2>
+      <div class="section-body">
+        <p class="para">IICL hires on capability and evidence. We do not discriminate on the basis of religion, caste, race, colour, sex, gender identity, sexual orientation, marital status, pregnancy, disability, age or any other characteristic protected under applicable law.</p>
+        <p class="para">If you need an adjustment at any stage of the process &mdash; to the format of an interview, the time allowed, or the way we communicate &mdash; tell us when you apply. It has no bearing on the assessment.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>How we handle your application</h2>
+      <div class="section-body">
+        <p class="para measures-note"><strong>Applications go to our recruitment address, not to the sales enquiry form.</strong> Please do not send candidate details through the contact form on this site &mdash; it routes to a different team.</p>
+      </div>
+      <dl class="sysgrid">
+        <div class="sysrow"><dt>What we collect</dt><dd>Your CV and whatever you choose to include with it, plus notes made by interviewers during the process</dd></div>
+        <div class="sysrow"><dt>Why</dt><dd>To assess your application for the role you applied to, and to contact you about it</dd></div>
+        <div class="sysrow"><dt>Who sees it</dt><dd>The recruitment team and the interviewers for that role. It is not shared outside IICL without your consent</dd></div>
+        <div class="sysrow"><dt>How long we keep it</dt><dd>For the duration of the process, and for up to twelve months afterwards so we can contact you about similar roles. Tell us if you would rather we did not, and we will delete it</dd></div>
+        <div class="sysrow"><dt>Your rights</dt><dd>You can ask us what we hold, ask for it to be corrected, or ask for it to be deleted. Write to the address above</dd></div>
+        <div class="sysrow"><dt>What not to send</dt><dd>Government identity numbers, financial details and health information. We do not need them to assess an application and will not ask for them at this stage</dd></div>
+      </dl>
+    </div>
+  </section>
+
 </Layout>
 
 <style>
   .mono { font-family: var(--font-mono); }
   .deck-sec { padding-bottom: 0; }
   .deck-head { display: flex; align-items: baseline; gap: 16px; }
-  .deck-count { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #ee2f2e; }
+  .deck-count { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--brand-ink); }
 
   .team-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
   .team-chip { font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #55585e;
     background: transparent; border: 1px solid #e6e3de; border-radius: 999px; padding: 7px 15px;
     cursor: pointer; font-family: var(--font-mono); transition: border-color .2s, color .2s, background .2s; }
   .team-chip:hover { border-color: #ee2f2e; color: #16171a; }
-  .team-chip.active { background: #ee2f2e; border-color: #ee2f2e; color: #fff; }
+  .team-chip.active { background: var(--brand-solid); border-color: #ee2f2e; color: #fff; }
 
   /* ── Stage ────────────────────────────────────────────────────────────── */
   .stage-outer { margin-top: 28px; background: #08090b; padding: 44px 0 34px; position: relative; overflow: hidden;
@@ -258,7 +305,7 @@
 
   /* Stationary on the focused card — this is the button you reach for. */
   .card-apply { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px;
-    background: #ee2f2e; color: #fff; text-decoration: none; font-weight: var(--w-heading); font-size: 14.5px;
+    background: var(--brand-solid); color: #fff; text-decoration: none; font-weight: var(--w-heading); font-size: 14.5px;
     padding: 12px 20px; border-radius: 8px; transition: background .2s, transform .2s; }
   .card-apply:hover { background: #d61f1e; transform: translateY(-2px); }
   .card:not(.is-active) .card-apply { opacity: 0; pointer-events: none; }
@@ -267,14 +314,18 @@
   .deck-ctrl { position: relative; display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 24px; }
   .deck-hint { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: rgba(244,242,238,.4); }
   .dots { display: flex; align-items: center; gap: 7px; }
-  .dot { width: 7px; height: 7px; padding: 0; border-radius: 50%; border: 0; cursor: pointer;
+  /* 24x24 minimum hit area (WCAG 2.2 AA 2.5.8 min target). The dot itself stays
+     small; the target around it does not. */
+  .dot::after { content: ''; position: absolute; left: 50%; top: 50%;
+    width: 24px; height: 24px; transform: translate(-50%, -50%); }
+  .dot { position: relative; width: 7px; height: 7px; padding: 0; border-radius: 50%; border: 0; cursor: pointer;
     background: rgba(244,242,238,.3); transition: background .25s, width .25s, border-radius .25s; }
   .dot:hover { background: rgba(244,242,238,.6); }
   .dot.on { width: 22px; border-radius: 999px; background: #ee2f2e; }
   .deck-live { position: relative; margin: 14px 0 0; text-align: center; font-size: 10.5px;
     letter-spacing: .2em; text-transform: uppercase; color: rgba(244,242,238,.5); }
 
-  .cta-inline { display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; background: #ee2f2e;
+  .cta-inline { display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; background: var(--brand-solid);
     color: #fff; text-decoration: none; font-weight: var(--w-heading); font-size: 16px; padding: 13px 26px; transition: background .2s; }
   .cta-inline:hover { background: #d61f1e; }
 

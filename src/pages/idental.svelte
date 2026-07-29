@@ -81,4 +81,49 @@
       <a class="cta-link" href="/contactus">Explore the full capability set <span class="arw">→</span></a>
     </div>
   </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Supported surface</h2>
+      <dl class="sysgrid">
+        <div class="sysrow"><dt>Clinic scope</dt><dd>Single clinic through to multi-location groups, with per-location configuration</dd></div>
+        <div class="sysrow"><dt>Roles</dt><dd>Reception, clinician, practice manager and group administrator, with separate permissions</dd></div>
+        <div class="sysrow"><dt>Modules</dt><dd>Appointments, patient records, treatment planning, billing and reminders</dd></div>
+        <div class="sysrow"><dt>Reminders</dt><dd>WhatsApp and SMS, subject to patient consent and channel opt-in</dd></div>
+        <div class="sysrow"><dt>Data</dt><dd>Migration from an existing system, with reconciliation before switchover</dd></div>
+        <div class="sysrow"><dt>Access</dt><dd>Role-based, with activity logged and retention set to your policy</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>What it needs from you</h2>
+      <div class="section-body">
+        <ul class="list">
+          <li>An export from your current system, or a decision to start clean</li>
+          <li>Your appointment types, treatment codes and billing structure</li>
+          <li>Consent capture for reminder channels</li>
+          <li>A named administrator per location</li>
+          <li>Sign-off on the migration reconciliation before the old system is retired</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Where it stops</h2>
+      <div class="section-body">
+        <ul class="list">
+          <li>It is practice management software. It does not diagnose, plan treatment clinically or offer clinical advice</li>
+          <li>Clinical decisions and records remain the clinician&rsquo;s responsibility</li>
+          <li>Reminders reach patients who have consented on that channel — coverage is never complete</li>
+          <li>Regulatory obligations for patient data remain yours; the controls support them but do not discharge them</li>
+          <li>Outcome measures are defined and baselined with you during discovery</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
 </ProductLayout>

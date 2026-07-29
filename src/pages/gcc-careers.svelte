@@ -212,14 +212,14 @@ const apply = (r) => `/contactus?intent=gcc-capability-requirement`;
   .mono { font-family: var(--font-mono); }
   .deck-sec { padding-bottom: 0; }
   .deck-head { display: flex; align-items: baseline; gap: 16px; }
-  .deck-count { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #ee2f2e; }
+  .deck-count { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--brand-ink); }
 
   .team-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
   .team-chip { font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #55585e;
     background: transparent; border: 1px solid #e6e3de; border-radius: 999px; padding: 7px 15px;
     cursor: pointer; font-family: var(--font-mono); transition: border-color .2s, color .2s, background .2s; }
   .team-chip:hover { border-color: #ee2f2e; color: #16171a; }
-  .team-chip.active { background: #ee2f2e; border-color: #ee2f2e; color: #fff; }
+  .team-chip.active { background: var(--brand-solid); border-color: #ee2f2e; color: #fff; }
 
   /* ── Stage ────────────────────────────────────────────────────────────── */
   .stage-outer { margin-top: 28px; background: #08090b; padding: 44px 0 34px; position: relative; overflow: hidden;
@@ -260,7 +260,7 @@ const apply = (r) => `/contactus?intent=gcc-capability-requirement`;
 
   /* Stationary on the focused card — this is the button you reach for. */
   .card-apply { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px;
-    background: #ee2f2e; color: #fff; text-decoration: none; font-weight: var(--w-heading); font-size: 14.5px;
+    background: var(--brand-solid); color: #fff; text-decoration: none; font-weight: var(--w-heading); font-size: 14.5px;
     padding: 12px 20px; border-radius: 8px; transition: background .2s, transform .2s; }
   .card-apply:hover { background: #d61f1e; transform: translateY(-2px); }
   .card:not(.is-active) .card-apply { opacity: 0; pointer-events: none; }
@@ -269,14 +269,18 @@ const apply = (r) => `/contactus?intent=gcc-capability-requirement`;
   .deck-ctrl { position: relative; display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 24px; }
   .deck-hint { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: rgba(244,242,238,.4); }
   .dots { display: flex; align-items: center; gap: 7px; }
-  .dot { width: 7px; height: 7px; padding: 0; border-radius: 50%; border: 0; cursor: pointer;
+  /* 24x24 minimum hit area (WCAG 2.2 AA 2.5.8 min target). The dot itself stays
+     small; the target around it does not. */
+  .dot::after { content: ''; position: absolute; left: 50%; top: 50%;
+    width: 24px; height: 24px; transform: translate(-50%, -50%); }
+  .dot { position: relative; width: 7px; height: 7px; padding: 0; border-radius: 50%; border: 0; cursor: pointer;
     background: rgba(244,242,238,.3); transition: background .25s, width .25s, border-radius .25s; }
   .dot:hover { background: rgba(244,242,238,.6); }
   .dot.on { width: 22px; border-radius: 999px; background: #ee2f2e; }
   .deck-live { position: relative; margin: 14px 0 0; text-align: center; font-size: 10.5px;
     letter-spacing: .2em; text-transform: uppercase; color: rgba(244,242,238,.5); }
 
-  .cta-inline { display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; background: #ee2f2e;
+  .cta-inline { display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; background: var(--brand-solid);
     color: #fff; text-decoration: none; font-weight: var(--w-heading); font-size: 16px; padding: 13px 26px; transition: background .2s; }
   .cta-inline:hover { background: #d61f1e; }
 

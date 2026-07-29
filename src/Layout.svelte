@@ -216,7 +216,7 @@
 <style>
   /* Off-screen until focused, then a solid, readable target. */
   :global(.skip-link) { position: absolute; left: 8px; top: -60px; z-index: 200;
-    padding: 10px 18px; background: #ee2f2e; color: #fff; text-decoration: none;
+    padding: 10px 18px; background: var(--brand-solid); color: #fff; text-decoration: none;
     font-size: 14px; font-weight: 600; border-radius: 0 0 6px 6px; transition: top .18s ease; }
   :global(.skip-link:focus) { top: 0; }
   .page-root { --red: #ee2f2e; --ink: #16171a; --muted: #55585e; --line: #e6e3de;
@@ -227,7 +227,7 @@
   .page-root :global(.mono) { font-family: var(--font-mono); }
   .page-root :global(.wrap) { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
 
-  .cta { display: inline-flex; align-items: center; gap: 10px; background: var(--red); color: #fff; text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 30px; white-space: nowrap; transition: background .2s; }
+  .cta { display: inline-flex; align-items: center; gap: 10px; background: var(--brand-solid); color: #fff; text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 30px; white-space: nowrap; transition: background .2s; }
   .cta:hover { background: #d61f1e; }
   .ghost-light { display: inline-flex; align-items: center; color: #f4f2ee; text-decoration: none; font-weight: 500; font-size: 16px; padding: 14px 30px; border: 1px solid rgba(255,255,255,0.28); transition: border-color .2s, background .2s; }
   .ghost-light:hover { border-color: var(--red); background: rgba(238,47,46,0.12); }
@@ -271,7 +271,7 @@
   .article-flow :global(.list li) { font-size: 16.5px; line-height: 1.7; }
   /* Drop cap on the opening paragraph — the one flourish that says "article". */
   .article-flow :global(.page-section:first-of-type .section-body .para:first-of-type)::first-letter {
-    float: left; font-size: 3.5em; line-height: .82; font-weight: 600; color: var(--red);
+    float: left; font-size: 3.5em; line-height: .82; font-weight: 600; color: var(--brand-ink);
     padding: .04em .12em 0 0; }
 
   /* Challenge / Opportunity / Why IICL — these ran together as unlabelled paragraphs. */
@@ -279,7 +279,7 @@
     border-left: 3px solid var(--red); margin: 4px 0 20px; }
   :global(.cow-row) { background: #fff; display: grid; grid-template-columns: 116px 1fr; gap: 20px;
     padding: 18px 22px; align-items: baseline; }
-  :global(.cow-k) { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--red); }
+  :global(.cow-k) { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--brand-ink); }
   :global(.cow-row p) { margin: 0; font-size: 16px; line-height: 1.7; color: #33363c; }
   @media (max-width: 620px) {
     :global(.cow-row) { grid-template-columns: 1fr; gap: 7px; }
@@ -296,7 +296,7 @@
     .hero-photo { transform: none; }
   }
   .page-kicker { display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
-    color: var(--red); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 16px; }
+    color: var(--brand-ink); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 16px; }
   :global(.tick) { width: 22px; height: 2px; background: var(--red); display: inline-block; }
   .page-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.03em; font-weight: var(--w-light); color: #fff; max-width: 28ch; text-wrap: pretty; text-shadow: 0 2px 30px rgba(0,0,0,0.5); }
   .page-lede { margin: 16px 0 0; max-width: 66ch; font-weight: var(--w-light); font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.72); }
@@ -375,7 +375,7 @@
 
   .cta-band { position: relative; background: #0a0a0a; color: #f4f2ee; padding: 52px 0; text-align: center;
     background-image: linear-gradient(rgba(8,8,8,0.74), rgba(8,8,8,0.88)), url('/img/banners/A1-og-default.png'); background-size: cover; background-position: center; background-repeat: no-repeat; }
-  .cta-kicker { color: var(--red); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .cta-kicker { color: var(--brand-ink); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
   .cta-h2 { margin: 16px auto 26px; max-width: 30ch; text-wrap: pretty; font-size: var(--fs-h1); line-height: 1.1; letter-spacing: -0.02em; font-weight: 600; }
   .cta-big { padding: 18px 38px; }
 

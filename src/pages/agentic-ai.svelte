@@ -457,9 +457,9 @@
 
   .scope { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .scope li { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
-    color: var(--brand); padding: 6px 12px; border-radius: 999px;
+    color: var(--brand-ink); padding: 6px 12px; border-radius: 999px;
     border: 1px solid color-mix(in srgb, var(--brand) 26%, transparent); }
-  .anchor-cta { color: var(--brand); font-weight: var(--w-medium); text-decoration: none; }
+  .anchor-cta { color: var(--brand-ink); font-weight: var(--w-medium); text-decoration: none; }
   .anchor-cta:hover { text-decoration: underline; }
   .sep { color: var(--muted); margin: 0 8px; }
   .small-links { font-size: var(--fs-small); }
@@ -482,7 +482,7 @@
   .layers { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 1px;
     background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
   .layers li { background: #fff; padding: 15px 18px; display: grid; gap: 5px; }
-  .layer-n { font-size: 11px; color: var(--brand); }
+  .layer-n { font-size: 11px; color: var(--brand-ink); }
   .layer-b { font-size: 14.5px; line-height: 1.55; color: #40434a; }
   .layer-b strong { display: block; font-size: 15px; color: var(--ink); }
   .layer-c { font-size: 11.5px; line-height: 1.5; color: var(--muted); }
@@ -493,16 +493,16 @@
 
   .outs { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px 20px; margin-top: 20px; }
   .out { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
-  .out span { color: var(--brand); margin-right: 6px; }
+  .out span { color: var(--brand-ink); margin-right: 6px; }
 
   .emphasis { font-weight: var(--w-medium); color: var(--ink); padding-left: 14px; border-left: 2px solid var(--brand); }
 
   .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0 14px; }
   .btn { display: inline-flex; align-items: center; gap: 9px; padding: 13px 24px; border-radius: 8px;
-    background: var(--brand); color: #fff; text-decoration: none; font-weight: var(--w-medium); font-size: 15px; }
+    background: var(--brand-solid, #d81f1e); color: #fff; text-decoration: none; font-weight: var(--w-medium); font-size: 15px; }
   .btn:hover { filter: brightness(1.08); }
   .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
-  .btn-ghost:hover { border-color: var(--brand); color: var(--brand); filter: none; }
+  .btn-ghost:hover { border-color: var(--brand); color: var(--brand-ink); filter: none; }
 
   .note { font-size: var(--fs-small); color: var(--muted); }
   .safety { padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px;

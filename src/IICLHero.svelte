@@ -726,12 +726,14 @@
 <style>
   /* Off-screen until focused, then a solid, readable target. */
   :global(.skip-link) { position: absolute; left: 8px; top: -60px; z-index: 200;
-    padding: 10px 18px; background: #ee2f2e; color: #fff; text-decoration: none;
+    padding: 10px 18px; background: var(--brand-solid); color: #fff; text-decoration: none;
     font-size: 14px; font-weight: 600; border-radius: 0 0 6px 6px; transition: top .18s ease; }
   :global(.skip-link:focus) { top: 0; }
   .iicl-root { width: 100%; background: #070707; font-family: var(--font); color: #f4f2ee; }
   .mono { font-family: var(--font-mono); }
-  a { color: #f4f2ee; }
+  /* Dark-stage links only. As a bare `a` rule this also hit the light sections
+     lower down the page, where #f4f2ee on #f7f6f3 is 1.03:1 — invisible. */
+  .journey a, .hero a, .chapter a { color: #f4f2ee; }
 
   /* Product explorer exit */
   .explore-exit { position: fixed; top: 84px; right: 28px; z-index: 46; background: rgba(10,10,10,0.85); color: #f4f2ee;
@@ -740,7 +742,7 @@
   .explore-exit:hover { background: #b81c1c; }
 
   /* Shared CTA / ghost buttons */
-  .cta { display: inline-flex; align-items: center; gap: 10px; background: #ee2f2e; color: #fff; text-decoration: none; font-weight: 600; font-size: 16px; padding: 16px 32px; transition: background .2s; }
+  .cta { display: inline-flex; align-items: center; gap: 10px; background: var(--brand-solid); color: #fff; text-decoration: none; font-weight: 600; font-size: 16px; padding: 16px 32px; transition: background .2s; }
   .cta:hover { background: #d61f1e; }
   .ghost { display: inline-flex; align-items: center; color: #f3f3f4; text-decoration: none; font-weight: 500; font-size: 16px; padding: 15px 32px; border: 1px solid rgba(243,243,244,0.28); transition: border-color .2s, color .2s; }
   .ghost:hover { border-color: rgba(243,243,244,0.6); color: #fff; }
@@ -784,7 +786,7 @@
   .chapter-p { font-size: 17px; font-weight: var(--w-light); line-height: 1.65; color: rgba(243,243,244,0.72); margin: 0 0 24px; text-wrap: pretty; }
   .chapter-link { pointer-events: auto; display: inline-flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; font-weight: 600; font-size: 15.5px; border-bottom: 2px solid #ee2f2e; padding-bottom: 4px; transition: color .2s; }
   .chapter-right .chapter-link { justify-content: flex-end; }
-  .chapter-link:hover { color: #ee2f2e; }
+  .chapter-link:hover { color: var(--brand-ink); }
 
   /* Generic sections — light theme (everything below the hero is white) */
   .section { --ink: #16171a; --muted: #55585e; --line: #e6e3de; color: var(--ink); }
@@ -794,7 +796,7 @@
   .wrap { max-width: var(--wrap-max); margin: 0 auto; padding: var(--space-section) var(--wrap-pad); box-sizing: border-box; }
   .section-head { max-width: 68ch; }
   .label-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-  .label { font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: #ee2f2e; }
+  .label { font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--brand-ink); }
   .section-h2 { font-weight: var(--w-heading); font-size: var(--fs-h2); line-height: 1.22; letter-spacing: -0.02em; margin: 0 0 var(--space-head); color: var(--ink); text-wrap: pretty; }
   .section-h2-wide { margin-bottom: 34px; }
   .section-h2-m0 { margin: 0; }
@@ -855,11 +857,11 @@
     padding: 20px 0; text-decoration: none; color: var(--ink); border-top: 1px solid var(--line);
     transition: color .2s; }
   .svc-row:hover { color: #b81c1c; }
-  .svc-num { font-size: 11.5px; letter-spacing: .16em; color: #ee2f2e; }
+  .svc-num { font-size: 11.5px; letter-spacing: .16em; color: var(--brand-ink); }
   .svc-body { display: flex; flex-direction: column; gap: 6px; }
   .svc-name { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
   .svc-desc { font-size: 14.5px; line-height: 1.55; color: var(--muted); }
-  .svc-go { font-size: 14px; color: #ee2f2e; opacity: 0; transition: opacity .2s, transform .2s; transform: translateX(-5px); }
+  .svc-go { font-size: 14px; color: var(--brand-ink); opacity: 0; transition: opacity .2s, transform .2s; transform: translateX(-5px); }
   .svc-row:hover .svc-go { opacity: 1; transform: none; }
   .svc-note { grid-column: 1 / -1; margin: 24px 0 0; padding-top: 20px; border-top: 1px solid var(--line);
     display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px;
@@ -872,7 +874,7 @@
   .step::before { content: ''; position: absolute; top: 21px; left: 52px; right: -44px; height: 1px; background: var(--line); }
   .step:last-child::before { display: none; }
   .step-num { position: absolute; top: 0; left: 0; width: 42px; height: 42px; display: grid; place-items: center;
-    font-size: 14px; color: #ee2f2e; border: 1px solid #ee2f2e; border-radius: 50%; background: #fff; }
+    font-size: 14px; color: var(--brand-ink); border: 1px solid #ee2f2e; border-radius: 50%; background: #fff; }
   .step-title { font-size: 21px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
   .step-desc { font-size: 15.5px; line-height: 1.6; color: var(--muted); }
 
@@ -886,7 +888,7 @@
   .ind-chip { font-size: 14.5px; font-weight: 400; color: var(--ink); text-decoration: none; background: #fff;
     border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px;
     transition: border-color .2s, color .2s, background .2s; }
-  .ind-chip:hover { border-color: #ee2f2e; color: #fff; background: #ee2f2e; }
+  .ind-chip:hover { border-color: #ee2f2e; color: #fff; background: var(--brand-solid, #d81f1e); }
 
   /* FAQ */
   .faq-wrap { display: block; }
@@ -901,7 +903,7 @@
   /* CTA */
   .cta-wrap { text-align: center; display: flex; flex-direction: column; align-items: center; }
   .cta-inner { width: 100%; display: flex; flex-direction: column; align-items: center; }
-  .cta-kicker { font-size: 12.5px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: #ee2f2e; margin-bottom: 20px; }
+  .cta-kicker { font-size: 12.5px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--brand-ink); margin-bottom: 20px; }
   .cta-h2 { font-weight: var(--w-body); font-size: clamp(30px, 3.6vw, 46px); line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 20px; color: var(--ink); max-width: 32ch; text-wrap: pretty; }
   .cta-p { font-size: 17px; line-height: 1.6; color: var(--muted); max-width: 52ch; margin: 0 0 36px; text-wrap: pretty; }
   .cta-big { font-size: 16.5px; padding: 17px 38px; }

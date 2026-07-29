@@ -48,7 +48,7 @@
   .nf-main :global(.wrap) { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
   .mono { font-family: var(--font-mono); }
 
-  .nf-code { font-size: 12px; letter-spacing: .24em; color: #ee2f2e; }
+  .nf-code { font-size: 12px; letter-spacing: .24em; color: var(--brand-ink); }
   .nf-h1 { margin: 14px 0 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -.03em;
     font-weight: var(--w-heading); color: var(--ink); }
   .nf-lede { margin: 14px 0 0; max-width: 56ch; font-size: var(--fs-body); line-height: 1.65; color: var(--muted); }
@@ -60,6 +60,6 @@
     transition: padding-left .2s ease; }
   .nf-routes a:hover { padding-left: 8px; }
   .nf-routes strong { font-size: 16px; font-weight: var(--w-heading); color: var(--ink); }
-  .nf-routes a:hover strong { color: #ee2f2e; }
+  .nf-routes a:hover strong { color: var(--brand-ink); }
   .nf-routes span { font-size: var(--fs-small); color: var(--muted); }
 </style>

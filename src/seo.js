@@ -171,3 +171,39 @@ export function jsonLd(...objects) {
     .map((o) => JSON.stringify(o).replace(/</g, "\\u003c"))
     .join("</script><script type=\"application/ld+json\">");
 }
+
+/**
+ * JobPosting for a single live vacancy.
+ *
+ * Returns null unless a real `posted` date is supplied. Google requires datePosted,
+ * penalises expired postings that stay marked up, and a date we invented would be a
+ * false claim about when the role opened. Fill `posted` (and ideally `validThrough`)
+ * on the role in src/pages/careers.svelte and the markup appears by itself.
+ */
+export function jobPostingSchema({ title, description, posted, validThrough, employmentType, location, remote, path }) {
+  if (!title || !posted) return null;
+  const IN = {
+    "@type": "Place",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: location || COMPANY.india.city,
+      addressCountry: "IN",
+    },
+  };
+  return {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title,
+    description,
+    datePosted: posted,
+    ...(validThrough ? { validThrough } : {}),
+    employmentType: employmentType || "FULL_TIME",
+    hiringOrganization: { "@id": SITE + "/#organization" },
+    jobLocation: IN,
+    ...(remote ? { jobLocationType: "TELECOMMUTE",
+                   applicantLocationRequirements: { "@type": "Country", name: "India" } } : {}),
+    ...(path ? { url: SITE + path } : {}),
+    // No baseSalary: compensation is not published, and a fabricated range would be a
+    // false claim as well as a structured-data policy breach.
+  };
+}

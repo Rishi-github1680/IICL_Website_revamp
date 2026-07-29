@@ -94,7 +94,7 @@
     border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 9px 18px; cursor: pointer;
     transition: border-color .25s, color .25s, background .25s; }
   .cat-chip:hover { border-color: rgba(238,47,46,.6); color: #fff; }
-  .cat-chip.active { background: #ee2f2e; border-color: #ee2f2e; color: #fff; }
+  .cat-chip.active { background: var(--brand-solid); border-color: #ee2f2e; color: #fff; }
   .cat-chip i { font-style: normal; font-size: 9.5px; padding: 1px 7px; border-radius: 999px; background: rgba(255,255,255,.14); }
   .mono { font-family: var(--font-mono); }
 
@@ -103,6 +103,6 @@
   .topics strong { font-size: 15px; font-weight: var(--w-heading); color: var(--ink); }
   .topics span { font-size: 14px; line-height: 1.55; color: #40434a; }
 
-  .inline-cta { color: var(--brand); font-weight: var(--w-medium); text-decoration: none; }
+  .inline-cta { color: var(--brand-ink); font-weight: var(--w-medium); text-decoration: none; }
   .inline-cta:hover { text-decoration: underline; }
 </style>

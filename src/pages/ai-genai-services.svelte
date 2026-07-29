@@ -310,10 +310,10 @@
 
   .scope { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .scope li { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
-    color: var(--brand); padding: 6px 12px; border-radius: 999px;
+    color: var(--brand-ink); padding: 6px 12px; border-radius: 999px;
     border: 1px solid color-mix(in srgb, var(--brand) 26%, transparent); }
   .trust { font-weight: var(--w-medium); color: var(--ink); }
-  .anchor-cta { color: var(--brand); font-weight: var(--w-medium); text-decoration: none; }
+  .anchor-cta { color: var(--brand-ink); font-weight: var(--w-medium); text-decoration: none; }
   .anchor-cta:hover { text-decoration: underline; }
 
   .rows { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 1px;
@@ -334,22 +334,22 @@
 
   .outs { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px 20px; margin-top: 22px; }
   .out { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
-  .out span { color: var(--brand); margin-right: 6px; }
+  .out span { color: var(--brand-ink); margin-right: 6px; }
 
   .gov { list-style: none; margin: 16px 0 0; padding: 0; display: grid;
     grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .gov li { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 13px 16px; display: flex; gap: 12px; align-items: baseline;
     font-size: 14.5px; color: #40434a; }
-  .gov span { font-size: 11px; color: var(--brand); }
+  .gov span { font-size: 11px; color: var(--brand-ink); }
 
   .pending { padding-left: 14px; border-left: 2px solid var(--line); color: var(--muted); }
 
   .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0 16px; }
   .btn { display: inline-flex; align-items: center; gap: 9px; padding: 13px 24px; border-radius: 8px;
-    background: var(--brand); color: #fff; text-decoration: none; font-weight: var(--w-medium); font-size: 15px; }
+    background: var(--brand-solid, #d81f1e); color: #fff; text-decoration: none; font-weight: var(--w-medium); font-size: 15px; }
   .btn:hover { filter: brightness(1.08); }
   .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
-  .btn-ghost:hover { border-color: var(--brand); color: var(--brand); filter: none; }
+  .btn-ghost:hover { border-color: var(--brand); color: var(--brand-ink); filter: none; }
 
   .note { font-size: var(--fs-small); color: var(--muted); }
   .safety { padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px;

@@ -57,7 +57,7 @@
   .st-root { background: #050505; color: #f4f2ee; font-family: var(--font); }
   .mono { font-family: var(--font-mono); }
   .st-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
-  .st-cta { display: inline-flex; align-items: center; gap: 10px; background: #ee2f2e; color: #fff;
+  .st-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--brand-solid, #d81f1e); color: #fff;
     text-decoration: none; font-weight: 600; font-size: 15.5px; padding: 15px 30px; transition: background .2s; }
   .st-cta:hover { background: #d61f1e; }
   .st-ghost { display: inline-flex; align-items: center; color: #f4f2ee; text-decoration: none; font-weight: 500;

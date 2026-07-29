@@ -193,7 +193,7 @@
 
   .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 8px; }
   /* Layout's .cta is scoped to Layout, so the submit button carries its own copy of the brand style. */
-  .submit { display: inline-flex; align-items: center; gap: 10px; background: #ee2f2e; color: #fff;
+  .submit { display: inline-flex; align-items: center; gap: 10px; background: var(--brand-solid); color: #fff;
     font: inherit; font-size: 16px; font-weight: 600; border: 0; border-radius: 0; padding: 15px 30px;
     cursor: pointer; transition: background .2s; }
   .submit:hover:not([disabled]) { background: #d61f1e; }

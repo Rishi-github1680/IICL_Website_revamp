@@ -81,10 +81,10 @@
   .sm-list li { margin: 0 0 6px; }
   .sm-list a { color: var(--ink); text-decoration: none; font-size: 15px; line-height: 1.6;
     border-bottom: 1px solid transparent; transition: color .18s, border-color .18s; }
-  .sm-list a:hover { color: var(--brand); border-bottom-color: var(--brand); }
+  .sm-list a:hover { color: var(--brand-ink); border-bottom-color: var(--brand); }
   .sm-soon { font-size: 15px; color: var(--muted); }
   .sm-soon i { font-style: normal; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--brand); border: 1px solid color-mix(in srgb, var(--brand) 40%, transparent);
+    color: var(--brand-ink); border: 1px solid color-mix(in srgb, var(--brand) 40%, transparent);
     border-radius: 999px; padding: 1px 6px; margin-left: 4px; }
 
   @media (max-width: 900px) { .sm-grid { grid-template-columns: repeat(2, 1fr); } }

@@ -19,6 +19,17 @@
   /* The display/UI face. Change this line to change the whole site. */
   --font-display: Aeonik, Switzer, ui-sans-serif, system-ui, sans-serif;
 
+  /* Brand red for TEXT. #ee2f2e is 4.13:1 on white — fine for a fill or a border
+     (3:1) but below the 4.5:1 WCAG AA needs for normal text. This clears 4.5:1 on
+     white, on #faf9f7 and on #f2f1ee. Dark surfaces override it below. */
+  --brand-ink: #c81a19;
+
+  /* Filled surfaces that carry WHITE text — buttons, active chips, the skip link.
+     White on #ee2f2e is 4.13:1, below the 4.5:1 AA requires for text this size.
+     This is 5.08:1 and visually indistinguishable at a glance. Decorative fills,
+     borders and marks keep --brand. */
+  --brand-solid: #d81f1e;
+
   /* Monospace, used for labels, counters and system-ish readouts. */
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
@@ -32,4 +43,11 @@
   --w-medium: 500;
   --w-heading: 600;
   --w-light: 300;
+}
+
+/* On dark surfaces the relationship inverts: the darker red would fail, so text red
+   goes lighter. Applied to the containers that paint a near-black background. */
+.page-hero, .svc-hero, .pr-hero, .cta-band, .pr-band, .journey, .sh, .nav-bar, .mh, .hero,
+.section-dark-true, .model-shell, .stage-outer {
+  --brand-ink: #ff6b60;
 }

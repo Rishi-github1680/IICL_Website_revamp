@@ -251,11 +251,11 @@
       <h2 class="section-h"><span class="tick"></span>Align screening evidence, customer assessment and candidate experience</h2>
       <div class="compare">
         <div>
-          <h4>IICL</h4>
+          <h3>IICL</h3>
           <ul>{#each QUALITY_US as q}<li>{q}</li>{/each}</ul>
         </div>
         <div>
-          <h4>Your decision discipline</h4>
+          <h3>Your decision discipline</h3>
           <ul>{#each QUALITY_YOU as q}<li>{q}</li>{/each}</ul>
         </div>
       </div>
@@ -361,7 +361,7 @@
 
   .cap-signal { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .cap-signal li { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--brand); padding: 6px 12px;
+    text-transform: uppercase; color: var(--brand-ink); padding: 6px 12px;
     border: 1px solid color-mix(in srgb, var(--brand) 26%, transparent); border-radius: 999px; }
   .qualify { max-width: 74ch; color: var(--muted); }
 
@@ -380,7 +380,7 @@
   .model h3 { margin: 0 0 6px; font-size: 17px; font-weight: var(--w-heading); color: var(--ink); }
   .model-when { margin: 0 0 14px; font-size: 14px; line-height: 1.6; color: #40434a; }
   .model dl { margin: 0; display: grid; gap: 10px; }
-  .model dt { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--brand); margin-bottom: 3px; }
+  .model dt { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--brand-ink); margin-bottom: 3px; }
   .model dd { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
 
   .brief { list-style: none; margin: 16px 0 0; padding: 0;
@@ -388,30 +388,30 @@
      }
   .brief li { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 13px 16px; display: flex; gap: 12px; align-items: baseline;
     font-size: 14.5px; color: #40434a; }
-  .brief span { font-size: 11px; color: var(--brand); }
+  .brief span { font-size: 11px; color: var(--brand-ink); }
 
   .outs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 20px; margin-top: 22px; }
   .out { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
-  .out span { color: var(--brand); margin-right: 6px; }
+  .out span { color: var(--brand-ink); margin-right: 6px; }
 
   .rel { list-style: none; margin: 16px 0 0; padding: 0; border-top: 1px solid var(--line); }
   .rel li { border-bottom: 1px solid var(--line); }
   .rel a { display: grid; gap: 3px; padding: 16px 2px; text-decoration: none; transition: padding-left .2s ease; }
   .rel a:hover { padding-left: 8px; }
   .rel strong { font-size: 16px; font-weight: var(--w-heading); color: var(--ink); }
-  .rel a:hover strong { color: var(--brand); }
+  .rel a:hover strong { color: var(--brand-ink); }
   .rel span { font-size: var(--fs-small); color: var(--muted); }
 
-  .inline-cta { color: var(--brand); font-weight: var(--w-medium); text-decoration: none; }
+  .inline-cta { color: var(--brand-ink); font-weight: var(--w-medium); text-decoration: none; }
   .inline-cta:hover { text-decoration: underline; }
 
   .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0 16px; }
   .btn { display: inline-flex; align-items: center; gap: 9px; padding: 13px 24px; border-radius: 8px;
-    background: var(--brand); color: #fff; text-decoration: none; font-weight: var(--w-medium); font-size: 15px; }
+    background: var(--brand-solid, #d81f1e); color: #fff; text-decoration: none; font-weight: var(--w-medium); font-size: 15px; }
   .btn:hover { filter: brightness(1.08); }
   /* The second path is outlined so both read as equal destinations (Spec D5 §13). */
   .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
-  .btn-ghost:hover { border-color: var(--brand); color: var(--brand); filter: none; }
+  .btn-ghost:hover { border-color: var(--brand); color: var(--brand-ink); filter: none; }
 
   .note { font-size: var(--fs-small); color: var(--muted); max-width: 78ch; }
   .safety { padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px;

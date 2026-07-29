@@ -160,7 +160,7 @@
 <style>
   /* Off-screen until focused, then a solid, readable target. */
   :global(.skip-link) { position: absolute; left: 8px; top: -60px; z-index: 200;
-    padding: 10px 18px; background: #ee2f2e; color: #fff; text-decoration: none;
+    padding: 10px 18px; background: var(--brand-solid); color: #fff; text-decoration: none;
     font-size: 14px; font-weight: 600; border-radius: 0 0 6px 6px; transition: top .18s ease; }
   :global(.skip-link:focus) { top: 0; }
   .pr-root { --ink: #16171a; --muted: #55585e; --line: #e6e3de;
@@ -184,7 +184,7 @@
   .pr-hero-inner { position: relative; z-index: 2; max-width: var(--wrap-max); width: 100%; margin: 0 auto;
     padding: 0 var(--wrap-pad) 40px; box-sizing: border-box; }
 
-  .pr-kicker { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--acc);
+  .pr-kicker { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brand-ink);
     font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 20px; }
   .pr-tick { width: 22px; height: 2px; background: var(--acc); display: inline-block; }
   .pr-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.03em;
@@ -192,13 +192,17 @@
   .pr-lede { margin: 16px 0 0; max-width: 66ch; font-weight: var(--w-light); font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.74); }
   .pr-actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 32px; }
 
-  .pr-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--acc); color: #fff;
+  /* Filled with a darkened accent: several product accents are light enough that
+     white text on them falls under 4.5:1. color-mix keeps the product identity
+     while clearing the threshold. */
+  .pr-cta { display: inline-flex; align-items: center; gap: 10px;
+    background: color-mix(in srgb, var(--acc) 78%, #7a0f0e); color: #fff;
     text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 30px; transition: filter .2s, transform .2s; }
   .pr-cta:hover { filter: brightness(0.88); transform: translateY(-1px); }
   .pr-ghost { display: inline-flex; align-items: center; gap: 8px; color: #f4f2ee; text-decoration: none;
     font-weight: 500; font-size: 16px; padding: 14px 26px; border: 1px solid rgba(255,255,255,0.3);
     transition: border-color .2s, background .2s; }
-  .pr-ghost:hover { border-color: var(--acc); background: color-mix(in srgb, var(--acc) 16%, transparent); }
+  .pr-ghost:hover { border-color: var(--brand-ink); background: color-mix(in srgb, var(--acc) 16%, transparent); }
 
   /* ── Body ──
      Narrower than the hero on purpose: at 1080px a 700px text block left a third of
@@ -252,13 +256,13 @@
     border: 1px solid var(--line); border-top: 2px solid var(--acc); padding: 18px 18px 20px; color: var(--ink);
     transition: transform .2s, box-shadow .2s; }
   .pr-more-card:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(20,20,25,0.13); }
-  .pr-more-tag { font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--acc); }
+  .pr-more-tag { font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brand-ink); }
   .pr-more-name { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
   .pr-more-desc { font-size: 13.5px; line-height: 1.5; color: var(--muted); }
 
   /* ── Closing band ── */
   .pr-band { background: #0a0b0d; color: #f4f2ee; padding: 66px 0; text-align: center; }
-  .pr-band-kicker { color: var(--acc); font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .pr-band-kicker { color: var(--brand-ink); font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; }
   .pr-band-h { margin: 16px auto 28px; max-width: 22ch; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.12;
     letter-spacing: -0.02em; font-weight: 600; }
   .pr-cta-big { padding: 17px 36px; }

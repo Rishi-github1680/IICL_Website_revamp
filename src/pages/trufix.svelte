@@ -80,4 +80,50 @@
       <a class="cta-link" href="/contactus">Explore the full capability set <span class="arw">→</span></a>
     </div>
   </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Supported surface</h2>
+      <dl class="sysgrid">
+        <div class="sysrow"><dt>Intake</dt><dd>Portal, email, chat and WhatsApp, routed into your ITSM platform</dd></div>
+        <div class="sysrow"><dt>ITSM</dt><dd>Platforms exposing a supported API for ticket read, update and closure</dd></div>
+        <div class="sysrow"><dt>Verification</dt><dd>Evidence type is defined per ticket category — a confirmation, a check, a reading or a photograph</dd></div>
+        <div class="sysrow"><dt>Assets</dt><dd>Where an asset or configuration item is involved, verification is recorded against it</dd></div>
+        <div class="sysrow"><dt>Audit</dt><dd>Every verification writes an auditable record against the ticket</dd></div>
+        <div class="sysrow"><dt>Escalation</dt><dd>Failed verification reopens the ticket to a named owner rather than closing it</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>What "verified" means</h2>
+      <div class="section-body">
+        <p class="para">Verification is meaningless as a general claim. It is defined per ticket category, agreed with you, and each definition states what evidence closes the ticket.</p>
+        <ul class="list">
+          <li>Password reset: the user has successfully authenticated since the change, not that the reset was executed</li>
+          <li>Hardware replacement: the asset record reflects the new device and the user has confirmed it works</li>
+          <li>Access request: the permission is present in the target system, checked rather than assumed</li>
+          <li>Facilities: a photograph or a sensor reading, timestamped against the work order</li>
+          <li>Application fault: the failing transaction now completes, or the user confirms the behaviour is gone</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section shade">
+    <div class="wrap">
+      <h2 class="section-h"><span class="tick"></span>Where it stops</h2>
+      <div class="section-body">
+        <ul class="list">
+          <li>It does not perform the fix; it confirms the fix happened</li>
+          <li>Categories with no practical evidence are excluded rather than given a token check</li>
+          <li>It cannot verify what your systems do not expose — the integration surface sets the boundary</li>
+          <li>It does not judge engineer performance; verification data is about tickets, not people</li>
+          <li>Outcome measures are defined and baselined with you during discovery</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
 </ProductLayout>

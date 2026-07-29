@@ -58,7 +58,7 @@
 
 <style>
   :global(.skip-link) { position: absolute; left: 8px; top: -60px; z-index: 200;
-    padding: 10px 18px; background: #ee2f2e; color: #fff; text-decoration: none;
+    padding: 10px 18px; background: var(--brand-solid); color: #fff; text-decoration: none;
     font-size: 14px; font-weight: 600; border-radius: 0 0 6px 6px; transition: top .18s ease; }
   :global(.skip-link:focus) { top: 0; }
 
@@ -81,7 +81,7 @@
   .cta-kicker { font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase; color: #ff5a4d; }
   .cta-h2 { margin: 16px auto 26px; max-width: 20ch; font-size: var(--fs-h1); line-height: 1.1;
     letter-spacing: -0.02em; font-weight: 600; }
-  .cta { display: inline-flex; align-items: center; gap: 10px; background: var(--red); color: #fff;
+  .cta { display: inline-flex; align-items: center; gap: 10px; background: var(--brand-solid); color: #fff;
     text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 30px; transition: background .2s; }
   .cta:hover { background: #d61f1e; }
 

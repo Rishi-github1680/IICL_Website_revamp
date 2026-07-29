@@ -58,12 +58,12 @@
 
   .cs-kicker { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #ff8d8b; }
   .cs-h1 { margin: 16px 0 0; font-size: clamp(32px, 5vw, 56px); font-weight: 700; letter-spacing: -0.03em; color: #fff; }
-  .cs-caret { color: #ee2f2e; animation: blink 1s steps(1) infinite; }
+  .cs-caret { color: var(--brand-ink); animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
   .cs-sub { margin: 18px 0 0; max-width: 46ch; font-size: 17px; line-height: 1.7; color: rgba(244,242,238,.66); }
 
   .cs-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 36px; }
-  .cs-cta { display: inline-flex; align-items: center; gap: 10px; background: #ee2f2e; color: #fff;
+  .cs-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--brand-solid, #d81f1e); color: #fff;
     text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 30px; transition: background .2s, transform .2s; }
   .cs-cta:hover { background: #d61f1e; transform: translateY(-2px); }
   .cs-ghost { display: inline-flex; align-items: center; color: #f4f2ee; text-decoration: none; font-weight: 500;

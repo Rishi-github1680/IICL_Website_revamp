@@ -40,7 +40,7 @@
       <!-- Solution-first (Spec FT1): Enterprise AI and GCC are the two commercial
            pathways, so each gets its own group rather than hiding inside "Services". -->
       <div class="ft-col ft-col-wide">
-        <h4>Enterprise AI Solutions</h4>
+        <h3 class="ft-h">Enterprise AI Solutions</h3>
         <ul>
           <li><a href="/ai-genai-services">Enterprise AI &amp; GenAI</a></li>
           <li><a href="/agentic-ai">Agentic AI</a></li>
@@ -63,22 +63,22 @@
       </div>
 
       <div class="ft-col">
-        <h4>GCC Technology Teams</h4>
+        <h3 class="ft-h">GCC Technology Teams</h3>
         <ul>
           {#each TALENT as t}<li><a href={t.href}>{t.label}</a></li>{/each}
         </ul>
-        <h4 class="ft-h4-gap">Industries</h4>
+        <h3 class="ft-h ft-h4-gap">Industries</h3>
         <ul>
           {#each INDUSTRIES.slice(0, 5) as s}<li><a href={s.href}>{s.label}</a></li>{/each}
         </ul>
       </div>
 
       <div class="ft-col">
-        <h4>Insights</h4>
+        <h3 class="ft-h">Insights</h3>
         <ul>
           {#each INSIGHTS as s}<li><a href={s.href}>{s.label}</a></li>{/each}
         </ul>
-        <h4 class="ft-h4-gap">Company</h4>
+        <h3 class="ft-h ft-h4-gap">Company</h3>
         <ul>
           <li><a href="/aboutus">About IICL</a></li>
           <li><a href="/careers">Careers</a></li>
@@ -139,21 +139,21 @@
   .ft-legal-name { margin: 13px 0 0; font-size: 14.5px; font-weight: var(--w-medium); color: #fff; letter-spacing: 0.01em; }
   .ft-addr-blk { margin: 11px 0 0; display: flex; flex-direction: column; gap: 9px; }
   .ft-addr-blk a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13.5px; line-height: 1.6; transition: color .2s; }
-  .ft-addr-blk a:hover { color: #ee2f2e; }
+  .ft-addr-blk a:hover { color: var(--brand-ink); }
   .ft-addr-blk strong { color: #fff; font-weight: 600; }
   .ft-contact { margin: 13px 0 0; display: flex; flex-direction: column; gap: 4px; }
   .ft-contact a { color: rgba(255,255,255,0.86); text-decoration: none; font-size: 14.5px; transition: color .2s; }
-  .ft-contact a:hover { color: #ee2f2e; }
+  .ft-contact a:hover { color: var(--brand-ink); }
 
   /* Column heads align on one baseline with the brand name; links sit on a tighter
      rhythm so each column reads as a block rather than a loose scatter. */
-  .ft-col h4 { font-size: 11px; font-weight: var(--w-medium); letter-spacing: 0.14em; text-transform: uppercase;
+  .ft-col .ft-h { font-size: 11px; font-weight: var(--w-medium); letter-spacing: 0.14em; text-transform: uppercase;
     color: rgba(255,255,255,0.45); margin: 0 0 12px; }
   .ft-col ul { list-style: none; margin: 0; padding: 0; }
   .ft-col li { margin: 0 0 4px; }
   .ft-col a { display: inline-block; color: rgba(255,255,255,0.82); text-decoration: none; font-size: 14px;
     font-weight: var(--w-body); line-height: 1.55; padding: 2px 0; transition: color .2s, transform .2s; }
-  .ft-col a:hover { color: #ee2f2e; transform: translateX(2px); }
+  .ft-col a:hover { color: var(--brand-ink); transform: translateX(2px); }
 
   /* Product rows carry their mark. The tile keeps mixed-weight logos aligned
      and readable against the dark footer. */
@@ -180,7 +180,7 @@
   /* The one action in the footer, so it is filled rather than outlined — it should
      read as the brightest thing down here. */
   .ft-cta { display: inline-flex; align-items: center; gap: 9px;
-    padding: 12px 24px; background: #ee2f2e; border-radius: 999px;
+    padding: 12px 24px; background: var(--brand-solid); border-radius: 999px;
     color: #fff; text-decoration: none; font-size: 14.5px; font-weight: var(--w-medium);
     box-shadow: 0 6px 20px rgba(238,47,46,0.32);
     transition: background .25s, transform .25s cubic-bezier(0.22,1,0.36,1), box-shadow .25s; }
@@ -197,7 +197,7 @@
   .ft-soc { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
     color: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.16);
     transition: color .22s, border-color .22s, background .22s, transform .22s; }
-  .ft-soc:hover { color: #fff; background: #ee2f2e; border-color: #ee2f2e; transform: translateY(-2px); }
+  .ft-soc:hover { color: #fff; background: var(--brand-solid, #d81f1e); border-color: #ee2f2e; transform: translateY(-2px); }
 
   .ft-bottom { margin-top: 16px; padding: 16px 0 0; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; }
   .ft-bottom span { font-size: 13px; color: rgba(255,255,255,0.5); }

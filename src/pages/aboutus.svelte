@@ -22,10 +22,10 @@
   // "Why enterprises choose IICL" — these were titles and descriptions run together
   // as loose paragraphs, with one heading left with no body at all.
   const REASONS = [
-    { t: 'Transparent and ethical AI', d: 'Fairness, explainability and regulatory alignment are built in, so you get AI you can defend to a regulator, not just deploy.' },
-    { t: 'Agents that act, not just chat', d: 'Autonomous agents plan, decide and execute across your enterprise systems, with the approval points agreed before anything goes live.' },
-    { t: 'Client-centric customisation', d: 'Every solution is scoped to your industry, your customers and your systems. Nothing is dropped in from a template.' },
-    { t: 'Multi-industry expertise', d: 'Healthcare, manufacturing, finance, banking, legal, logistics, supply chain, contact centre and HR — nine sectors in production today.' },
+    { t: 'We start from your systems, not a template', d: 'The first question is what you already run and what it will let us do. Most of the difficulty in enterprise AI is integration and permissions, not the model, so that is where scoping starts.' },
+    { t: 'Authority is agreed before anything is built', d: 'What the system may decide, what it may only propose, and what it must never touch — written down and signed off before build, not discovered at go-live.' },
+    { t: 'Evidence gates, not a fixed number of weeks', d: 'Each stage has to produce evidence before the next one is funded. If a Proof of Value shows the approach does not hold, that is a result, and we say so rather than proceeding.' },
+    { t: 'We tell you when AI is the wrong answer', d: 'Some processes come out of review better served by deterministic automation, a process change, or nothing at all. We would rather lose the scope than deliver something that cannot be defended.' },
   ];
 
   // The old page promised six steps and then listed five unlabelled lines.
@@ -254,7 +254,7 @@
   /* Mission / vision */
   .mv { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
   .mv-card { background: #fff; border: 1px solid #e6e3de; border-top: 3px solid #ee2f2e; padding: 26px 26px 28px; }
-  .mv-k { display: block; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #ee2f2e; margin-bottom: 14px; }
+  .mv-k { display: block; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--brand-ink); margin-bottom: 14px; }
   .mv-card p { margin: 0; font-size: 16px; line-height: 1.7; color: #33363c; }
 
   /* Product marquee — a slow ticker of everything in production. */
@@ -285,7 +285,7 @@
   .office-pulse { width: 7px; height: 7px; border-radius: 50%; background: #ee2f2e; animation: opulse 2.4s ease infinite; }
   @keyframes opulse { 50% { opacity: .35; } }
   @media (prefers-reduced-motion: reduce) { .office-pulse { animation: none; } }
-  .office-k { display: block; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #ee2f2e; margin-bottom: 12px; }
+  .office-k { display: block; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--brand-ink); margin-bottom: 12px; }
   .office-note { color: #55585e; margin-bottom: 0; }
   .office-contact { margin-top: 24px; }
   .office-contact a, .office a { color: #b81c1c; }

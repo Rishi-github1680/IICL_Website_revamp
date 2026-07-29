@@ -106,7 +106,7 @@
   .uc-link { display: grid; grid-template-columns: 52px 232px 1fr; gap: 0 22px; padding: 22px 22px 22px 16px;
     text-decoration: none; transition: background .2s ease; align-items: start; }
   .uc-link:hover { background: #faf9f7; }
-  .uc-n { font-size: 12px; color: var(--brand); padding-top: 4px; }
+  .uc-n { font-size: 12px; color: var(--brand-ink); padding-top: 4px; }
   /* Landscape thumbnail, matching the ratio the journal cards use. */
   .uc-shot { display: block; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden;
     background: #0b0c0e; border: 1px solid var(--line); }
@@ -117,17 +117,17 @@
   .uc-body { display: grid; gap: 7px; }
   .uc-cat { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
   .uc-title { font-size: 19px; font-weight: var(--w-heading); color: var(--ink); letter-spacing: -.015em; }
-  .uc-link:hover .uc-title { color: var(--brand); }
+  .uc-link:hover .uc-title { color: var(--brand-ink); }
   .uc-ex { font-size: var(--fs-body); line-height: 1.6; color: #40434a; max-width: 74ch; }
 
   .uc-rows { display: grid; gap: 5px; margin-top: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
   .uc-rows span { display: grid; grid-template-columns: 150px 1fr; gap: 14px;
     font-size: 13.5px; line-height: 1.5; color: var(--muted); }
   .uc-rows em { font-style: normal; font-size: 10.5px; letter-spacing: .14em;
-    text-transform: uppercase; color: var(--brand); padding-top: 2px; }
+    text-transform: uppercase; color: var(--brand-ink); padding-top: 2px; }
 
-  .uc-go { margin-top: 8px; font-size: 12px; letter-spacing: .1em; color: var(--brand); }
-  .inline-cta { color: var(--brand); font-weight: var(--w-medium); text-decoration: none; }
+  .uc-go { margin-top: 8px; font-size: 12px; letter-spacing: .1em; color: var(--brand-ink); }
+  .inline-cta { color: var(--brand-ink); font-weight: var(--w-medium); text-decoration: none; }
   .inline-cta:hover { text-decoration: underline; }
 
   @media (max-width: 700px) {
