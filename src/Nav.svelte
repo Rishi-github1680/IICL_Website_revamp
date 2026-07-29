@@ -22,7 +22,7 @@
 <div class="nav-bar">
   <div class="nav-inner">
     <a href="/" class="brand" onclick={close}>
-      <img class="brand-logo" src="/iicl_logo.png" alt="IICL — Intelligence India.Com" loading="lazy" decoding="async" />
+      <img class="brand-logo" src="/iicl_logo.png" alt="IICL" loading="lazy" decoding="async" />
     </a>
 
     <button class="hamburger" class:on={mobileOpen} aria-label="Menu" aria-expanded={mobileOpen} onclick={() => (mobileOpen = !mobileOpen)}>

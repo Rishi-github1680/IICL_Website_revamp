@@ -500,7 +500,7 @@
     <div class="wrap">
       <div data-reveal class="section-head">
         <div class="label-row"><span class="tick"></span><span class="label">Who we are</span></div>
-        <h2 class="section-h2">Intelligence India.Com Limited: enterprise AI engineering and implementation.</h2>
+        <h2 class="section-h2">IICL: enterprise AI engineering and implementation.</h2>
       </div>
       <div data-reveal class="def-body">
         <p class="def-p">IICL helps organisations identify, design, validate and operate enterprise AI solutions. Our work connects business workflows with approved data, enterprise applications, human decision rights and measurable operating outcomes.</p>

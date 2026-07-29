@@ -6,7 +6,7 @@
 <Layout
   kicker="Legal"
   h1="Privacy Policy"
-  lede="Privacy Policy for IICL (Intelligence India.Com Limited). Learn how we collect, use, and protect your personal information when you use our AI solutions and services."
+  lede="Privacy Policy for IICL. Learn how we collect, use, and protect your personal information when you use our AI solutions and services."
   heroBanner="/img/banners/A1-og-default.png"
   path="/privacy-policy"
   bandKicker="Privacy"
@@ -15,7 +15,7 @@
   <section class="page-section">
     <div class="wrap">
       <div class="section-body">
-        <p class="para">Welcome to IICL (Intelligence India.Com Limited). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website www.iicl.in or use our services.</p>
+        <p class="para">Welcome to IICL. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website www.iicl.in or use our services.</p>
         <p class="para">By accessing or using our website, you consent to the practices described in this Privacy Policy.</p>
       </div>
     </div>
