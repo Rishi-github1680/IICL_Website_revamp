@@ -74,7 +74,7 @@ export const MENU = [
       { label: 'Enterprise AI & GenAI', href: '/ai-genai-services' },
       { label: 'Agentic AI', href: '/agentic-ai' },
     ],
-    highlight: { href: '/ai-genai-services', img: '/img/ai-solution-banner.webp', title: 'Enterprise AI & GenAI', text: 'Consulting and implementation, from use case to governed production.' } },
+    highlight: { href: '/contactus?intent=ai-discovery-workshop', img: '/img/ai-solution-banner.webp', title: 'Not sure which one fits?', text: 'Bring one process to a discovery workshop and we will tell you what it actually needs.' } },
   { label: 'Talent', mega: 'columns', cols: [
     { title: 'Technology teams', links: TALENT },
   ] },

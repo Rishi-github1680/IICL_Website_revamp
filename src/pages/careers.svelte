@@ -124,6 +124,7 @@
 
 <Layout
   kicker="Company"
+  heroImage={{ img: '/img/careers-hero.svg', alt: 'Diagram: capability domains feeding role clusters that assemble into a delivery team' }}
   h1="Build the systems people actually talk to"
   lede="We build voice agents, WhatsApp commerce and enterprise AI from Hyderabad and Raleigh. Small teams, real customers, work you can point at."
   path="/careers"

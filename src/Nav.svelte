@@ -61,7 +61,7 @@
                     <span class="mm-h4">Services</span>
                     {#each item.services as svc}
                       <a href={svc.href} class="mm-item mm-item-svc" onclick={close}>
-                        <span class="mm-txt"><strong>{svc.label}</strong></span>
+                        <span class="mm-name">{svc.label}</span>
                       </a>
                     {/each}
                   </div>
@@ -228,8 +228,8 @@
   .dropdown.mega { position: fixed; left: 0; right: 0; margin: 14px auto 0; top: 60px; box-sizing: border-box; display: grid;
     background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 30px; border-radius: 10px; }
   /* Two even link columns with a full-width footer CTA underneath. */
-  .mm-item-svc { padding: 9px 10px; }
-  .mm-item-svc strong { font-size: 14px; }
+  /* Service rows sit slightly tighter than product rows — no logo tile to clear. */
+  .mm-item-svc { align-items: center; }
   .mega-products { max-width: 720px; grid-template-columns: 1fr 1fr; gap: 8px 34px; padding: 24px 24px 10px; }
   /* Single promo panel — anchored under its trigger rather than spanning the viewport. */
   .dropdown.mega-promo { position: absolute; top: 100%; left: 0; right: auto; width: 340px; max-width: 340px;
