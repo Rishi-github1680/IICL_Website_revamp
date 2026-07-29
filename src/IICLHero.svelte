@@ -138,7 +138,7 @@
 
     // Settle onto a stage when scrolling stops, so a chapter is never left frozen
     // half-way through its transition. Centres of the hero + four chapter windows.
-    const stopSnap = snapStory(journeyEl, [0.02, 0.255, 0.455, 0.66, 0.92]);
+    const stopSnap = snapStory(journeyEl, [0.02, 0.255, 0.455, 0.66, 0.92], { maxJump: 0.13 });
 
     const idle = window.requestIdleCallback || ((f) => setTimeout(f, 600));
     const arm3D = () => idle(() => { ready3D = true; }, { timeout: 2500 });
@@ -286,7 +286,7 @@
         const RAMP = 0.045;
         const inE = smooth((J - p.w0) / RAMP);
         const outE = 1 - smooth((J - (p.w1 - RAMP)) / RAMP);
-        const o = ease(p.el, Math.max(0, Math.min(inE, outE)), 10.5);
+        const o = ease(p.el, Math.max(0, Math.min(inE, outE)), 20);
         const drift = ((1 - o) * 14).toFixed(2);
         p.el.style.opacity = o.toFixed(3);
         p.el.style.transform = p.el.classList.contains('chapter')
@@ -314,7 +314,8 @@
     // grain-by-grain into a particle cloud (iiclScatter → the shared shader in core.js) and
     // fades BY the boundary; the incoming one starts as a scattered cloud there and condenses
     // into shape. Only the two dispersed clouds ever overlap — never two formed models.
-    const fadeModels = (J) => {
+    const fadeModels = (J, rawJ) => {
+      const ahead = Math.max(J, rawJ ?? J);
       let maxO = 0;
       const r = journeyEl.getBoundingClientRect();
       const offscreen = r.bottom <= 0 || r.top >= (window.innerHeight || 1);
@@ -324,14 +325,14 @@
       for (const m of models()) {
         // Then load each model ~0.2 of scroll before it is shown, so only one 3D
         // context spins up at a time rather than four at once.
-        if (near && m.el.dataset.src && J > m.i0 - 0.2) { m.el.src = m.el.dataset.src; delete m.el.dataset.src; }
+        if (near && m.el.dataset.src && ahead > m.i0 - 0.2) { m.el.src = m.el.dataset.src; delete m.el.dataset.src; }
         // Handoff half-width. Each boundary is shared by two models and both windows are
         // centred on it, so one rises exactly as the other falls. Wider than the fade
         // needs, because the dispersed moment between shapes is the transition.
         const H = 0.075;
         const inE = m.i0 < 0 ? 1 : smooth((J - (m.i0 - H)) / (2 * H));
         const outE = m.i1 > 2 ? 1 : 1 - smooth((J - (m.i1 - H)) / (2 * H));
-        const o = ease(m.el, Math.max(0, Math.min(inE, outE)), 7);
+        const o = ease(m.el, Math.max(0, Math.min(inE, outE)), 16);
         const peak = typeof m.peak === 'function' ? m.peak(J) : (m.peak ?? 0.82);
         m.el.style.opacity = (o * peak).toFixed(3); // hold the models back so the text reads cleanly
 
@@ -348,7 +349,7 @@
         const dy = ((0.5 - L) * 16).toFixed(1);
         // A breath of soft focus while dispersed (composited filter, quantized so the
         // style only changes in steps). A formed scene is always pin sharp.
-        const bl = Math.round((1 - o) * 8) / 4;
+        const bl = Math.round((1 - o) * 20) / 10;
         m.el.style.transform = 'translateY(' + dy + 'px) scale(' + sc + ')';
         m.el.style.filter = bl > 0 ? 'blur(' + bl + 'px)' : '';
         m.el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
@@ -377,41 +378,27 @@
       }
     };
     let raf;
+    // Visual progress. The scroll — and above all the snap's glide — can jump an
+    // entire handoff in half a second; slaved 1:1, the model swap concentrates into
+    // the moments AFTER arrival, which is exactly the popout. V is a camera dolly,
+    // not a scrubber: the scroll sets the destination, and the world flows there
+    // over ~1.3s of critically-damped motion, so every dissolve-storm-condense
+    // plays out in full no matter how abruptly the visitor scrolled.
+    let V = -1;
     const frame = () => {
       tick();
       const J = journeyP();
-      fadeModels(J);
-      fadePanels(J);
+      if (V < 0) V = J; // reloads restore scroll mid-journey; never replay from zero
+      V += (J - V) * (1 - Math.exp(-dt * 2.4));
+      if (Math.abs(J - V) < 0.0004) V = J;
+      fadeModels(V, J);
+      fadePanels(V);
       driveCursor();
       if (exploring && J < 0.8) exitExplore(); // scrolled away from the galaxy stage → leave explore
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
 
-    // ── Stage-wise scroll snapping ──
-    // After scrolling stops, glide to the nearest point so each stage lands cleanly.
-    const snapJ = [0, 0.25, 0.45, 0.66, 0.92, 1]; // hero, then one stop per point
-    let snapTimer, snapping = false;
-    const onScrollSnap = () => {
-      if (snapping) return;
-      clearTimeout(snapTimer);
-      snapTimer = setTimeout(() => {
-        const range = journeyEl.offsetHeight - window.innerHeight;
-        if (range <= 0) return;
-        const top = journeyEl.offsetTop;
-        const J = (window.scrollY - top) / range;
-        if (J < -0.01 || J > 1) return; // above/below the journey → free scroll
-        let best = snapJ[0], bd = Infinity;
-        for (const p of snapJ) { const d = Math.abs(p - J); if (d < bd) { bd = d; best = p; } }
-        const targetY = Math.round(top + best * range);
-        if (Math.abs(targetY - window.scrollY) > 3) {
-          snapping = true;
-          window.scrollTo({ top: targetY, behavior: 'smooth' });
-          setTimeout(() => { snapping = false; }, 700);
-        }
-      }, 150);
-    };
-    window.addEventListener('scroll', onScrollSnap, { passive: true });
 
     // The galaxy signals when the visitor scrolls past the last product — close and move on.
     const onExploreDone = (e) => {
@@ -430,9 +417,7 @@
       clearTimeout(readyTimer);
       cancelAnimationFrame(raf);
       window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('scroll', onScrollSnap);
       window.removeEventListener('message', onExploreDone);
-      clearTimeout(snapTimer);
     };
   });
 </script>
