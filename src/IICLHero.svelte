@@ -86,23 +86,10 @@
 
   // Refs
   let rootEl, journeyEl, heroPanelEl, ch1El, ch2El, ch3El, ch4El;
-  let m1El, m2El, m3El, m4El; // brain / voice agent / data stream / galaxy
+  let storyCanvas;     // the one continuous world behind every chapter
+  let galaxyEl;        // the product explorer, now its own section
 
   // ── Product explorer (galaxy stage) — hidden until "See all products" is clicked ──
-  let exploring = $state(false);
-  const postTo = (el, msg) => { try { if (el && el.contentWindow) el.contentWindow.postMessage(msg, '*'); } catch (e) {} };
-  function enterExplore(e) {
-    e.preventDefault();
-    exploring = true;
-    if (ch4El) ch4El.style.display = 'none';
-    if (m4El) { m4El.style.pointerEvents = 'auto'; postTo(m4El, { iiclExplore: true }); }
-  }
-  function exitExplore() {
-    if (!exploring) return;
-    exploring = false;
-    if (ch4El) ch4El.style.display = '';
-    if (m4El) { m4El.style.pointerEvents = ''; postTo(m4El, { iiclExplore: false }); }
-  }
 
   // Set once the page has loaded and gone idle; gates every 3D iframe fetch.
   let ready3D = false;
@@ -114,7 +101,6 @@
     // A scene announces its first rendered frame; until then the backdrop holds.
     let readyTimer = 0;
     const onReady = (e) => {
-      if (e.data?.iiclReady) { modelReady = true; clearTimeout(readyTimer); }
     };
     if (!no3D) {
       window.addEventListener('message', onReady);
@@ -162,7 +148,6 @@
     if (reduced || no3D) {
       journeyEl.style.height = '100vh';
       [ch1El, ch2El, ch3El, ch4El].filter(Boolean).forEach((el) => { el.style.display = 'none'; });
-      if (m1El) m1El.style.opacity = '1';
       return;
     }
 
@@ -179,14 +164,6 @@
       { el: ch2El, w0: 0.38, w1: 0.53 },
       { el: ch3El, w0: 0.58, w1: 0.74 },
       { el: ch4El, w0: 0.8, w1: 1.05 }
-    ];
-    const models = () => [
-      // Held back under the hero copy (H1, lede, two CTAs read over it), then back to
-      // full strength for chapter 1, which only has a short headline beside it.
-      { el: m1El, i0: -1, i1: 0.35, peak: (J) => 0.35 + 0.6 * smooth((J - 0.13) / 0.07) },  // brain
-      { el: m2El, i0: 0.35, i1: 0.56 },  // voice agent
-      { el: m3El, i0: 0.56, i1: 0.78 },  // delivery stream
-      { el: m4El, i0: 0.78, i1: 9 }      // galaxy
     ];
     // Particle dissolve for the four chapter headlines: letters never move — they materialize
     // grain-by-grain in random order (and dissolve out the same way), in step with the models.
@@ -218,9 +195,6 @@
     }
 
     // Tell each iframe how dispersed it should be (1 - opacity) and pause hidden ones.
-    const post = (el, msg) => {
-      try { if (el.contentWindow) el.contentWindow.postMessage(msg, '*'); } catch (e) {}
-    };
 
     // Mouse: track for the custom cursor ring + forward into visible iframes.
     const mouse = { x: -100, y: -100, cx: -100, cy: -100, overLink: false, moved: false };
@@ -232,12 +206,11 @@
     };
     window.addEventListener('pointermove', onMove, { passive: true });
     // The global <Cursor /> draws the ring; here we only forward the pointer into the visible 3D iframes.
+    // The global <Cursor /> draws the ring; here the pointer only parallaxes the world.
     const driveCursor = () => {
-      if (mouse.moved) {
-        mouse.moved = false;
-        const p = { iiclPointer: { x: mouse.x / window.innerWidth, y: mouse.y / window.innerHeight } };
-        for (const m of models()) if (!m.el._pause) post(m.el, p);
-      }
+      if (!world || !mouse.moved) return;
+      world.setPointer((mouse.x / (window.innerWidth || 1)) * 2 - 1,
+                       -((mouse.y / (window.innerHeight || 1)) * 2 - 1));
     };
     // Ease displayed opacity toward the scroll-derived target. Time-based, not
     // per-frame: a fixed lerp factor converges at whatever rate the display refreshes,
@@ -283,49 +256,47 @@
     // grain-by-grain into a particle cloud (iiclScatter → the shared shader in core.js) and
     // fades BY the boundary; the incoming one starts as a scattered cloud there and condenses
     // into shape. Only the two dispersed clouds ever overlap — never two formed models.
-    const fadeModels = (J) => {
-      const r = journeyEl.getBoundingClientRect();
-      const offscreen = r.bottom <= 0 || r.top >= (window.innerHeight || 1);
-      // Nothing is fetched until the journey is within about a screen and a half of
-      // view. Primary content and CTAs are usable long before any 3D context exists.
-      const near = ready3D && r.top < (window.innerHeight || 1) * 1.5 && r.bottom > -(window.innerHeight || 1) * 0.5;
-      for (const m of models()) {
-        // Then load each model ~0.2 of scroll before it is shown, so only one 3D
-        // context spins up at a time rather than four at once.
-        if (near && m.el.dataset.src && J > m.i0 - 0.2) { m.el.src = m.el.dataset.src; delete m.el.dataset.src; }
-        // Handoff half-width. Each boundary is shared by two models, and both windows
-        // are centred on it, so one rises exactly as the other falls — no gap, no dip.
-        const H = 0.055;
-        const inE = m.i0 < 0 ? 1 : smooth((J - (m.i0 - H)) / (2 * H));
-        const outE = m.i1 > 2 ? 1 : 1 - smooth((J - (m.i1 - H)) / (2 * H));
-        const o = ease(m.el, Math.max(0, Math.min(inE, outE)), 7);
-        const peak = typeof m.peak === 'function' ? m.peak(J) : (m.peak ?? 0.82);
-        m.el.style.opacity = (o * peak).toFixed(3); // hold the models back so the text reads cleanly
-        m.el.style.transform = 'scale(' + (0.96 + 0.04 * o).toFixed(4) + ')';
-        m.el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
-        const pause = offscreen || o < 0.002;
-        if (m.el._pause !== pause) { m.el._pause = pause; post(m.el, { iiclPause: pause }); }
-        // Scatter tracks the fade rather than leading it. A pow < 1 made the model
-        // disintegrate well before it dimmed, which read as a separate event.
-        const s = Math.round((1 - o) * 100) / 100;
-        if (m.el._scatter !== s) { m.el._scatter = s; post(m.el, { iiclScatter: s }); }
-        // Scroll-driven zoom, mapped to each model's own stage span — every model flies in, then hands off
-        // to the next while dispersing, so the stages read as one continuous motion.
-        const zStart = m.i0 < 0 ? 0 : m.i0;
-        const zEnd = m.i1 > 1 ? 1 : m.i1;
-        const lz = Math.min(1, Math.max(0, (J - zStart) / Math.max(zEnd - zStart, 0.001)));
-        const z = Math.round(lz * 100) / 100;
-        if (m.el._zoom !== z) { m.el._zoom = z; post(m.el, { iiclZoom: z }); }
+    // ── The one continuous world ──────────────────────────────────────────
+    // Loaded lazily: nothing is fetched until the story is within about a screen and a
+    // half of view, so the H1, the lede and both CTAs are usable long before any WebGL
+    // context exists. One scene replaces four iframes, so there is one context, not four.
+    let world = null, worldLoading = false;
+    // The product galaxy loads when its section is near, not with the page.
+    const loadGalaxy = () => {
+      if (!galaxyEl || !galaxyEl.dataset.src || !ready3D) return;
+      const r = galaxyEl.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      if (r.top < vh * 1.6 && r.bottom > -vh * 0.5) {
+        galaxyEl.src = galaxyEl.dataset.src;
+        delete galaxyEl.dataset.src;
       }
     };
+
+    const loadWorld = () => {
+      if (world || worldLoading || no3D || !ready3D || !storyCanvas) return;
+      const r = journeyEl.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      if (!(r.top < vh * 1.5 && r.bottom > -vh * 0.5)) return;
+      worldLoading = true;
+      import('./story-world.ts').then(({ createWorld }) => {
+        if (!storyCanvas) return;
+        world = createWorld(storyCanvas);
+        modelReady = true;
+        clearTimeout(readyTimer);
+      }).catch(() => { worldLoading = false; });
+    };
+
     let raf;
     const frame = () => {
       tick();
       const J = journeyP();
-      fadeModels(J);
+      loadWorld();
+      loadGalaxy();
+      // One call drives the whole story. The world owns its own easing, so the stage
+      // never jumps when the scroll position does.
+      world?.setProgress(Math.max(0, Math.min(1, J)));
       fadePanels(J);
       driveCursor();
-      if (exploring && J < 0.8) exitExplore(); // scrolled away from the galaxy stage → leave explore
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
@@ -356,24 +327,15 @@
     window.addEventListener('scroll', onScrollSnap, { passive: true });
 
     // The galaxy signals when the visitor scrolls past the last product — close and move on.
-    const onExploreDone = (e) => {
-      if (e.data && e.data.iiclExploreDone) {
-        exitExplore();
-        // The products section was removed — the galaxy is the product showcase now.
-        // Land back on the chapter that launched it.
-        ch4El?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    };
-    window.addEventListener('message', onExploreDone);
 
     return () => {
       stopSnap();
+      world?.dispose();
       window.removeEventListener('message', onReady);
       clearTimeout(readyTimer);
       cancelAnimationFrame(raf);
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('scroll', onScrollSnap);
-      window.removeEventListener('message', onExploreDone);
       clearTimeout(snapTimer);
     };
   });
@@ -387,9 +349,6 @@
   <!-- Spec G14: a skip link, and a real <main> landmark for the page content. -->
   <a class="skip-link" href="#main">Skip to main content</a>
   <Cursor />
-  {#if exploring}
-    <button class="explore-exit" onclick={exitExplore}>✕ Exit product view</button>
-  {/if}
   <!-- Sticky nav (shared) -->
   <Nav />
 
@@ -411,10 +370,9 @@
         <div class="journey-model journey-flat journey-holding" class:is-gone={modelReady} aria-hidden={modelReady}>
           <Backdrop label="Enterprise AI, illustrated" />
         </div>
-        <iframe bind:this={m1El} data-src="hologram.html?transparent=1&ui=0" title="AI brain hologram 3D model" loading="lazy" class="journey-model" style="opacity:1;"></iframe>
-        <iframe bind:this={m2El} data-src="voice-agent.html?transparent=1&ui=0" title="AI voice agent 3D model" class="journey-model" style="opacity:0;"></iframe>
-        <iframe bind:this={m3El} data-src="data-stream.html?transparent=1&ui=0" title="Global delivery stream 3D model" class="journey-model" style="opacity:0;"></iframe>
-        <iframe bind:this={m4El} data-src="galaxy.html?transparent=1&ui=0" title="Product galaxy 3D model" class="journey-model" style="opacity:0;"></iframe>
+        <!-- One scene for the whole story. Four iframes meant four WebGL contexts and
+             four unrelated worlds crossfading; this is a single continuous animation. -->
+        <canvas bind:this={storyCanvas} class="journey-model journey-canvas" aria-hidden="true"></canvas>
       {/if}
       <div class="journey-vignette"></div>
 
@@ -475,7 +433,7 @@
         </div>
         <h2 class="chapter-h2">A product suite, across the industries we serve.</h2>
         <p class="chapter-p">Delivered from Hyderabad and the USA — WhatsApp commerce, voice AI, service management and enterprise workflows, built for enterprise and mid-market teams.</p>
-        <a href="#journey" class="chapter-link" onclick={enterExplore}>See all products <span class="mono">→</span></a>
+        <a href="#product-suite" class="chapter-link">See all products <span class="mono">→</span></a>
       </div>
     </div>
   </div>
@@ -589,13 +547,40 @@
         <span class="mono ind-strip-k">Industries we already work in</span>
         <div class="ind-chips">
           {#each industries as ind}
-            <!-- The name is the accessible name and the tooltip; only the mark is drawn. -->
-            <a href={ind.href} class="ind-chip" aria-label={ind.name} title={ind.name}>
+            <!-- The name is real text, revealed on hover and focus. It is also the
+                 link's accessible name, so a screen reader never depends on the mark. -->
+            <a href={ind.href} class="ind-chip">
               <span class="ind-mark" style="--mark:url('{ind.icon}')" aria-hidden="true"></span>
+              <span class="ind-name">{ind.name}</span>
             </a>
           {/each}
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Product suite. Previously the story's final beat, which meant the only way to
+       browse the products was to scroll the story to its end and enter a special mode. -->
+  <div id="product-suite" class="section section-dark-true">
+    <div class="wrap">
+      <div data-reveal class="label-row"><span class="tick"></span><span class="label">The product suite</span></div>
+      <h2 data-reveal class="section-h2">Explore what we have built.</h2>
+      <p data-reveal class="def-p ps-lede">Each one started as a workflow a customer could not get through. Drag to look around, or open any product for the detail.</p>
+      {#if no3D}
+        <ul class="ps-list">
+          {#each products as pr}
+            <li><a href={pr.href}><strong>{pr.name}</strong><span>{pr.desc}</span></a></li>
+          {/each}
+        </ul>
+      {:else}
+        <div data-reveal class="ps-stage">
+          <iframe bind:this={galaxyEl} data-src="galaxy.html?transparent=1&ui=0"
+            title="Interactive product galaxy" loading="lazy" class="ps-frame"></iframe>
+        </div>
+        <ul class="ps-links">
+          {#each products as pr}<li><a href={pr.href}>{pr.name}</a></li>{/each}
+        </ul>
+      {/if}
     </div>
   </div>
 
@@ -755,6 +740,22 @@
   .journey-stage { position: sticky; top: 0; height: 100vh; min-height: 620px; overflow: hidden; cursor: none; background: radial-gradient(100% 100% at 50% 40%, #141414 0%, #0a0a0a 55%, #050505 100%); }
   .journey-stage a { cursor: none; }
   .journey-glow { position: absolute; top: 12%; left: 22%; right: 22%; height: 74%; background: radial-gradient(ellipse at center, rgba(238,47,46,0.09) 0%, rgba(238,47,46,0) 62%); pointer-events: none; }
+  /* Product suite */
+  .ps-lede { max-width: 62ch; margin-bottom: 26px; }
+  .ps-stage { position: relative; height: clamp(380px, 52vh, 560px); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 12px; overflow: hidden; background: #060607; }
+  .ps-frame { width: 100%; height: 100%; border: 0; display: block; }
+  .ps-links { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .ps-links a { display: inline-block; font-size: 14px; color: #f4f2ee; text-decoration: none;
+    border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 16px; transition: background .2s, border-color .2s; }
+  .ps-links a:hover { background: var(--brand-solid, #d81f1e); border-color: var(--brand-solid, #d81f1e); }
+  .ps-list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; }
+  .ps-list a { display: grid; gap: 3px; padding: 14px 16px; text-decoration: none;
+    border: 1px solid rgba(255,255,255,.14); border-radius: 8px; color: #f4f2ee; }
+  .ps-list strong { font-size: 15.5px; }
+  .ps-list span { font-size: 13.5px; color: rgba(244,242,238,.66); }
+
+  .journey-canvas { width: 100%; height: 100%; display: block; }
   .journey-model { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; background: transparent; }
   .journey-flat { overflow: hidden; }
   /* Holds the stage until a scene renders; fades out once one does. */
@@ -883,13 +884,30 @@
   .ind-strip-k { display: block; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
     color: var(--muted); margin-bottom: 14px; }
   .ind-chips { display: flex; flex-wrap: wrap; gap: 10px; }
-  .ind-mark { display: block; width: 26px; height: 26px; background: currentColor;
+  .ind-mark { flex: none; display: block; width: 26px; height: 26px; background: currentColor;
     -webkit-mask: var(--mark) center / contain no-repeat; mask: var(--mark) center / contain no-repeat; }
-  .ind-chip { display: inline-flex; align-items: center; justify-content: center;
-    width: 52px; height: 52px; color: var(--ink); text-decoration: none; background: #fff;
+  /* Collapsed to a 52px circle; the name expands out of it on hover or keyboard focus.
+     Animating grid-template-columns rather than width keeps the text from reflowing
+     as it appears, and max-width on the name stops a long label jumping. */
+  .ind-chip { display: inline-flex; align-items: center; gap: 0;
+    height: 52px; padding: 0 13px; color: var(--ink); text-decoration: none; background: #fff;
     border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px;
     transition: border-color .2s, color .2s, background .2s; }
-  .ind-chip:hover { border-color: #ee2f2e; color: #fff; background: var(--brand-solid, #d81f1e); }
+  .ind-chip:hover, .ind-chip:focus-visible {
+    color: #fff; background: var(--brand-solid, #d81f1e); border-color: var(--brand-solid, #d81f1e); }
+
+  .ind-name { display: block; max-width: 0; overflow: hidden; white-space: nowrap;
+    font-size: 14px; font-weight: var(--w-medium); letter-spacing: -0.005em;
+    opacity: 0; transform: translateX(-4px);
+    transition: max-width .34s cubic-bezier(0.22,1,0.36,1), opacity .22s ease,
+                transform .34s cubic-bezier(0.22,1,0.36,1), margin-left .34s cubic-bezier(0.22,1,0.36,1); }
+  .ind-chip:hover .ind-name, .ind-chip:focus-visible .ind-name {
+    max-width: 220px; opacity: 1; transform: none; margin-left: 10px; }
+
+  /* The expansion is decoration; without it the name is simply always visible. */
+  @media (prefers-reduced-motion: reduce) {
+    .ind-name { max-width: 220px; opacity: 1; transform: none; margin-left: 10px; transition: none; }
+  }
 
   /* FAQ */
   .faq-wrap { display: block; }
