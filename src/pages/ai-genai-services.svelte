@@ -325,7 +325,7 @@
 
   /* Real gaps, borders on the cards. A 1px gap over a background drew the dividers
      but showed as a grey block wherever the last row was not full. */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr);
     gap: 12px; margin-top: 16px; }
   .card { background: #fff; padding: 18px; border: 1px solid var(--line); border-radius: 8px; }
   .card h3 { margin: 0 0 8px; font-size: 16px; font-weight: var(--w-heading); color: var(--ink); }
@@ -337,7 +337,7 @@
   .out span { color: var(--brand); margin-right: 6px; }
 
   .gov { list-style: none; margin: 16px 0 0; padding: 0; display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+    grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .gov li { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 13px 16px; display: flex; gap: 12px; align-items: baseline;
     font-size: 14.5px; color: #40434a; }
   .gov span { font-size: 11px; color: var(--brand); }

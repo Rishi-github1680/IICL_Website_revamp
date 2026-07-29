@@ -125,7 +125,7 @@
   </header>
 
   <div bind:this={bodyEl} class="svc-body">
-    <aside class="svc-index" aria-label="On this page">
+    <nav class="svc-index" aria-label="On this page">
       <div class="idx-inner">
         <p class="idx-title mono">On this page</p>
         <ol>
@@ -139,7 +139,7 @@
           {/each}
         </ol>
       </div>
-    </aside>
+    </nav>
 
     <main id="main" class="svc-content">
       {@render children?.()}
@@ -184,7 +184,6 @@
   .svc-root { --red: #ee2f2e; --ink: #16171a; --muted: #55585e; --line: #e6e3de;
     /* Service pages keep the pre-48px gutter — the sticky index rail already
        indents the content, so the wider site gutter doubled up here. */
-    --wrap-pad: 32px;
     background: #fff; color: var(--ink); font-family: var(--font); min-height: 100vh; }
   .svc-root :global(.mono) { font-family: var(--font-mono); }
   .svc-root :global(.wrap) { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
@@ -205,33 +204,41 @@
     background:
       linear-gradient(90deg, rgba(6,6,6,0.86) 0%, rgba(6,6,6,0.62) 38%, rgba(6,6,6,0.2) 68%, rgba(6,6,6,0.04) 100%),
       linear-gradient(180deg, rgba(6,6,6,0.42) 0%, rgba(6,6,6,0) 24%, rgba(6,6,6,0.5) 100%); }
-  /* Same 220px + 44px offset as .svc-body, so the H1 and the prose below it sit on one
-     rail. Without it the hero copy started 264px left of every section heading. */
   .svc-hero-inner { position: relative; z-index: 2; max-width: var(--wrap-max); width: 100%; margin: 0 auto;
-    padding: 0 var(--wrap-pad) 40px; box-sizing: border-box;
-    display: grid; grid-template-columns: 220px 1fr; gap: 44px; }
-  .svc-hero-inner > * { grid-column: 2; }
+    padding: 0 var(--wrap-pad) 40px; box-sizing: border-box; }
   .svc-kicker { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--red);
     font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 22px; }
   :global(.tick) { width: 22px; height: 2px; background: var(--red); display: inline-block; }
-  .svc-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.035em;
+  .svc-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.03em;
     font-weight: var(--w-light); color: #fff; max-width: 28ch; text-wrap: pretty; text-shadow: 0 2px 30px rgba(0,0,0,0.55); }
   .svc-lede { margin: 16px 0 0; max-width: 66ch; font-weight: var(--w-light); font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.74); }
   .svc-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
 
-  /* ── Body: sticky index rail beside the content column ── */
-  .svc-body { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box;
-    display: grid; grid-template-columns: 220px 1fr; gap: 44px; align-items: start; }
-  .svc-index { position: sticky; top: 84px; padding: 40px 0; }
-  .idx-title { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
-  .svc-index ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
-  .idx-btn { display: flex; gap: 12px; align-items: baseline; width: 100%; text-align: left; background: none;
-    border: 0; border-left: 2px solid transparent; margin-left: -1px; padding: 9px 0 9px 16px; cursor: pointer;
-    font: inherit; font-size: 14px; line-height: 1.4; color: var(--muted); transition: color .2s, border-color .2s; }
-  .idx-btn:hover { color: var(--ink); }
-  .idx-btn.active { color: var(--ink); font-weight: 600; border-left-color: var(--red); }
-  .idx-num { font-size: 11px; color: var(--red); flex: none; }
-  .idx-label { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  /* ── Body: one column at the standard gutter, like every other landing page ── */
+  .svc-body { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
+
+  /* On-page contents as a sticky horizontal strip. It was a 220px left rail, which
+     pushed all content 264px right of every other page on the site. */
+  .svc-index { position: sticky; top: var(--nav-h, 58px); z-index: 5;
+    background: color-mix(in srgb, #fff 92%, transparent); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line); margin: 0 calc(var(--wrap-pad) * -1);
+    padding: 0 var(--wrap-pad); }
+  .idx-inner { display: flex; align-items: center; gap: 18px; overflow-x: auto;
+    scrollbar-width: none; padding: 10px 0; }
+  .idx-inner::-webkit-scrollbar { display: none; }
+  .idx-title { flex: none; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin: 0; }
+  .svc-index ol { flex: 1; list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; }
+  .svc-index li { flex: none; }
+  .idx-btn { display: inline-flex; gap: 8px; align-items: baseline; background: none;
+    border: 1px solid transparent; border-radius: 999px; padding: 7px 14px; cursor: pointer;
+    font: inherit; font-size: 13.5px; line-height: 1.3; color: var(--muted);
+    white-space: nowrap; transition: color .2s, background .2s, border-color .2s; }
+  .idx-btn:hover { color: var(--ink); background: #f4f2ef; }
+  .idx-btn.active { color: #fff; background: var(--red); border-color: var(--red); }
+  .idx-num { font-size: 10.5px; color: var(--red); flex: none; }
+  .idx-btn.active .idx-num { color: rgba(255,255,255,.75); }
+  .idx-label { max-width: 26ch; overflow: hidden; text-overflow: ellipsis; }
 
   /* The column stays full width so split sections keep a usable image, but running
      text inside it is capped to a readable measure. */
@@ -266,7 +273,6 @@
   .cta-big { padding: 18px 38px; }
 
   @media (max-width: 1040px) {
-    .svc-body, .svc-hero-inner { grid-template-columns: 1fr; gap: 0; }
     /* Index becomes a horizontal strip that sticks under the nav. */
     .svc-index { position: sticky; top: 64px; padding: 0; z-index: 20; background: #fff;
       border-bottom: 1px solid var(--line); margin: 0 calc(var(--wrap-pad) * -1);

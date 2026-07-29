@@ -808,7 +808,10 @@
   .def-p { margin: 0; font-size: var(--fs-body); line-height: 1.7; color: #40434a; }
   .proof-pending { color: #55585e; padding-left: 14px; border-left: 2px solid #e6e3de; }
 
-  .outcomes { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  /* One wide row per outcome, each split into condition / response / evidence.
+     Declared explicitly so the shared .outcomes rule cannot impose its own count. */
+  .outcomes { list-style: none; margin: 0; padding: 0; display: grid;
+    grid-template-columns: 1fr; gap: 12px; }
   .outcome { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; display: grid;
     grid-template-columns: minmax(180px, 0.9fr) minmax(200px, 1.2fr) minmax(200px, 1.1fr);
     gap: 6px 24px; align-items: baseline; }

@@ -187,7 +187,7 @@
   .pr-kicker { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--acc);
     font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 20px; }
   .pr-tick { width: 22px; height: 2px; background: var(--acc); display: inline-block; }
-  .pr-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.035em;
+  .pr-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.03em;
     font-weight: var(--w-light); color: #fff; max-width: 28ch; text-wrap: pretty; }
   .pr-lede { margin: 16px 0 0; max-width: 66ch; font-weight: var(--w-light); font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.74); }
   .pr-actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 32px; }

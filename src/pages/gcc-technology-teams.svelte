@@ -368,7 +368,7 @@
   /* Real gaps with a border per card. The 1px-gap-over-background trick drew the
      dividers, but showed as a grey block wherever the last row was not full — six
      cards in a four-column track leave two. */
-  .cond-grid, .dom-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  .cond-grid, .dom-grid { display: grid; grid-template-columns: repeat(3, 1fr);
     gap: 12px; margin-top: 16px; }
   .cond, .dom { background: #fff; padding: 20px; border: 1px solid var(--line); border-radius: 8px; }
   .cond h3, .dom h3 { margin: 0 0 8px; font-size: 16.5px; font-weight: var(--w-heading); color: var(--ink); }
@@ -384,7 +384,7 @@
   .model dd { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
 
   .brief { list-style: none; margin: 16px 0 0; padding: 0;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
      }
   .brief li { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 13px 16px; display: flex; gap: 12px; align-items: baseline;
     font-size: 14.5px; color: #40434a; }

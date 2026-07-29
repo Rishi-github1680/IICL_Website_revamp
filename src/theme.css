@@ -99,10 +99,12 @@ html { scroll-behavior: smooth; }
 /* ── Outcome strip ─────────────────────────────────────────────────────
    Three claims carrying visual weight, so a section can say what changes
    without another six paragraphs. Picks up --acc where a page sets one
-   (product pages), otherwise the brand red. */
+   (product pages), otherwise the brand red. Three across, never four: auto-fit against
+   the full content width was producing four and five cards per row, each too narrow
+   for its own heading. */
 .outcomes {
   list-style: none; margin: 14px 0 0; padding: 0;
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
 }
 .outcome { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 18px; display: grid; gap: 7px; align-content: start; transition: background .22s; }
 .outcome:hover { background: var(--paper-2); }
@@ -251,7 +253,7 @@ img { max-width: 100%; }
   background: color-mix(in srgb, #ee2f2e 4%, transparent); border-radius: 0 6px 6px 0; }
 
 .pathlist { list-style: none; margin: 16px 0 0; padding: 0;
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .pathlist li { background: #fff; border: 1px solid var(--line); border-radius: 8px;
   padding: 16px 18px; display: grid; gap: 5px; }
 .pathlist a { font-size: 15.5px; font-weight: var(--w-heading); color: var(--ink); text-decoration: none; }
@@ -261,3 +263,12 @@ img { max-width: 100%; }
 @media (max-width: 700px) {
   .sysrow { grid-template-columns: 1fr; gap: 4px; }
 }
+
+/* ── Three-across content grids ────────────────────────────────────────
+   Card grids on content pages cap at three per row. auto-fit against the full content
+   width was producing four and five, which left each card too narrow for its own
+   heading and made part-filled rows look like a mistake. Journal and rail layouts are
+   deliberately excluded — they set their own counts. */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (max-width: 1040px) { .grid-3, .pathlist, .outcomes { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 660px)  { .grid-3, .pathlist, .outcomes { grid-template-columns: 1fr; } }

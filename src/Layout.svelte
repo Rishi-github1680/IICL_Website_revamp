@@ -222,7 +222,8 @@
   .page-root { --red: #ee2f2e; --ink: #16171a; --muted: #55585e; --line: #e6e3de;
     background: #fff; color: var(--ink); font-family: var(--font); min-height: 100vh; }
   /* Industry pages run their grids tighter to the edge than the rest of the site. */
-  .page-root.industry { --wrap-pad: 32px; }
+  /* No industry gutter override: the wider grids it existed for are capped at three
+     across now, and it left industry pages starting 16px left of every other page. */
   .page-root :global(.mono) { font-family: var(--font-mono); }
   .page-root :global(.wrap) { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
 
@@ -297,7 +298,7 @@
   .page-kicker { display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
     color: var(--red); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 16px; }
   :global(.tick) { width: 22px; height: 2px; background: var(--red); display: inline-block; }
-  .page-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.035em; font-weight: 600; color: #fff; max-width: 28ch; text-wrap: pretty; text-shadow: 0 2px 30px rgba(0,0,0,0.5); }
+  .page-h1 { margin: 0; font-size: var(--fs-h1); line-height: 1.08; letter-spacing: -0.03em; font-weight: var(--w-light); color: #fff; max-width: 28ch; text-wrap: pretty; text-shadow: 0 2px 30px rgba(0,0,0,0.5); }
   .page-lede { margin: 16px 0 0; max-width: 66ch; font-weight: var(--w-light); font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.72); }
   .page-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
 

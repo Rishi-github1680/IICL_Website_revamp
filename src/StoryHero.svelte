@@ -158,10 +158,10 @@
     text-align: center; padding: 80px var(--wrap-pad) 0; }
   .sh-eyebrow { display: flex; align-items: center; gap: 12px; font-size: 11.5px; letter-spacing: .24em;
     text-transform: uppercase; color: rgba(243,243,244,.66); margin-bottom: 24px; }
-  .sh-h1 { margin: 0 0 26px; font-size: var(--fs-h1); line-height: 1.1; letter-spacing: -.025em;
-    font-weight: var(--w-heading); max-width: 22ch; color: #fff; text-wrap: pretty;
+  .sh-h1 { margin: 0 0 26px; font-size: var(--fs-h1); line-height: 1.1; letter-spacing: -.03em;
+    font-weight: var(--w-light); max-width: 22ch; color: #fff; text-wrap: pretty;
     text-shadow: 0 2px 40px rgba(0,0,0,.8); }
-  .sh-lede { margin: 0 0 30px; font-size: var(--fs-body); line-height: 1.65; color: rgba(243,243,244,.7);
+  .sh-lede { margin: 0 0 30px; font-weight: var(--w-light); font-size: var(--fs-body); line-height: 1.65; color: rgba(243,243,244,.7);
     max-width: 54ch; text-wrap: pretty; text-shadow: 0 1px 20px rgba(0,0,0,.9); }
   /* The caller's buttons need to be clickable through the non-interactive panel. */
   .sh-hero :global(a), .sh-hero :global(button) { pointer-events: auto; }
@@ -175,8 +175,8 @@
   .sh-kicker { display: inline-flex; align-items: center; gap: 12px; font-size: 11.5px; letter-spacing: .22em;
     text-transform: uppercase; color: rgba(243,243,244,.66); margin-bottom: 12px; }
   .sh-h2 { margin: 0; font-size: var(--fs-h2); line-height: 1.14; letter-spacing: -.02em;
-    font-weight: var(--w-heading); color: #fff; text-wrap: pretty; text-shadow: 0 2px 30px rgba(0,0,0,.9); }
-  .sh-note { margin: 13px 0 0; font-size: 15px; line-height: 1.65; color: rgba(243,243,244,.66);
+    font-weight: var(--w-body); color: #fff; text-wrap: pretty; text-shadow: 0 2px 30px rgba(0,0,0,.9); }
+  .sh-note { margin: 13px 0 0; font-weight: var(--w-light); font-size: 15px; line-height: 1.65; color: rgba(243,243,244,.66);
     max-width: 46ch; text-shadow: 0 1px 18px rgba(0,0,0,.9); }
   .sh-line.right .sh-note { margin-left: auto; }
 
