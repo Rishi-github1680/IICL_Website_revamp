@@ -115,7 +115,20 @@
     // A scene announces its first rendered frame; until then the backdrop holds.
     let readyTimer = 0;
     const onReady = (e) => {
-      if (e.data?.iiclReady) { modelReady = true; clearTimeout(readyTimer); }
+      if (!e.data?.iiclReady) return;
+      modelReady = true;
+      clearTimeout(readyTimer);
+      // The scene that just booted missed every message posted while it was still
+      // loading — including the scatter state that makes it a cloud rather than a
+      // formed model. Identify it by source and replay its current state, so it joins
+      // the story exactly where the scroll says it should be.
+      for (const el of [m1El, m2El, m3El, m4El]) {
+        if (el && e.source === el.contentWindow) {
+          if (el._scatter !== undefined) postTo(el, { iiclScatter: el._scatter });
+          if (el._zoom !== undefined) postTo(el, { iiclZoom: el._zoom });
+          if (el._pause !== undefined) postTo(el, { iiclPause: el._pause });
+        }
+      }
     };
     if (!no3D) {
       window.addEventListener('message', onReady);
@@ -193,6 +206,15 @@
     // grain-by-grain in random order (and dissolve out the same way), in step with the models.
     for (const chEl of [ch1El, ch2El, ch3El, ch4El]) {
       if (!chEl) continue;
+      // The text used to arrive as one block, which read as a popup beside the model.
+      // Staggered, it reads as narration: the kicker leads, the headline condenses,
+      // the body follows, the link lands last. On the way out it reverses — the
+      // details leave before the title does.
+      chEl._cascade = [
+        { el: chEl.querySelector('.chapter-eyebrow'), th: 0.02 },
+        { el: chEl.querySelector('.chapter-p'), th: 0.45 },
+        { el: chEl.querySelector('.chapter-link'), th: 0.62 },
+      ].filter((c) => c.el);
       const h = chEl.querySelector('.chapter-h2');
       if (!h) continue;
       const letters = [];
@@ -261,7 +283,7 @@
       for (const p of panels()) {
         // Ramp deliberately shorter than half the window, so every chapter has a
         // plateau where it is fully opaque and readable rather than always fading.
-        const RAMP = 0.035;
+        const RAMP = 0.045;
         const inE = smooth((J - p.w0) / RAMP);
         const outE = 1 - smooth((J - (p.w1 - RAMP)) / RAMP);
         const o = ease(p.el, Math.max(0, Math.min(inE, outE)), 10.5);
@@ -271,6 +293,14 @@
           ? 'translateY(calc(-50% + ' + drift + 'px))'
           : 'translateY(' + drift + 'px)';
         p.el.style.visibility = o < 0.02 ? 'hidden' : 'visible';
+        if (p.el._cascade && o > 0.001) {
+          for (const c of p.el._cascade) {
+            const co = Math.max(0, Math.min(1, (o - c.th) / 0.3));
+            const ce = co * co * (3 - 2 * co);
+            c.el.style.opacity = ce.toFixed(2);
+            c.el.style.transform = 'translateY(' + ((1 - ce) * 8).toFixed(1) + 'px)';
+          }
+        }
         // Particle dissolve: each letter condenses at its own point of the fade ramp — no movement.
         if (p.el._letters && o > 0.001) {
           for (const L of p.el._letters) {
@@ -440,9 +470,9 @@
           <Backdrop label="Enterprise AI, illustrated" />
         </div>
         <iframe bind:this={m1El} data-src="hologram.html?transparent=1&ui=0" title="AI brain hologram 3D model" loading="lazy" class="journey-model" style="opacity:1;"></iframe>
-        <iframe bind:this={m2El} data-src="voice-agent.html?transparent=1&ui=0" title="AI voice agent 3D model" class="journey-model" style="opacity:0;"></iframe>
-        <iframe bind:this={m3El} data-src="data-stream.html?transparent=1&ui=0" title="Global delivery stream 3D model" class="journey-model" style="opacity:0;"></iframe>
-        <iframe bind:this={m4El} data-src="galaxy.html?transparent=1&ui=0" title="Product galaxy 3D model" class="journey-model" style="opacity:0;"></iframe>
+        <iframe bind:this={m2El} data-src="voice-agent.html?transparent=1&ui=0&scatter=1" title="AI voice agent 3D model" class="journey-model" style="opacity:0;"></iframe>
+        <iframe bind:this={m3El} data-src="data-stream.html?transparent=1&ui=0&scatter=1" title="Global delivery stream 3D model" class="journey-model" style="opacity:0;"></iframe>
+        <iframe bind:this={m4El} data-src="galaxy.html?transparent=1&ui=0&scatter=1" title="Product galaxy 3D model" class="journey-model" style="opacity:0;"></iframe>
       {/if}
       <div class="journey-vignette"></div>
 

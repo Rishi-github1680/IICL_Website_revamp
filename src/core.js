@@ -199,7 +199,10 @@ export function createStage({
   let visible = true;
 
   // Host page (hero) drives disperse/re-form, pause and scroll-zoom via postMessage.
-  let scatter = 0;
+  // Journey scenes boot dispersed (?scatter=1): the parent's first iiclScatter message
+  // usually races the listener and is lost, and a scene that boots formed then pops in
+  // as a complete shape at its boundary instead of condensing out of the cloud.
+  let scatter = params.get("scatter") === "1" ? 1 : 0;
   let paused = false;
   let zoomT = 0;
   let zoomActive = false; // only dolly when the journey drives us — never fight manual OrbitControls zoom
