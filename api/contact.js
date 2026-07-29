@@ -9,23 +9,18 @@
 // Until RESEND_API_KEY is set the endpoint returns 503 and the form tells the
 // visitor to email reachus@iicl.in directly, so no enquiry is silently lost.
 
+import { REQUIREMENTS, INTENT_KEYS as APPROVED_INTENTS } from "../src/intents.js";
+
 const MAX = { name: 120, company: 160, email: 200, phone: 40, requirement: 80, message: 4000 };
 
 // Approved contact intents (Spec F3). Anything not on this list is discarded rather
 // than echoed — the parameter is attacker-controlled and must never reach an email
 // subject, a log line or a downstream system as free text.
-const INTENT_KEYS = new Set([
-  "ai-discovery-workshop",
-  "enterprise-ai-use-case",
-  "gcc-team-expansion",
-  "gcc-capability-requirement",
-  "agentic-ai-workflow-assessment",
-  "agentic-ai-architecture",
-  "agentic-ai-proof-of-value",
-  "agentic-ai-security-assessment",
-  "agentic-ai-value-assessment",
-  "agentic-ai-managed-operations",
-]);
+// Both allowlists come from the same module the form renders, so a value the form can
+// offer is always a value the endpoint accepts, and nothing else is.
+const REQUIREMENT_VALUES = new Set(REQUIREMENTS);
+
+const INTENT_KEYS = APPROVED_INTENTS;
 
 // Coarse in-memory rate limit: a serverless instance handles many requests before it
 // is recycled, so this stops the obvious flood without any external dependency. It is
@@ -90,6 +85,10 @@ export default async function handler(req, res) {
   if (!looksLikeEmail(data.email)) {
     return res.status(400).json({ error: "That email address does not look right." });
   }
+  // Enforced, not assumed — this value goes into the email subject.
+  if (!REQUIREMENT_VALUES.has(data.requirement)) {
+    return res.status(400).json({ error: "Please choose an enquiry type from the list." });
+  }
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -128,12 +127,18 @@ export default async function handler(req, res) {
     });
 
     if (!send.ok) {
-      console.error("Resend rejected the enquiry:", send.status, await send.text());
+      // Status and provider response only. The enquiry payload is never logged.
+      console.error(JSON.stringify({ evt: "contact.send_failed", status: send.status,
+                                     provider: await send.text() }));
       return res.status(502).json({ error: "We could not send that just now." });
     }
+    // Success signal for monitoring. Intent and requirement are both allowlisted
+    // values, so neither can carry visitor-supplied text.
+    console.log(JSON.stringify({ evt: "contact.sent", intent: intent || "none",
+                                 requirement: data.requirement }));
     return res.status(200).json({ ok: true });
   } catch (err) {
-    console.error("Contact form failed:", err);
+    console.error(JSON.stringify({ evt: "contact.error", message: String(err && err.message) }));
     return res.status(500).json({ error: "We could not send that just now." });
   }
 }

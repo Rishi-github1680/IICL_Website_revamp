@@ -116,7 +116,7 @@
       <section class="page-section faq-section">
         <div class="wrap">
           <h2 class="section-h"><span class="tick"></span>Common questions</h2>
-          <div class="faq-list">
+          <div class="faq-list" class:faq-2col={faqs.length > 5}>
             {#each faqs as f}
               <details class="faq-item" name="faq">
                 <summary class="faq-q">{f.q}<span class="faq-mark" aria-hidden="true"></span></summary>

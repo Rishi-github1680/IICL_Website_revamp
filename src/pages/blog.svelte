@@ -11,6 +11,12 @@
   import ArticleGrid from '../ArticleGrid.svelte';
   import { POSTS } from '../posts.js';
 
+  // Two hubs rather than one list: a guide answers "how do I do this", a field note
+  // records what we learned doing it. The audit asked for them separated and for
+  // representative workflows labelled as guides rather than deployments.
+  const GUIDES = POSTS.filter((p) => p.kind === 'guide');
+  const NOTES = POSTS.filter((p) => p.kind !== 'guide');
+
   const CATS = ['All', ...new Set(POSTS.map((p) => p.category))];
   let active = $state('All');
   const filtered = $derived(active === 'All' ? POSTS : POSTS.filter((p) => p.category === active));
@@ -53,12 +59,27 @@
     </MirrorHall>
   </section>
 
-  <!-- Every article as a grid too, so the full set is reachable without dragging. -->
-  <section class="page-section">
-    <div class="wrap">
-      <ArticleGrid posts={filtered} featured={false} kicker="All articles" heading={active === 'All' ? 'Everything in the journal' : active} />
-    </div>
-  </section>
+  <!-- Two hubs. Filtering narrows both; an empty hub hides itself. -->
+  {#if filtered.filter((p) => p.kind === 'guide').length}
+    <section class="page-section">
+      <div class="wrap">
+        <ArticleGrid posts={filtered.filter((p) => p.kind === 'guide')} featured={false}
+          kicker="Implementation guides"
+          heading="How to approach the decision" />
+        <p class="para hub-note">Guides describe how we would approach a problem and what has to be true for it to work. They are not accounts of a specific customer deployment &mdash; those are the <a href="/use-cases">use cases</a>.</p>
+      </div>
+    </section>
+  {/if}
+
+  {#if filtered.filter((p) => p.kind !== 'guide').length}
+    <section class="page-section">
+      <div class="wrap">
+        <ArticleGrid posts={filtered.filter((p) => p.kind !== 'guide')} featured={false}
+          kicker="Field notes"
+          heading="What the work actually involves" />
+      </div>
+    </section>
+  {/if}
 
   <section class="page-section shade">
     <div class="wrap">
@@ -103,6 +124,7 @@
   .topics strong { font-size: 15px; font-weight: var(--w-heading); color: var(--ink); }
   .topics span { font-size: 14px; line-height: 1.55; color: #40434a; }
 
+  .hub-note { margin-top: 18px; max-width: 74ch; font-size: var(--fs-small); color: var(--muted); }
   .inline-cta { color: var(--brand-ink); font-weight: var(--w-medium); text-decoration: none; }
   .inline-cta:hover { text-decoration: underline; }
 </style>

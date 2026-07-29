@@ -35,10 +35,22 @@
       { label: 'Home', href: '/' },
       { label: 'About IICL', href: '/aboutus' },
       { label: 'Careers', href: '/careers' },
+      { label: 'GCC Careers', href: '/gcc-careers' },
+      { label: 'Contract and engagement models', href: '/contracts' },
       { label: 'Contact', href: '/contactus' },
       { label: 'Privacy Policy', href: '/privacy-policy' },
     ]) },
   ].filter((g) => g.links.length);
+
+  // Anything indexable that none of the groups above picked up. Without this the
+  // human sitemap silently drifts from sitemap.xml every time a route is added.
+  const listed = new Set(GROUPS.flatMap((g) => g.links.map((l) => l.href.split('#')[0])));
+  const missed = PAGES
+    .filter((p) => (p.kind === 'home' || p.kind === 'page') && p.index !== false)
+    .map((p) => ({ label: p.title.replace(/ \| IICL.*$/, '').replace(/ - IICL.*$/, ''),
+                   href: p.slug === 'index' ? '/' : '/' + p.slug }))
+    .filter((l) => !listed.has(l.href));
+  if (missed.length) GROUPS.push({ title: 'Other pages', links: missed });
 </script>
 
 <Layout

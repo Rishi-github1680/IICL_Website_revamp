@@ -285,3 +285,16 @@ img { max-width: 100%; }
   font-family: var(--font-mono); font-size: 12px; color: var(--brand-ink); }
 .stagelist strong { font-size: 15.5px; font-weight: var(--w-heading); color: var(--ink); }
 .stagelist span { font-size: 14.5px; line-height: 1.6; color: #40434a; }
+
+/* ── Two-column FAQ ────────────────────────────────────────────────────
+   Past five questions a single column makes the reader scroll through answers that do
+   not apply to them. Two columns use width the page already has. `name="faq"` keeps
+   single-open behaviour across both columns, since the browser scopes it to the name,
+   not the container. */
+@media (min-width: 900px) {
+  .faq-2col { max-width: none; display: grid; grid-template-columns: 1fr 1fr;
+    column-gap: 40px; align-content: start; border-top: 0; }
+  /* Each column needs its own top rule, which the shared border-top cannot provide. */
+  .faq-2col > .faq-item:first-child,
+  .faq-2col > .faq-item:nth-child(2) { border-top: 1px solid var(--line); }
+}

@@ -4,7 +4,7 @@
 
 export const POSTS = [
   {
-    href: '/blog-ivaak-ai',
+    href: '/blog-ivaak-ai', kind: 'guide',
     title: 'How AI voice agents are changing customer engagement',
     category: 'AI Voice Agents',
     readTime: '7 min read',
@@ -13,7 +13,7 @@ export const POSTS = [
     alt: 'iVaak AI voice agents handling customer conversations',
   },
   {
-    href: '/blog-trufix-ai',
+    href: '/blog-trufix-ai', kind: 'guide',
     title: "Why a “Resolved” ticket often isn't",
     category: 'IT Support & Automation',
     readTime: '8 min read',
@@ -22,7 +22,7 @@ export const POSTS = [
     alt: 'TruFix AI verifying an IT ticket resolution',
   },
   {
-    href: '/blog-iwac-ai',
+    href: '/blog-iwac-ai', kind: 'guide',
     title: 'Running sales and support on WhatsApp',
     category: 'WhatsApp & AI Chatbots',
     readTime: '6 min read',
@@ -31,7 +31,7 @@ export const POSTS = [
     alt: 'iWac AI handling WhatsApp business engagement',
   },
   {
-    href: '/blog-choosing-processes',
+    href: '/blog-choosing-processes', kind: 'guide',
     title: 'How to choose the first process to automate',
     category: 'Adopting AI',
     readTime: '6 min read',
@@ -40,7 +40,7 @@ export const POSTS = [
     alt: 'Layered neural network resolving to a single output',
   },
   {
-    href: '/blog-human-in-the-loop',
+    href: '/blog-human-in-the-loop', kind: 'guide',
     title: 'Where a person has to stay in the loop',
     category: 'Adopting AI',
     readTime: '7 min read',
@@ -49,7 +49,7 @@ export const POSTS = [
     alt: 'Orchestrator directing specialist agents in orbit',
   },
   {
-    href: '/blog-ai-integration-reality',
+    href: '/blog-ai-integration-reality', kind: 'note',
     title: 'What AI integration actually involves',
     category: 'Engineering',
     readTime: '8 min read',

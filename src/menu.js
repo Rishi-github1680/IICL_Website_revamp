@@ -53,7 +53,7 @@ export const INSIGHTS = [
 
 export const COMPANY_LINKS = [
   { label: 'About IICL', href: '/aboutus', icon: '/img/nav-about.svg' },
-  { label: 'Contracts', href: '/contracts', icon: '/img/nav-contracts.svg' },
+  { label: 'Careers', href: '/careers', icon: '/img/nav-careers.svg' },
 ];
 
 // Talent. Spec B3/G3: "Do not use IT Staff Augmentation as the only top-level label

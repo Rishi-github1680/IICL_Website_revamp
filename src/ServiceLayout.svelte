@@ -150,7 +150,7 @@
         <section class="page-section faq-section">
           <div class="wrap">
             <h2 class="section-h"><span class="tick"></span>Common questions</h2>
-            <div class="faq-list">
+            <div class="faq-list" class:faq-2col={faqs.length > 5}>
               {#each faqs as f}
                 <details class="faq-item" name="faq">
                   <summary class="faq-q">{f.q}<span class="faq-mark" aria-hidden="true"></span></summary>
@@ -214,33 +214,27 @@
   .svc-lede { margin: 16px 0 0; max-width: 66ch; font-weight: var(--w-light); font-size: var(--fs-body); line-height: 1.65; color: rgba(244,242,238,0.74); }
   .svc-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
 
-  /* ── Body: one column at the standard gutter, like every other landing page ── */
-  .svc-body { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box; }
+  /* ── Body: content on the standard gutter, index rail to its right ──
+     The rail used to sit on the left, which pushed the H1 and every section 264px
+     right of every other landing page. On the right it costs the content nothing. */
+  .svc-body { max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--wrap-pad); box-sizing: border-box;
+    display: grid; grid-template-columns: minmax(0, 1fr) 216px; gap: 48px; align-items: start; }
+  /* DOM order keeps the nav before <main> for screen readers and the skip link;
+     the grid places it visually to the right. */
+  .svc-index { grid-column: 2; grid-row: 1; position: sticky; top: calc(var(--nav-h, 58px) + 24px); padding: 40px 0; }
+  .svc-content { grid-column: 1; grid-row: 1; }
 
-  /* On-page contents as a sticky horizontal strip. It was a 220px left rail, which
-     pushed all content 264px right of every other page on the site. */
-  .svc-index { position: sticky; top: var(--nav-h, 58px); z-index: 5;
-    /* Opaque: a translucent strip let whatever scrolled behind it decide the
-       contrast of its own labels. */
-    background: #fff;
-    border-bottom: 1px solid var(--line); margin: 0 calc(var(--wrap-pad) * -1);
-    padding: 0 var(--wrap-pad); }
-  .idx-inner { display: flex; align-items: center; gap: 18px; overflow-x: auto;
-    scrollbar-width: none; padding: 10px 0; }
-  .idx-inner::-webkit-scrollbar { display: none; }
-  .idx-title { flex: none; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--muted); margin: 0; }
-  .svc-index ol { flex: 1; list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; }
-  .svc-index li { flex: none; }
-  .idx-btn { display: inline-flex; gap: 8px; align-items: baseline; background: none;
-    border: 1px solid transparent; border-radius: 999px; padding: 7px 14px; cursor: pointer;
-    font: inherit; font-size: 13.5px; line-height: 1.3; color: var(--muted);
-    white-space: nowrap; transition: color .2s, background .2s, border-color .2s; }
-  .idx-btn:hover { color: var(--ink); background: #f4f2ef; }
-  .idx-btn.active { color: #fff; background: var(--brand-solid); border-color: var(--red); }
+  .idx-title { font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 14px; }
+  .svc-index ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .idx-btn { display: flex; gap: 10px; align-items: baseline; width: 100%; text-align: left;
+    background: none; border: 0; border-left: 2px solid transparent; margin-left: -1px;
+    padding: 8px 0 8px 14px; cursor: pointer; font: inherit; font-size: 13.5px; line-height: 1.4;
+    color: var(--muted); transition: color .2s, border-color .2s; }
+  .idx-btn:hover { color: var(--ink); }
+  .idx-btn.active { color: var(--ink); font-weight: var(--w-medium); border-left-color: var(--brand); }
   .idx-num { font-size: 10.5px; color: var(--brand-ink); flex: none; }
-  .idx-btn.active .idx-num { color: rgba(255,255,255,.75); }
-  .idx-label { max-width: 26ch; overflow: hidden; text-overflow: ellipsis; }
+  .idx-label { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
   /* The column stays full width so split sections keep a usable image, but running
      text inside it is capped to a readable measure. */
@@ -281,7 +275,7 @@
       /* A grid item defaults to min-width:auto, so the rail grew to fit its own
          content and overflow-x had nothing to clip. This lets it scroll instead. */
       min-width: 0; }
-    .idx-inner { overflow-x: auto; padding: 12px var(--wrap-pad); }
+  .idx-inner { display: block; }
     .idx-title { display: none; }
     .svc-index ol { display: flex; gap: 6px; border-left: 0; }
     .idx-btn { width: auto; white-space: nowrap; border-left: 0; border-bottom: 2px solid transparent;
@@ -303,5 +297,10 @@
      white-space: nowrap turned that into a horizontal scrollbar. Let it wrap. */
   @media (max-width: 560px) {
     .cta, .cta-big { white-space: normal; max-width: 100%; padding: 14px 22px; font-size: 15px; text-align: center; }
+  }
+
+  @media (max-width: 1080px) {
+    .svc-body { grid-template-columns: 1fr; gap: 0; }
+    .svc-index { display: none; }
   }
 </style>
