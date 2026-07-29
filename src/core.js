@@ -208,6 +208,80 @@ export function createStage({
   let zoomActive = false; // only dolly when the journey drives us — never fight manual OrbitControls zoom
   let exploreMode = false; // a model's own explore UI has taken the camera — stand down
   const baseDist = camera.position.distanceTo(controls.target);
+
+  // ── Transition veil ──────────────────────────────────────────────────
+  // A storm of ember grains that exists only while the scene is dispersed, identical
+  // in look across scenes because it is drawn by the stage, not the model. This is
+  // what mesh-only scenes (the voice orb has no particles of its own) dissolve into —
+  // without it their handoff is a cloud fading against a swelling solid.
+  const veilMat = (() => {
+    const count = isLowPower ? 420 : 900;
+    const geo = new THREE.BufferGeometry();
+    const pos = new Float32Array(count * 3);
+    const aR = new Float32Array(count), aY = new Float32Array(count);
+    const aSpeed = new Float32Array(count), aPhase = new Float32Array(count);
+    for (let i = 0; i < count; i++) {
+      aR[i] = baseDist * (0.26 + Math.random() * 0.30);
+      aY[i] = (Math.random() * 2 - 1) * baseDist * 0.24;
+      aSpeed[i] = 0.05 + Math.random() * 0.16;
+      aPhase[i] = Math.random() * Math.PI * 2;
+    }
+    geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute("aR", new THREE.BufferAttribute(aR, 1));
+    geo.setAttribute("aY", new THREE.BufferAttribute(aY, 1));
+    geo.setAttribute("aSpeed", new THREE.BufferAttribute(aSpeed, 1));
+    geo.setAttribute("aPhase", new THREE.BufferAttribute(aPhase, 1));
+    const mat = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      uniforms: {
+        uScatter: { value: 0 },
+        uTime: { value: 0 },
+        // Size scales with camera distance so the grains render at a similar pixel
+        // size in every scene, near or far.
+        uSize: { value: (isLowPower ? 0.05 : 0.045) * Math.min(window.devicePixelRatio, 1.8) * baseDist },
+        uOpacity: { value: 0.55 },
+      },
+      vertexShader: `
+        uniform float uScatter;
+        uniform float uTime;
+        uniform float uSize;
+        attribute float aR;
+        attribute float aY;
+        attribute float aSpeed;
+        attribute float aPhase;
+        varying float vA;
+        void main() {
+          float ang = aPhase + uTime * aSpeed + uScatter * 1.4;
+          vec3 p = vec3(cos(ang) * aR, aY + sin(uTime * 0.6 + aPhase * 3.0) * aR * 0.08, sin(ang) * aR);
+          vA = smoothstep(0.12, 0.8, uScatter)
+             * (0.6 + 0.4 * (0.5 + 0.5 * sin(uTime * 1.7 + aPhase * 9.0)));
+          vec4 mv = viewMatrix * modelMatrix * vec4(p, 1.0);
+          gl_PointSize = uSize * (330.0 / max(1.0, -mv.z));
+          gl_Position = projectionMatrix * mv;
+        }
+      `,
+      fragmentShader: `
+        uniform float uOpacity;
+        varying float vA;
+        void main() {
+          vec2 c = gl_PointCoord - vec2(0.5);
+          float d = length(c);
+          if (d > 0.5) discard;
+          float glow = smoothstep(0.5, 0.0, d);
+          float core = smoothstep(0.14, 0.0, d);
+          vec3 col = vec3(1.0, 0.30, 0.22) * (1.0 + core * 1.6);
+          gl_FragColor = vec4(col, (glow * 0.7 + core) * uOpacity * vA);
+        }
+      `,
+    });
+    const pts = new THREE.Points(geo, mat);
+    pts.frustumCulled = false;
+    scene.add(pts);
+    return mat;
+  })();
+
   window.addEventListener("message", (event) => {
     const data = event.data || {};
     if (typeof data.iiclScatter === "number") scatter = data.iiclScatter;
@@ -276,7 +350,10 @@ export function createStage({
       mat.uniforms.uRepel.value = repel;
       mat.uniforms.uScatter.value = s;
       mat.uniforms.uTime.value = elapsed;
+      if (mat.uniforms.uNeb) mat.uniforms.uNeb.value = baseDist;
     }
+    veilMat.uniforms.uScatter.value = s;
+    veilMat.uniforms.uTime.value = elapsed;
     for (const update of updaters) update(elapsed, delta);
     composer.render();
     // Tell the host page the moment there is something real on screen. Until this
@@ -318,6 +395,9 @@ export function createParticleMaterial({
       uRepel: { value: 0 },
       uScatter: { value: 0 },
       uTime: { value: 0 },
+      // Camera distance of the owning scene: the storm's radius scales with it, so the
+      // dispersed cloud fills a similar fraction of the screen in every scene.
+      uNeb: { value: 6 },
     },
     vertexColors: true,
     vertexShader: `
@@ -326,6 +406,7 @@ export function createParticleMaterial({
       uniform float uRepel;
       uniform float uScatter;
       uniform float uTime;
+      uniform float uNeb;
       varying vec3 vColor;
       varying float vFade;
       void main() {
@@ -355,8 +436,18 @@ export function createParticleMaterial({
             cos(uTime * 1.5 + h2 * 6.283),
             sin(uTime * 1.2 + h3 * 6.283)
           ) * g * 0.16;
+          // The universal storm. Escaped grains do not stay in the silhouette of the
+          // model they left — they converge on the SAME slow ember vortex every scene
+          // shares (radius set by the scene's own camera distance). Fully dispersed,
+          // every model IS this storm, so a handoff swaps two identical clouds and the
+          // eye reads one substance condensing into the next shape.
+          float na = h1 * 6.28318 + uTime * (0.06 + h2 * 0.10) + uScatter * 1.4;
+          float nr = uNeb * (0.30 + h3 * 0.26);
+          vec3 storm = vec3(cos(na) * nr, (h2 * 2.0 - 1.0) * uNeb * 0.22, sin(na) * nr);
+          wp.xyz = mix(wp.xyz, storm, g * g * 0.9);
+          vColor = mix(vColor, vec3(1.0, 0.30, 0.22), g * g * 0.85);
         }
-        vFade = 1.0 - g * (0.45 + h2 * 0.3);
+        vFade = 1.0 - g * (0.30 + h2 * 0.22);
         vec4 mvPosition = viewMatrix * wp;
         gl_PointSize = uSize * (330.0 / max(1.0, -mvPosition.z)) * (1.0 - g * 0.35);
         gl_Position = projectionMatrix * mvPosition;
