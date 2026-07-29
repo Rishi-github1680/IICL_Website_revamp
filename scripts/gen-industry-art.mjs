@@ -190,6 +190,52 @@ const S = (id) => `url(#stroke-${id})`;
 const B = (id) => `filter="url(#bloom-${id})"`;
 
 const MOTIF = {
+
+  careers: (r, id) => {
+    // Capability domains -> role scorecard -> mobilised pod.
+    const CX = 1040, CY = 450;
+    const dom = ["AI &amp; GENAI", "DATA", "CLOUD &amp; SRE", "SECURITY", "PRODUCT", "PLATFORMS"];
+    const rows = dom.map((d, i) => {
+      const y = 250 + i * 68;
+      return `<g opacity="${n(0.9 - i * 0.05)}">
+        <rect x="640" y="${y - 17}" width="196" height="34" rx="6" fill="none" stroke="${C.red}" stroke-width="2" opacity=".5"/>
+        <circle cx="662" cy="${y}" r="4" fill="${C.ember}"/>
+        <text x="678" y="${y + 4}" font-family="IBM Plex Mono, monospace" font-size="12" letter-spacing="1.4" fill="${C.ember}" opacity=".85">${d}</text>
+        <path d="M836 ${y} C 900 ${y}, 930 ${CY}, ${CX - 116} ${CY}" fill="none" stroke="${C.red}" stroke-width="2.2" opacity="${n(0.5 - i * 0.03)}"/>
+      </g>`;
+    }).join("");
+
+    // Role satellites around the scorecard core.
+    const sat = [];
+    for (let i = 0; i < 8; i++) {
+      const a = -Math.PI / 2 + (i / 8) * Math.PI * 2;
+      const sx = CX + Math.cos(a) * 172, sy = CY + Math.sin(a) * 172;
+      sat.push(`<line x1="${n(CX + Math.cos(a) * 118)}" y1="${n(CY + Math.sin(a) * 118)}" x2="${n(sx - Math.cos(a) * 15)}" y2="${n(sy - Math.sin(a) * 15)}" stroke="${C.red}" stroke-width="2" opacity=".42"/>`);
+      sat.push(`<circle cx="${n(sx)}" cy="${n(sy)}" r="14" fill="${C.base}" stroke="${C.red}" stroke-width="2.2" opacity=".8"/>`);
+      sat.push(`<circle cx="${n(sx)}" cy="${n(sy)}" r="4" fill="${C.ember}" ${B(id)}/>`);
+    }
+
+    // The assembled pod: five seats filling up.
+    const pod = [];
+    for (let i = 0; i < 5; i++) {
+      const y = 316 + i * 52;
+      pod.push(`<rect x="1330" y="${y}" width="176" height="36" rx="6" fill="none" stroke="${C.red}" stroke-width="2" opacity="${n(0.78 - i * 0.1)}"/>`);
+      pod.push(`<circle cx="1352" cy="${y + 18}" r="4.5" fill="${C.ember}" opacity="${n(0.95 - i * 0.14)}" ${B(id)}/>`);
+      pod.push(`<rect x="1368" y="${y + 15}" width="${n(112 - i * 13)}" height="5" rx="2.5" fill="${C.red}" opacity="${n(0.6 - i * 0.08)}"/>`);
+      pod.push(`<path d="M${n(CX + 190)} ${CY} C 1240 ${CY}, 1280 ${y + 18}, 1330 ${y + 18}" fill="none" stroke="${C.red}" stroke-width="1.8" opacity="${n(0.42 - i * 0.05)}"/>`);
+    }
+
+    return `
+      ${rows}
+      <circle cx="${CX}" cy="${CY}" r="118" fill="none" stroke="${S(id)}" stroke-width="5" opacity=".9" ${B(id)}/>
+      <circle cx="${CX}" cy="${CY}" r="152" fill="none" stroke="${C.red}" stroke-width="2.2" opacity=".38" stroke-dasharray="5 13"/>
+      <text x="${CX}" y="${CY - 4}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" letter-spacing="2.6" fill="${C.ember}">ROLE</text>
+      <text x="${CX}" y="${CY + 18}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" letter-spacing="2.6" fill="${C.ember}">SCORECARD</text>
+      ${sat.join("")}
+      <rect x="1314" y="286" width="208" height="300" rx="10" fill="none" stroke="${C.red}" stroke-width="2.4" opacity=".55"/>
+      ${pod.join("")}`;
+  },
+
   healthcare: (r, id) => {
     // ECG trace with a bright pulse peak, ringed by monitoring orbits.
     const y = 470, x0 = 640;
@@ -506,6 +552,7 @@ const MOTIF = {
 // HUD content per page: where the reticle sits, what the readout says, and callouts.
 // Labels are sector language, not decoration — they should look like real instrumentation.
 const HUD = {
+  careers:         { ret: [1040, 450, 152], rd: [1186, 128, "TEAM BUILD", ["DOMAINS", "ROLES", "MOBILISE"]], cal: [[1418, 600, 1500, 700, "POD READY"]] },
   healthcare:      { ret: [1010, 470, 250], rd: [1188, 116, "PATIENT FLOW", ["TRIAGE", "BOOKING", "REMINDERS"]], cal: [[1272, 604, 1352, 690, "ESCALATION"]] },
   manufacturing:   { ret: [1080, 400, 190], rd: [1176, 116, "LINE STATUS", ["UPTIME", "YIELD", "MAINT"]], cal: [[700, 600, 636, 690, "ROBOT ARM"]] },
   finance:         { ret: [1120, 430, 208], rd: [700, 116, "LEDGER", ["INVOICES", "RECON", "FORECAST"]], cal: [[1530, 385, 1436, 300, "TREND"]] },
@@ -536,7 +583,7 @@ const SEEDS = {
   logistics: 67, "supply-chain": 79, "contact-centre": 89, hr: 97,
   "ai-genai-services": 103, "agentic-ai": 109, "web-mobile-dev": 127,
   "whatsapp-business": 131, "erp-services": 149, "staff-augmentation": 157, helpdesk: 163,
-  aboutus: 173, blog: 179, "use-cases": 191, contactus: 197,
+  aboutus: 173, blog: 179, "use-cases": 191, contactus: 197, careers: 211,
 };
 
 mkdirSync(OUT, { recursive: true });

@@ -96,6 +96,7 @@ export const MENU = [
 // and a motif per page, so the site looks designed rather than stocked. Vector: ~20KB
 // each and sharp at any size. Regenerate with: node scripts/gen-industry-art.mjs
 export const PAGE_ART = {
+  careers: { img: '/img/industry/careers.svg', alt: 'HUD diagram: capability domains feeding a role scorecard that assembles into a mobilised delivery pod' },
   '/gcc-technology-teams': { img: '/img/industry/staff-augmentation.svg', alt: 'Schematic of specialised technology capability domains forming a GCC team' },
   healthcare:       { img: '/img/industry/healthcare.svg',     alt: 'Heartbeat trace running through a neural network, representing AI in healthcare' },
   manufacturing:    { img: '/img/industry/manufacturing.svg',  alt: 'Robotic arm and gear system over a production line, representing AI in manufacturing' },
