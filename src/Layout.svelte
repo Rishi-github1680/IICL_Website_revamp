@@ -91,18 +91,20 @@
   const groupHref = { Service: '/#services', Product: '/#products', Industry: '/#industries', Company: '/aboutus', Legal: '/privacy-policy' };
 
   // Breadcrumb trail: Home › {group} › {this page}.
-  const trail = [{ name: 'Home', href: '/' }];
-  if (kicker && groupHref[kicker]) trail.push({ name: kicker, href: groupHref[kicker] });
-  if (h1 && path) trail.push({ name: h1, href: path });
+  // $derived, not module scope: props are reactive, and structured data that captured
+  // only their initial values would go stale if one ever changed.
+  const trail = $derived.by(() => {
+    const t = [{ name: 'Home', href: '/' }];
+    if (kicker && groupHref[kicker]) t.push({ name: kicker, href: groupHref[kicker] });
+    if (h1 && path) t.push({ name: h1, href: path });
+    return t;
+  });
 
-  const entity =
-    schemaType === 'Service' ? serviceSchema({ name: h1, description: lede, path })
-    : schemaType === 'Product' ? productSchema({ name: h1, description: lede, path })
-    : null;
-
-  const blocks = jsonLd(
+  const blocks = $derived(jsonLd(
     path ? breadcrumbSchema(trail) : null,
-    entity,
+    schemaType === 'Service' ? serviceSchema({ name: h1, description: lede, path })
+      : schemaType === 'Product' ? productSchema({ name: h1, description: lede, path })
+      : null,
     faqs && faqs.length ? faqSchema(faqs) : null,
     article
       ? articleSchema({
@@ -110,7 +112,7 @@
           image: heroImage?.img, datePublished: published, dateModified: updated,
         })
       : null,
-  );
+  ));
 </script>
 
 <svelte:head>
@@ -234,7 +236,7 @@
   .page-hero.has-model .wrap { position: relative; z-index: 2; width: 100%; }
   .hero-model { position: absolute; top: 0; right: -6%; width: 60%; height: 100%; border: 0; pointer-events: none; z-index: 1;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22%); mask-image: linear-gradient(90deg, transparent 0, #000 22%); }
-  @media (max-width: 860px) { .hero-model { display: none; } .page-hero.has-model { min-height: 0; } }
+  
   .page-hero::after { content: ''; position: absolute; inset: auto 0 0; height: 2px; background: linear-gradient(90deg, var(--red), transparent 60%); z-index: 3; }
 
   /* Photo hero (industry pages): a real image, kept legible by a scrim that is dense behind
@@ -276,9 +278,7 @@
     padding: 18px 22px; align-items: baseline; }
   :global(.cow-k) { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--red); }
   :global(.cow-row p) { margin: 0; font-size: 16px; line-height: 1.7; color: #33363c; }
-  @media (max-width: 620px) {
-    :global(.cow-row) { grid-template-columns: 1fr; gap: 7px; }
-  }
+  
 
   @keyframes faqIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
 
@@ -357,14 +357,7 @@
   :global(.page-section .wrap:has(> .section-body + .list) > .list) {
     grid-column: 1 / -1; grid-row: 2; margin-top: 16px;
   }
-  @media (max-width: 900px) {
-    :global(.page-section .wrap:has(> .section-body + .feature-grid)),
-    :global(.page-section .wrap:has(> .section-body + .outcomes)),
-    :global(.page-section .wrap:has(> .section-body + .list)) { display: block; }
-    :global(.page-section .wrap:has(> .section-body + .feature-grid) > .section-h),
-    :global(.page-section .wrap:has(> .section-body + .outcomes) > .section-h),
-    :global(.page-section .wrap:has(> .section-body + .list) > .section-h) { margin-bottom: var(--space-head); }
-  }
+  
   :global(.img-strip) { margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 22px 34px; align-items: center; }
   :global(.img-strip img) { height: 40px; width: auto; object-fit: contain; opacity: 0.85; }
 
@@ -374,20 +367,10 @@
   .cta-h2 { margin: 16px auto 26px; max-width: 20ch; font-size: var(--fs-h1); line-height: 1.1; letter-spacing: -0.02em; font-weight: 600; }
   .cta-big { padding: 18px 38px; }
 
-  @media (max-width: 860px) {
-    :global(.section-split) { grid-template-columns: 1fr; gap: 34px; }
-    :global(.section-split.rev .split-text) { order: 0; }
-    :global(.split-media::before) { display: none; }
-    :global(.feature-grid) { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 760px) {
-    .page-h1 { max-width: none; }
-    .page-hero { padding: 72px 0 56px; }
-  }
+  
+  
 
   /* On a narrow phone the CTA label is wider than the gutter allows, and
      white-space: nowrap turned that into a horizontal scrollbar. Let it wrap. */
-  @media (max-width: 560px) {
-    .cta, .cta-big { white-space: normal; max-width: 100%; padding: 14px 22px; font-size: 15px; text-align: center; }
-  }
+  
 </style>

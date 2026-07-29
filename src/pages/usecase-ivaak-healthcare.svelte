@@ -13,6 +13,7 @@
   faqs={[
     { q: "What is iVaak AI for Healthcare?", a: "iVaak AI is an advanced AI Voice Agent platform designed specifically for healthcare communication and operational workflow automation. Unlike traditional voice bots or scripted IVR systems, iVaak AI can understand patient intent, conduct natural voice conversations, connect with healthcare systems, trigger real-time workflows, automate follow-ups, escalate urgent cases, and complete operational actions autonomously. The platform combines AI Voice Agents, Large Language Models (LLMs), Conversational AI, Retrieval-Augmented Generation (RAG), healthcare workflow automation, CRM & EMR integrations, WhatsApp communication, and multilingual voice intelligence into one unified patient engagement platform." },
   ]}
+  path="/usecase-ivaak-healthcare"
   article
 >
   <!-- G12 classification. Until the baseline, eligible population, measurement period,

@@ -10,6 +10,7 @@
   h1="Smarter Support Starts Here: The Rise of AI Voice Agents in Customer Service"
   lede="How customer care teams use iVaak AI voice agents to handle routine calls, qualify enquiries and hand over to a person with full context."
   heroBanner="/img/banners/A11-banner-usecases.png"
+  path="/usecase-ivaak-customercare"
   article
 >
   <!-- G12 classification. Until the baseline, eligible population, measurement period,

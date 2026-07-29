@@ -9,6 +9,7 @@
   h1="What AI integration actually involves"
   lede="The model is rarely the hard part. What the work really consists of when an agent has to talk to systems you already run."
   heroBanner="/img/banners/A10-banner-blog.png"
+  path="/blog-ai-integration-reality"
   article
 >
   <section class="page-section">

@@ -206,7 +206,5 @@
   .office h3 { margin: 0 0 12px; font-size: 19px; font-weight: 600; color: #16171a; }
   .office a { color: #b81c1c; text-decoration: none; }
   .office a:hover { text-decoration: underline; }
-  @media (max-width: 760px) {
-    .row, .offices { grid-template-columns: 1fr; }
-  }
+  
 </style>

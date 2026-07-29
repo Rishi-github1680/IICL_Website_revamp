@@ -13,6 +13,7 @@
   faqs={[
     { q: "What is TruFix AI?", a: "TruFix AI is an enterprise-grade AI-powered ticketing and resolution intelligence platform that automates support operations across voice, email, WhatsApp, chat, and enterprise systems. Unlike traditional helpdesk platforms, TruFix AI combines: But the most powerful differentiator is this: TruFix AI automatically calls customers back after a ticket is marked resolved to verify whether the fix actually worked. This changes everything. AI-powered ticket classification Autonomous support workflows AI Voice Agents Intelligent escalation management Resolution verification callbacks WhatsApp resolution confirmation Audit-first resolution tracking SLA intelligence and monitoring" },
   ]}
+  path="/blog-trufix-ai"
   article
 >
   <section class="page-section">

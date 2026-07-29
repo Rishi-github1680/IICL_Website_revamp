@@ -278,17 +278,7 @@
   .cta-inline:hover { background: #d61f1e; }
 
   /* ── Narrow screens: the fan becomes a plain grid, every Apply visible ── */
-  @media (max-width: 900px) {
-    .stage-outer { padding: 30px var(--wrap-pad); }
-    .stage { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px; height: auto; perspective: none; overflow: visible; padding-inline: 0;
-      scroll-snap-type: none; cursor: default; }
-    .card { position: static; flex: none; width: auto; height: auto; min-height: 340px;
-      transform: none !important; opacity: 1 !important; filter: none !important; z-index: auto !important; }
-    .card:not(.is-active) .card-apply { opacity: 1; pointer-events: auto; }
-    .deck-ctrl, .deck-live { display: none; }
-    .stage { cursor: default; }
-  }
+  
   @media (prefers-reduced-motion: reduce) {
     .card, .card-apply, .dot { transition: none; }
   }

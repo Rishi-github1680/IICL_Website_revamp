@@ -10,6 +10,7 @@
   h1="The Future of Real Estate Sales is Conversational AI: How iVaak AI is Transforming Buyer Engagement"
   lede="How real estate teams use iVaak AI voice agents to respond to property enquiries instantly, qualify buyers and schedule site visits."
   heroBanner="/img/banners/A11-banner-usecases.png"
+  path="/usecase-ivaak-realestate"
   article
 >
   <!-- G12 classification. Until the baseline, eligible population, measurement period,

@@ -9,6 +9,7 @@
   h1="How to choose the first process to automate"
   lede="Most failed AI projects picked the wrong process, not the wrong model. Five tests we run before agreeing to build anything."
   heroBanner="/img/banners/A10-banner-blog.png"
+  path="/blog-choosing-processes"
   article
 >
   <section class="page-section">

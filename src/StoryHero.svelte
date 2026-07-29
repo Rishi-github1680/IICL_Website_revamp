@@ -177,11 +177,7 @@
     box-shadow: 0 0 10px rgba(237,16,29,.8); animation: shPulse 1.8s ease infinite; }
   @keyframes shPulse { 50% { opacity: .35; } }
 
-  @media (max-width: 760px) {
-    .sh-line.left, .sh-line.right { left: var(--wrap-pad); right: var(--wrap-pad); text-align: left; max-width: none; }
-    .sh-line.right .sh-note { margin-left: 0; }
-    .sh-hud { left: var(--wrap-pad); right: var(--wrap-pad); }
-  }
+  
   @media (prefers-reduced-motion: reduce) {
     .sh-hud-dot { animation: none; }
     .sh { height: 100vh !important; }

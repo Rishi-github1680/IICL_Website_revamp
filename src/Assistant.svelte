@@ -294,19 +294,7 @@
 
   /* On a phone the panel takes the whole screen — a 360px card floating over the
      page is fiddly to type into, and the keyboard covers half of it. */
-  @media (max-width: 640px) {
-    .ag { right: 16px; bottom: 16px; }
-    .ag-panel { position: fixed; inset: 0; width: 100%; height: 100%; height: 100dvh;
-      border: 0; border-radius: 0; animation: agInFull .24s cubic-bezier(0.22,1,0.36,1); }
-    @keyframes agInFull { from { transform: translateY(14px); } to { transform: none; } }
-    .ag-head { padding: 14px 16px; padding-top: max(14px, env(safe-area-inset-top)); }
-    .ag-log { padding: 16px; }
-    .ag-msg { max-width: 88%; font-size: 14.5px; }
-    .ag-input { padding: 12px 16px; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
-    .ag-input input { font-size: 16px; }   /* 16px stops iOS zooming the page on focus */
-    /* The launcher would otherwise sit on top of the full-screen panel. */
-    .is-open .ag-fab { display: none; }
-  }
+  
   @media (prefers-reduced-motion: reduce) {
     .ag-ring, .ag-bars line, .ag-live, .ag-msg { animation: none; }
     .ag-fab, .ag-panel, .ag-mark, .ag-close, .ag-arw { transition: none; animation: none; }

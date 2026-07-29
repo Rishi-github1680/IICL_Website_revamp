@@ -783,7 +783,7 @@
   .outcome-cond { font-size: 15.5px; font-weight: var(--w-heading); color: #16171a; }
   .outcome-resp { font-size: 14.5px; line-height: 1.55; color: #40434a; }
   .outcome-ev { font-size: 11.5px; line-height: 1.5; color: #55585e; }
-  @media (max-width: 900px) { .outcome { grid-template-columns: 1fr; gap: 4px; } }
+  
 
   /* -- Two equal commercial pathways. Identical cards: the equality is the point. ── */
   .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -866,35 +866,12 @@
   .cta-kicker { font-size: 12.5px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: #ee2f2e; margin-bottom: 20px; }
   .cta-h2 { font-weight: 600; font-size: clamp(30px, 3.6vw, 46px); line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 20px; color: var(--ink); max-width: 24ch; text-wrap: balance; }
   .cta-p { font-size: 17px; line-height: 1.6; color: var(--muted); max-width: 52ch; margin: 0 0 36px; text-wrap: pretty; }
-  .cta-big { font-size: 16.5px; padding: 17px 38px; }
 
   /* ── Responsive. The homepage had no breakpoints at all: every grid was a fixed
      column count, so it overflowed below ~900px. ── */
-  @media (max-width: 1040px) {
-    .paths, .conv { grid-template-columns: 1fr; }
-    .track { grid-template-columns: 1fr; gap: 32px; }
-    .step::before { display: none; }
-    .faq-wrap { grid-template-columns: 1fr; gap: 36px; }
-  }
+  
   /* Tablet / iPad: the journey keeps its animation but needs a shorter scroll and
      chapters that sit inside the gutter rather than against a 580px half-measure. */
-  @media (max-width: 1040px) {
-    .journey { height: 380vh; }
-    .chapter { max-width: min(440px, 62vw); }
-  }
-  @media (max-width: 720px) {
-    .svc-cols { grid-template-columns: 1fr; gap: 0; }
-    /* Phone: the journey still animates — the chapters simply stack over the model
-       and the scroll distance shortens so each stage is reachable with a thumb. */
-    .journey { height: 320vh; }
-    .chapter { max-width: none; top: auto; bottom: 12vh; transform: none; }
-    .chapter-left, .chapter-right { left: var(--wrap-pad); right: var(--wrap-pad); text-align: left; }
-    .chapter-right .chapter-eyebrow, .chapter-right .chapter-link { justify-content: flex-start; }
-    .chapter-h2 { font-size: var(--fs-h2); }
-    .chapter-p { font-size: var(--fs-body); }
-    .hero-actions { flex-direction: column; align-items: stretch; width: 100%; max-width: 320px; }
-    .cta, .ghost { justify-content: center; }
-    /* Keep the model visible behind the text rather than letting it fill the screen. */
-    .journey-model { opacity: .55; }
-  }
+  
+  
 </style>

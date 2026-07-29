@@ -60,7 +60,6 @@
 }
 
 /* Phones and small tablets take the 24px gutter. Section rhythm stays 32px. */
-@media (max-width: 900px) { :root { --wrap-pad: 24px; } }
 
 body { font-family: var(--font); }
 
@@ -118,7 +117,6 @@ html { scroll-behavior: smooth; }
   letter-spacing: -0.03em; color: var(--acc, var(--brand));
 }
 .outcome span { font-size: 14px; line-height: 1.5; color: var(--muted); }
-@media (max-width: 860px) { .outcomes { grid-template-columns: 1fr; } }
 
 /* ── Flow diagram ──────────────────────────────────────────────────────
    A left-to-right process as a row of numbered stages joined by a rail, instead
@@ -135,14 +133,6 @@ html { scroll-behavior: smooth; }
   font-family: var(--font-mono); font-size: 13px; font-weight: var(--w-medium); }
 .flow-step strong { display: block; margin: 14px 0 5px; font-size: 15.5px; font-weight: var(--w-heading); color: var(--ink); }
 .flow-step span { display: block; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
-@media (max-width: 860px) {
-  .flow { grid-auto-flow: row; gap: 18px; }
-  .flow::before { left: 21px; right: auto; top: 0; bottom: 0; width: 2px; height: auto;
-    background: linear-gradient(180deg, var(--brand), color-mix(in srgb, var(--brand) 22%, transparent)); }
-  .flow-step { display: grid; grid-template-columns: 44px 1fr; gap: 0 16px; padding: 0; }
-  .flow-step b { grid-row: 1 / span 2; }
-  .flow-step strong { margin: 10px 0 4px; }
-}
 
 /* ── Comparison ────────────────────────────────────────────────────────
    Two columns, before and after. Used where a page was explaining a change in
@@ -159,7 +149,6 @@ html { scroll-behavior: smooth; }
 .compare li::before { content: ''; position: absolute; left: 0; top: 8px; width: 10px; height: 2px;
   border-radius: 2px; background: #c9c6c1; }
 .compare > div + div li::before { background: var(--brand); }
-@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
 
 /* ── Metric row ────────────────────────────────────────────────────────
    Figures given room to be read, with the unit and the caveat attached. */

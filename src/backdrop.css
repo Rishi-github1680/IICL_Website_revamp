@@ -70,9 +70,6 @@
 /* Embedded (ui=0) scenes keep the schematic but let the page show through. */
 .transparent .ai-fb { background: radial-gradient(circle at 50% 45%, rgba(21,6,9,.92) 0%, rgba(5,5,5,.7) 55%, rgba(5,5,5,0) 100%); }
 
-@media (max-width: 700px) {
-  .ai-fb .fb-sats text, .ai-fb .fb-sats rect { display: none; }
-}
 @media (prefers-reduced-motion: reduce) {
   .ai-fb-wash, .ai-fb .fb-links path, .ai-fb .fb-halo,
   .ai-fb .fb-hub-glow, .ai-fb .fb-hub-ring, .ai-fb .fb-meter-fill { animation: none; }

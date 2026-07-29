@@ -13,6 +13,7 @@
   faqs={[
     { q: "What is iVaak AI?", a: "iVaak AI is an enterprise-grade AI Voice Agent and conversational AI platform designed to automate customer engagement across voice, WhatsApp, email, chat, and enterprise systems. The platform combines: …into one unified customer communication platform. Unlike traditional chatbots or IVR systems, iVaak AI enables businesses to deploy highly natural, context-aware conversational experiences capable of handling customer interactions autonomously. Whether the use case is customer support, sales qualification, appointment scheduling, healthcare communication, or lead engagement, iVaak AI enables organizations to scale customer conversations intelligently. AI Voice Agents Large Language Models (LLMs) Conversational AI Retrieval-Augmented Generation (RAG) WhatsApp automation CRM integrations Workflow automation Multilingual conversational intelligence" },
   ]}
+  path="/blog-ivaak-ai"
   article
 >
   <section class="page-section">

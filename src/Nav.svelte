@@ -325,47 +325,5 @@
   .hamburger.on span:nth-child(2) { opacity: 0; }
   .hamburger.on span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  @media (max-width: 980px) {
-    .hamburger { display: flex; }
-    .nav-links { position: fixed; inset: 60px 0 auto; flex-direction: column; align-items: stretch; gap: 0; background: #070707; border-bottom: 1px solid rgba(238,47,46,0.25); padding: 8px 20px 24px; max-height: calc(100vh - 60px); overflow-y: auto; display: none; }
-    .nav-links.open { display: flex; }
-    .nav-group { border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .nav-group::after { display: none; }
-    .nav-link { padding: 15px 0; width: 100%; justify-content: space-between; font-size: 16px; }
-    .nav-link::after { display: none; }
-    .nav-links > .nav-link { border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .dropdown, .dropdown.mega { position: static; margin: 0; border: 0; box-shadow: none; padding: 0 0 12px; min-width: 0; max-width: none; background: transparent; border-radius: 0;
-      opacity: 1; visibility: visible; transform: none; pointer-events: auto; display: none; }
-    .dropdown.mega { grid-template-columns: 1fr; gap: 4px; }
-    .nav-group:hover .dropdown { display: none; }
-    .nav-group.active .dropdown { display: flex; }
-    .nav-group.active .dropdown.mega { display: grid; }
-    .mm-highlight { display: none; } /* promo block is a desktop luxury… */
-    .mega-promo .mm-highlight { display: block; } /* …except when it IS the panel */
-    .dropdown.mega-promo { width: auto; max-width: none; padding: 0 0 12px; }
-    .mega-promo .mm-h5 { color: #f4f2ee; }
-    .mega-promo .mm-p { color: rgba(244,242,238,0.6); }
-    .mm-h4 { color: rgba(244,242,238,0.45); margin-top: 10px; padding: 0; }
-    .mm-link { color: #f4f2ee; }
-    /* Icon rows on the dark mobile sheet. */
-    /* Undo the desktop anchoring and column flow — on the sheet it stacks. */
-    .dropdown.mega-columns { position: static; width: auto; max-width: none; margin: 0;
-      grid-auto-flow: row; grid-auto-columns: auto; padding: 0 0 10px; gap: 0; }
-    .mm-row { padding: 9px 0; border-radius: 0; }
-    .mm-row:hover { background: transparent; }
-    .mm-ico::before { background: rgba(244,242,238,0.75); }
-    .mm-row-t { color: #f4f2ee; }
-    /* Product rows on the dark mobile sheet. */
-    .mega-products { padding: 0 0 10px; gap: 0; }
-    .mm-item { padding: 10px 0; border-radius: 0; }
-    .mm-item:hover { background: transparent; }
-    .mm-name { color: #f4f2ee; }
-    .mm-desc { color: rgba(244,242,238,0.5); }
-    .mm-foot { border-top: 1px solid rgba(255,255,255,0.08); padding: 14px 0; margin-top: 4px; }
-    .mm-foot:hover { background: transparent; }
-    .mm-foot-t { color: #f4f2ee; }
-    .mm-foot-p { color: rgba(244,242,238,0.5); }
-    .talk { align-self: flex-start; margin-top: 18px; padding: 12px 22px; font-size: 15px; }
-    .talk-arrow { opacity: 1; margin-left: 0; }
-  }
+  
 </style>

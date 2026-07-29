@@ -30,13 +30,16 @@
   let sections = $state([]);   // [{ id, title }]
   let active = $state(0);
 
-  const trail = [{ name: 'Home', href: '/' }, { name: 'Services', href: '/#services' }];
-  if (h1 && path) trail.push({ name: h1, href: path });
-  const blocks = jsonLd(
+  const trail = $derived.by(() => {
+    const t = [{ name: 'Home', href: '/' }, { name: 'Services', href: '/#services' }];
+    if (h1 && path) t.push({ name: h1, href: path });
+    return t;
+  });
+  const blocks = $derived(jsonLd(
     path ? breadcrumbSchema(trail) : null,
     path ? serviceSchema({ name: h1, description: lede, path }) : null,
     faqs && faqs.length ? faqSchema(faqs) : null,
-  );
+  ));
 
   function goTo(i) {
     // scroll-margin-top on [id] (theme.css) keeps the heading clear of the sticky nav.
@@ -256,27 +259,8 @@
     letter-spacing: -0.02em; font-weight: 600; }
   .cta-big { padding: 18px 38px; }
 
-  @media (max-width: 1040px) {
-    .svc-body { grid-template-columns: 1fr; gap: 0; }
-    /* Index becomes a horizontal strip that sticks under the nav. */
-    .svc-index { position: sticky; top: 64px; padding: 0; z-index: 20; background: #fff;
-      border-bottom: 1px solid var(--line); margin: 0 calc(var(--wrap-pad) * -1);
-      /* A grid item defaults to min-width:auto, so the rail grew to fit its own
-         content and overflow-x had nothing to clip. This lets it scroll instead. */
-      min-width: 0; }
-    .idx-inner { overflow-x: auto; padding: 12px var(--wrap-pad); }
-    .idx-title { display: none; }
-    .svc-index ol { display: flex; gap: 6px; border-left: 0; }
-    .idx-btn { width: auto; white-space: nowrap; border-left: 0; border-bottom: 2px solid transparent;
-      margin-left: 0; padding: 8px 12px; }
-    .idx-btn.active { border-left-color: transparent; border-bottom-color: var(--red); }
-    .idx-label { -webkit-line-clamp: 1; max-width: 26ch; }
-    .svc-content { padding-top: 40px; }
-  }
-  @media (max-width: 760px) {
-    .svc-h1 { max-width: none; }
-    .svc-hero { padding-top: 84px; min-height: 0; }
-  }
+  
+  
   @media (prefers-reduced-motion: reduce) {
     .svc-content :global(.page-section.reveal) { opacity: 1; transform: none; transition: none; }
     .svc-photo { transform: none; }
@@ -284,7 +268,5 @@
 
   /* On a narrow phone the CTA label is wider than the gutter allows, and
      white-space: nowrap turned that into a horizontal scrollbar. Let it wrap. */
-  @media (max-width: 560px) {
-    .cta, .cta-big { white-space: normal; max-width: 100%; padding: 14px 22px; font-size: 15px; text-align: center; }
-  }
+  
 </style>

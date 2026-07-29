@@ -245,10 +245,6 @@
 
 <style>
   /* Stats */
-  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #e6e3de; border: 1px solid #e6e3de; margin-top: 8px; }
-  .stat { background: #fff; padding: 26px 22px; display: flex; flex-direction: column; gap: 8px; }
-  .stat-v { font-size: clamp(30px, 3.4vw, 42px); line-height: 1; color: #16171a; }
-  .stat-k { font-size: 14px; line-height: 1.5; color: #55585e; }
 
   /* Mission / vision */
   .mv { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
@@ -287,14 +283,8 @@
   .office-k { display: block; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #ee2f2e; margin-bottom: 12px; }
   .office-note { color: #55585e; margin-bottom: 0; }
   .office-contact { margin-top: 24px; }
-  .office-contact a, .office a { color: #b81c1c; }
+  .office-contact a { color: #b81c1c; }
 
-  @media (max-width: 860px) {
-    .stat-row { grid-template-columns: repeat(2, 1fr); }
-    .mv, .offices { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 520px) {
-    .stat-row { grid-template-columns: 1fr; }
-    .step { flex-direction: column; gap: 8px; }
-  }
+  
+  
 </style>

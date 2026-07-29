@@ -9,6 +9,7 @@
   h1="Where a person has to stay in the loop"
   lede="Full autonomy is rarely the goal. How we decide which decisions an agent commits, which it drafts, and which it never touches."
   heroBanner="/img/banners/A10-banner-blog.png"
+  path="/blog-human-in-the-loop"
   article
 >
   <section class="page-section">

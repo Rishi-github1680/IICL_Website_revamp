@@ -47,13 +47,16 @@
     return () => { window.removeEventListener('message', onReady); stop(); };
   });
 
-  const trail = [{ name: 'Home', href: '/' }, { name: 'AI Solutions', href: '/#products' }];
-  if (h1 && path) trail.push({ name: h1, href: path });
-  const blocks = jsonLd(
+  const trail = $derived.by(() => {
+    const t = [{ name: 'Home', href: '/' }, { name: 'AI Solutions', href: '/#products' }];
+    if (h1 && path) t.push({ name: h1, href: path });
+    return t;
+  });
+  const blocks = $derived(jsonLd(
     path ? breadcrumbSchema(trail) : null,
     path ? productSchema({ name: h1, description: lede, path }) : null,
     faqs && faqs.length ? faqSchema(faqs) : null,
-  );
+  ));
 </script>
 
 <svelte:head>
@@ -255,31 +258,14 @@
     letter-spacing: -0.02em; font-weight: 600; }
   .pr-cta-big { padding: 17px 36px; }
 
-  @media (max-width: 980px) {
-    .pr-more-row { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 860px) {
-    .pr-model { display: none; }
-    .pr-body :global(.section-split) { grid-template-columns: 1fr; gap: 30px; }
-    .pr-body :global(.section-split.rev .split-text) { order: 0; }
-    .pr-body :global(.feature-grid) { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 720px) {
-    .pr-hero { padding-top: 84px; min-height: 0; }
-    .pr-h1 { max-width: none; }
-    .pr-hero-inner { padding: 0 var(--wrap-pad) 32px; }
-    .pr-body { padding: 0 var(--wrap-pad); }
-    .pr-more-row { grid-template-columns: 1fr; }
-    .pr-actions { flex-direction: column; align-items: stretch; }
-    .pr-cta, .pr-ghost { justify-content: center; }
-  }
+  
+  
+  
   @media (prefers-reduced-motion: reduce) {
     .pr-body :global(.page-section.reveal) { opacity: 1; transform: none; transition: none; }
   }
 
   /* On a narrow phone the CTA label is wider than the gutter allows, and
      white-space: nowrap turned that into a horizontal scrollbar. Let it wrap. */
-  @media (max-width: 560px) {
-    .cta, .cta-big { white-space: normal; max-width: 100%; padding: 14px 22px; font-size: 15px; text-align: center; }
-  }
+  
 </style>

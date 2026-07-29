@@ -10,6 +10,7 @@
   h1="iWac: The Future of AI-Powered Customer Engagement on WhatsApp"
   lede="How businesses use WhatsApp to capture leads, take orders, collect payments and support customers without adding headcount."
   heroBanner="/img/banners/A10-banner-blog.png"
+  path="/blog-iwac-ai"
   article
 >
   <section class="page-section">

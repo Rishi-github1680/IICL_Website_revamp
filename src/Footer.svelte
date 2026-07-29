@@ -202,10 +202,7 @@
   .ft-bottom { margin-top: 16px; padding: 16px 0 0; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; }
   .ft-bottom span { font-size: 13px; color: rgba(255,255,255,0.5); }
 
-  @media (max-width: 1080px) { .ft-top { grid-template-columns: 1.2fr 1fr 1fr; } }
-  @media (max-width: 780px) { .ft-top { grid-template-columns: 1fr 1fr; gap: 28px; } }
-  @media (max-width: 560px) {
-    .ft-top { grid-template-columns: 1fr; }
-    .ft-actions { justify-content: space-between; }
-  }
+  
+  
+  
 </style>

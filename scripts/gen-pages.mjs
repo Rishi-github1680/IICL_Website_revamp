@@ -78,7 +78,7 @@ function social(p, canonical) {
 function head(p, extra = "") {
   const canonical = p.slug === "index" ? "/" : "/" + p.slug;
   return `    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=1440" />
     <meta name="theme-color" content="${p.theme || "#ffffff"}" />
     <title>${esc(p.title)}</title>
 ${p.description ? `    <meta name="description" content="${esc(p.description)}" />
