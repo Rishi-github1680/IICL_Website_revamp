@@ -86,6 +86,7 @@
 
   // Refs
   let rootEl, journeyEl, heroPanelEl, ch1El, ch2El, ch3El, ch4El;
+  let glowEl; // the stage glow, driven per frame so it can breathe at handoffs
   let m1El, m2El, m3El, m4El; // brain / voice agent / data stream / galaxy
 
   // ── Product explorer (galaxy stage) — hidden until "See all products" is clicked ──
@@ -284,6 +285,7 @@
     // fades BY the boundary; the incoming one starts as a scattered cloud there and condenses
     // into shape. Only the two dispersed clouds ever overlap — never two formed models.
     const fadeModels = (J) => {
+      let maxO = 0;
       const r = journeyEl.getBoundingClientRect();
       const offscreen = r.bottom <= 0 || r.top >= (window.innerHeight || 1);
       // Nothing is fetched until the journey is within about a screen and a half of
@@ -302,22 +304,46 @@
         const o = ease(m.el, Math.max(0, Math.min(inE, outE)), 7);
         const peak = typeof m.peak === 'function' ? m.peak(J) : (m.peak ?? 0.82);
         m.el.style.opacity = (o * peak).toFixed(3); // hold the models back so the text reads cleanly
-        m.el.style.transform = 'scale(' + (0.96 + 0.04 * o).toFixed(4) + ')';
+
+        // Motion that never reverses. Scale used to follow opacity, so an outgoing
+        // scene grew in and then shrank back out — its motion turned around at the
+        // plateau, which is what made each handoff feel like a reset. `L` runs 0→1
+        // across the scene's WHOLE visible life, so it enters slightly small and low,
+        // passes through full size, and leaves slightly large and high: the camera
+        // keeps travelling in the scroll direction through every boundary.
+        const lifeA = m.i0 < 0 ? -0.12 : m.i0 - H;
+        const lifeB = m.i1 > 2 ? 1 : m.i1 + H;
+        const L = Math.min(1, Math.max(0, (J - lifeA) / Math.max(lifeB - lifeA, 0.001)));
+        const sc = (0.95 + 0.11 * L).toFixed(4);
+        const dy = ((0.5 - L) * 16).toFixed(1);
+        // A breath of soft focus while dispersed (composited filter, quantized so the
+        // style only changes in steps). A formed scene is always pin sharp.
+        const bl = Math.round((1 - o) * 8) / 4;
+        m.el.style.transform = 'translateY(' + dy + 'px) scale(' + sc + ')';
+        m.el.style.filter = bl > 0 ? 'blur(' + bl + 'px)' : '';
         m.el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
         const pause = offscreen || o < 0.002;
         if (m.el._pause !== pause) { m.el._pause = pause; post(m.el, { iiclPause: pause }); }
-        // Fully dispersed by the time the shape is half-faded. At 1 - o both clouds sat
-        // at 0.5 across the boundary — two legible shapes overlapping. At twice the rate
-        // the boundary is a single particle field that the next shape condenses out of,
-        // so the four scenes read as one cloud changing form.
-        const s = Math.round(Math.min(1, (1 - o) * 2) * 100) / 100;
+        // Fully dispersed by the time the shape is half-faded, and eased: dissolution
+        // starts gently, accelerates through the middle and settles — grain drift,
+        // not a linear wipe. At the boundary only formless clouds ever overlap.
+        const sr = Math.min(1, (1 - o) * 2);
+        const s = Math.round(sr * sr * (3 - 2 * sr) * 100) / 100;
         if (m.el._scatter !== s) { m.el._scatter = s; post(m.el, { iiclScatter: s }); }
+        if (o > maxO) maxO = o;
         // One camera for the whole journey. Mapping zoom to each model's own span meant
         // the flight restarted at every handoff — the camera visibly rewound four times.
         // Driven from global progress, each scene continues the move the last one was
         // making, so the push through the story never breaks.
         const z = Math.round(Math.min(1, Math.max(0, J)) * 100) / 100;
         if (m.el._zoom !== z) { m.el._zoom = z; post(m.el, { iiclZoom: z }); }
+      }
+      // The stage glow swells while no scene is fully formed, so the dispersed moment
+      // reads as an energy beat rather than a dip. Composited props only.
+      if (glowEl) {
+        const t = Math.min(1, Math.max(0, (1 - maxO) / 0.5));
+        glowEl.style.opacity = (0.8 + 0.2 * t).toFixed(2);
+        glowEl.style.transform = 'scale(' + (1 + 0.15 * t).toFixed(3) + ')';
       }
     };
     let raf;
@@ -401,7 +427,7 @@
   <main id="main">
   <div id="products" bind:this={journeyEl} class="journey">
     <div class="journey-stage">
-      <div class="journey-glow"></div>
+      <div bind:this={glowEl} class="journey-glow"></div>
       {#if no3D}
         <!-- No WebGL, a metered connection, or models switched off: one still
              backdrop, and no iframe is ever created — nothing is fetched. -->
@@ -758,7 +784,8 @@
   .journey { height: 460vh; position: relative; background: #0a0a0a; }
   .journey-stage { position: sticky; top: 0; height: 100vh; min-height: 620px; overflow: hidden; cursor: none; background: radial-gradient(100% 100% at 50% 40%, #141414 0%, #0a0a0a 55%, #050505 100%); }
   .journey-stage a { cursor: none; }
-  .journey-glow { position: absolute; top: 12%; left: 22%; right: 22%; height: 74%; background: radial-gradient(ellipse at center, rgba(238,47,46,0.09) 0%, rgba(238,47,46,0) 62%); pointer-events: none; }
+  .journey-glow { position: absolute; top: 12%; left: 22%; right: 22%; height: 74%; opacity: 0.8; will-change: transform, opacity;
+    background: radial-gradient(ellipse at center, rgba(238,47,46,0.11) 0%, rgba(238,47,46,0) 62%); pointer-events: none; }
   .journey-model { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; background: transparent; }
   .journey-flat { overflow: hidden; }
   /* Holds the stage until a scene renders; fades out once one does. */
