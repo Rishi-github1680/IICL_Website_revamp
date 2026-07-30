@@ -734,7 +734,8 @@
   height: 76%;
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.13);
-  clip-path: polygon(42% 0, 76% 10%, 88% 24%, 73% 42%, 84% 57%, 65% 74%, 54% 100%, 39% 81%, 24% 66%, 28% 46%, 9% 29%, 20% 13%);
+  /* India silhouette (north → clockwise), relative to this box. */
+  clip-path: polygon(48% 3%, 58% 7%, 72% 10%, 82% 14%, 74% 20%, 64% 18%, 70% 30%, 68% 44%, 62% 58%, 56% 70%, 52% 76%, 44% 96%, 39% 82%, 33% 64%, 28% 48%, 24% 40%, 12% 44%, 20% 34%, 10% 36%, 18% 28%, 26% 18%, 36% 8%);
 }
 .tp-root .city {
   position: absolute;
@@ -753,12 +754,13 @@
   background: var(--red-light);
   box-shadow: 0 0 0 5px rgba(238, 47, 46, 0.1), 0 0 18px rgba(238, 47, 46, 0.52);
 }
-.tp-root .city-1 { left: 46%; top: 60%; }
-.tp-root .city-2 { left: 51%; top: 68%; }
-.tp-root .city-3 { left: 42%; top: 20%; }
-.tp-root .city-4 { left: 35%; top: 31%; }
-.tp-root .city-5 { left: 58%; top: 66%; }
-.tp-root .city-6 { left: 31%; top: 53%; }
+/* Positioned on the India silhouette. Order: HYD BLR NCR PUN CHE MUM. */
+.tp-root .city-1 { left: 49%; top: 58%; }  /* HYD */
+.tp-root .city-2 { left: 47%; top: 70%; }  /* BLR */
+.tp-root .city-3 { left: 46%; top: 22%; }  /* NCR */
+.tp-root .city-4 { left: 43%; top: 57%; }  /* PUN */
+.tp-root .city-5 { left: 53%; top: 66%; }  /* CHE */
+.tp-root .city-6 { left: 39%; top: 55%; }  /* MUM */
 .tp-root .map-caption {
   position: absolute;
   left: 22px;
