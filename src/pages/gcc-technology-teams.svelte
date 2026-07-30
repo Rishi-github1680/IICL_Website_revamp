@@ -44,7 +44,17 @@
     ['06', 'Continuity',   'Governance and improvement'],
   ];
 
-  const cities = ['HYD', 'BLR', 'NCR', 'PUN', 'CHE', 'MUM'];
+  // City markers in the India map's own viewBox (0 0 260 300), placed by real geography.
+  const mapCities = [
+    { name: 'NCR', x: 118, y: 70 },
+    { name: 'MUM', x: 102, y: 150 },
+    { name: 'PUN', x: 116, y: 154 },
+    { name: 'HYD', x: 138, y: 162 },
+    { name: 'BLR', x: 132, y: 200 },
+    { name: 'CHE', x: 152, y: 192 },
+  ];
+  // India silhouette outline (north → clockwise), same viewBox.
+  const INDIA_PATH = 'M88 32 L120 46 L150 58 L188 54 L176 84 L178 120 L168 156 L156 194 L140 258 L122 208 L112 168 L104 140 L92 118 L74 120 L86 102 L78 80 L84 54 L82 40 Z';
 
   const pad = (i) => String(i + 1).padStart(2, '0');
 
@@ -213,11 +223,15 @@
           <a class="button button-light" href="/niche-technology-hiring">Open the niche capability view <span aria-hidden="true">↗</span></a>
         </div>
         <div class="map-panel" aria-label="Conceptual India talent map">
-          {#each cities as city, i}
-            <span class="city city-{i + 1}">
-              <i></i>{city}
-            </span>
-          {/each}
+          <svg class="india-map" viewBox="0 0 260 300" role="img" aria-label="India, showing major GCC technology cities">
+            <path class="india-outline" d={INDIA_PATH} />
+            {#each mapCities as c}
+              <g class="map-city">
+                <circle cx={c.x} cy={c.y} r="3.4" />
+                <text x={c.x + 8} y={c.y + 3.2}>{c.name}</text>
+              </g>
+            {/each}
+          </svg>
           <div class="map-caption">
             <b>CAPABILITY DEPTH</b>
             <span>Research layer · illustrative mock-up</span>
