@@ -11,6 +11,9 @@
   import { breadcrumbSchema, serviceSchema, jsonLd } from '../seo.js';
 
   const PATH = '/gcc-technology-teams';
+  // Per-deploy cache-buster for the model iframe (see IICLHero) so a header change is
+  // never masked by a stale CDN copy of india-map.html.
+  const BUILD_ID = typeof __BUILD_ID__ !== 'undefined' ? __BUILD_ID__ : 'dev';
 
   const domains = [
     { code: 'AI', name: 'AI & GenAI',           summary: 'ML engineering, GenAI applications, MLOps, AI platforms and responsible AI.',        roles: 'AI/ML Engineers · GenAI Engineers · MLOps · AI Architects' },
@@ -44,17 +47,6 @@
     ['06', 'Continuity',   'Governance and improvement'],
   ];
 
-  // Accurate India boundary (Natural Earth, public domain) projected to viewBox
-  // 0 0 260 263; cities placed from their real lat/lon in the same projection.
-  const mapCities = [
-    { name: 'NCR', x: 82.7, y: 68.8 },
-    { name: 'MUM', x: 45.5, y: 155.7 },
-    { name: 'PUN', x: 54.2, y: 160.8 },
-    { name: 'HYD', x: 93.5, y: 171.1 },
-    { name: 'BLR', x: 85.9, y: 211.4 },
-    { name: 'CHE', x: 108.6, y: 210.4 },
-  ];
-  const INDIA_PATH = 'M88 6 L97.1 16.7 L96.2 24.1 L99.6 28.8 L99.3 33.4 L93.2 32.2 L95.6 42.3 L104 48 L115.8 54.4 L110.4 58.6 L107.1 67.1 L115.3 70.5 L123.3 75 L134.4 80.1 L146 81.3 L150.9 85.9 L157.4 86.8 L167.7 88.9 L174.7 88.8 L175.7 85.2 L174.6 79.4 L175.2 75.5 L180.4 73.5 L181.1 80.7 L181.3 82.5 L189 86 L194.4 84.6 L201.5 85.2 L208.4 84.9 L209 79.3 L205.6 76.4 L212.4 75.3 L220.1 68.5 L229.9 62.7 L237 64.9 L243.1 61.1 L247.1 66.8 L244.2 70.6 L253.4 71.9 L254 75.4 L251 77.1 L251.7 82.7 L245.7 81 L234.7 87.3 L234.9 92.6 L230.2 100.2 L229.8 104.6 L226 112.2 L219.4 110.1 L219.1 119.5 L217.2 122.6 L218.1 126.5 L213.9 128.7 L209.4 114.2 L207.1 114.2 L205.7 120.1 L201 115.3 L203.6 110.1 L207.4 109.6 L211.3 101.9 L206.5 100.3 L198.6 100.5 L190.5 99.2 L189.8 92.9 L185.7 92.4 L179 88.5 L176 94.7 L182.1 99.5 L176.8 102.9 L174.9 106.2 L180.2 108.7 L178.7 114.2 L181.6 121 L183 128.5 L181.8 131.9 L176 131.7 L165.5 133.6 L166 140.5 L161.5 145.9 L149.3 152 L139.8 162.8 L133.4 168.5 L124.9 174.5 L124.9 178.7 L120.7 180.9 L113 184.2 L109.1 184.7 L106.5 191.6 L108.3 203.5 L108.8 211 L105.2 219.7 L105.1 235.2 L100.7 235.6 L96.9 242.6 L99.5 245.6 L91.7 248.2 L88.9 254.4 L85.5 257 L77.4 248.5 L73.5 235.7 L70.2 226.5 L67.3 222.2 L62.8 213.4 L60.6 202 L59.2 196.4 L51.5 183.8 L47.9 166.2 L45.4 154.5 L45.4 143.4 L43.8 134.9 L31.4 140.4 L25.5 139.3 L14.4 128.2 L18.5 124.9 L16 121.3 L6 113.6 L11.7 107.5 L30.3 107.5 L28.6 99.7 L23.9 95.1 L22.9 88.1 L17.4 84 L26.7 74.4 L36.6 75.1 L45.4 65.6 L50.8 56.3 L59 47.2 L58.9 40.7 L66.1 35.4 L59.2 30.9 L56.3 24.7 L53.3 16.7 L57.5 12.8 L70.3 15 L79.8 13.7 L88 6 Z';
 
   const pad = (i) => String(i + 1).padStart(2, '0');
 
@@ -223,15 +215,7 @@
           <a class="button button-light" href="/niche-technology-hiring">Open the niche capability view <span aria-hidden="true">↗</span></a>
         </div>
         <div class="map-panel" aria-label="Conceptual India talent map">
-          <svg class="india-map" viewBox="0 0 260 263" role="img" aria-label="India, showing major GCC technology cities">
-            <path class="india-outline" d={INDIA_PATH} />
-            {#each mapCities as c}
-              <g class="map-city">
-                <circle cx={c.x} cy={c.y} r="3.4" />
-                <text x={c.x + 8} y={c.y + 3.2}>{c.name}</text>
-              </g>
-            {/each}
-          </svg>
+          <iframe class="india-map-frame" src="/india-map.html?transparent=1&ui=0&b={BUILD_ID}" title="3D map of India" loading="lazy"></iframe>
           <div class="map-caption">
             <b>CAPABILITY DEPTH</b>
             <span>Research layer · illustrative mock-up</span>
