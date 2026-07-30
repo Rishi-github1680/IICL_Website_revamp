@@ -15,6 +15,11 @@
   // The static backdrop is the default state. It stays up until a scene reports its
   // first rendered frame, so a slow fetch shows artwork rather than an empty box.
   let modelReady = $state(false);
+
+  // Per-deploy cache-buster for the model iframe URLs (injected by vite.config.js).
+  // Vercel's CDN caches the rarely-changing model .html with its old security headers;
+  // a fresh ?b= key per deploy forces those pages to be re-served with current headers.
+  const BUILD_ID = typeof __BUILD_ID__ !== 'undefined' ? __BUILD_ID__ : 'dev';
   import Nav from './Nav.svelte';
   import Cursor from './Cursor.svelte';
   import Footer from './Footer.svelte';
@@ -462,10 +467,10 @@
         <div class="journey-model journey-flat journey-holding" class:is-gone={modelReady} aria-hidden={modelReady}>
           <Backdrop label="Enterprise AI, illustrated" />
         </div>
-        <iframe bind:this={m1El} data-src="hologram.html?transparent=1&ui=0" title="AI brain hologram 3D model" loading="lazy" class="journey-model" style="opacity:1;"></iframe>
-        <iframe bind:this={m2El} data-src="voice-agent.html?transparent=1&ui=0&scatter=1" title="AI voice agent 3D model" class="journey-model" style="opacity:0;"></iframe>
-        <iframe bind:this={m3El} data-src="data-stream.html?transparent=1&ui=0&scatter=1" title="Global delivery stream 3D model" class="journey-model" style="opacity:0;"></iframe>
-        <iframe bind:this={m4El} data-src="galaxy.html?transparent=1&ui=0&scatter=1" title="Product galaxy 3D model" class="journey-model" style="opacity:0;"></iframe>
+        <iframe bind:this={m1El} data-src="hologram.html?transparent=1&ui=0&b={BUILD_ID}" title="AI brain hologram 3D model" loading="lazy" class="journey-model" style="opacity:1;"></iframe>
+        <iframe bind:this={m2El} data-src="voice-agent.html?transparent=1&ui=0&scatter=1&b={BUILD_ID}" title="AI voice agent 3D model" class="journey-model" style="opacity:0;"></iframe>
+        <iframe bind:this={m3El} data-src="data-stream.html?transparent=1&ui=0&scatter=1&b={BUILD_ID}" title="Global delivery stream 3D model" class="journey-model" style="opacity:0;"></iframe>
+        <iframe bind:this={m4El} data-src="galaxy.html?transparent=1&ui=0&scatter=1&b={BUILD_ID}" title="Product galaxy 3D model" class="journey-model" style="opacity:0;"></iframe>
       {/if}
       <div class="journey-vignette"></div>
 

@@ -34,8 +34,17 @@ function cleanUrls() {
   };
 }
 
+// A per-deploy build id. The homepage frames the model pages (hologram.html …) in
+// same-origin iframes; those .html files rarely change, so Vercel's CDN keeps serving
+// a cached copy WITH ITS OLD SECURITY HEADERS (a 304 reuses stale CSP / X-Frame-Options).
+// Appending ?b=<BUILD_ID> to the iframe src makes each deploy request a fresh cache key,
+// which is served with the current headers. On Vercel the commit SHA is stable per
+// deploy; locally a timestamp is fine.
+const BUILD_ID = (process.env.VERCEL_GIT_COMMIT_SHA || String(Date.now())).slice(0, 12);
+
 export default defineConfig({
   plugins: [svelte(), cleanUrls()],
+  define: { __BUILD_ID__: JSON.stringify(BUILD_ID) },
   build: {
     target: "es2020",
     sourcemap: false,
