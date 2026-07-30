@@ -325,7 +325,15 @@
       for (const m of models()) {
         // Then load each model ~0.2 of scroll before it is shown, so only one 3D
         // context spins up at a time rather than four at once.
-        if (near && m.el.dataset.src && ahead > m.i0 - 0.2) { m.el.src = m.el.dataset.src; delete m.el.dataset.src; }
+        if (near && m.el.dataset.src && ahead > m.i0 - 0.2) {
+          m.el.src = m.el.dataset.src; delete m.el.dataset.src;
+          // The scene's iiclReady message can race the parent's listener and be lost,
+          // and then the holding backdrop never fades — the schematic stays up forever
+          // (the bug users hit on the landing). The iframe's own load event is a reliable
+          // fallback: once the document has loaded the scene paints within a frame or two,
+          // so lift the backdrop shortly after regardless of the message.
+          m.el.addEventListener('load', () => setTimeout(() => { modelReady = true; }, 350), { once: true });
+        }
         // Handoff half-width. Each boundary is shared by two models and both windows are
         // centred on it, so one rises exactly as the other falls. Wider than the fade
         // needs, because the dispersed moment between shapes is the transition.
