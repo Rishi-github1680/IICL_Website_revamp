@@ -60,6 +60,9 @@ export const COMPANY_LINKS = [
 // legacy staffing route redirects into it (Stage 4).
 export const TALENT = [
   { label: 'GCC Technology Teams', href: '/gcc-technology-teams', icon: '/img/nav-gcc.svg' },
+  { label: 'Startup Ecosystem Support', href: '/startup-ecosystem-support', icon: '/img/nav-startup.svg' },
+  { label: 'How IICL Hires', href: '/how-iicl-hires', icon: '/img/nav-hiring.svg' },
+  { label: 'Niche Technology Hiring', href: '/niche-technology-hiring', icon: '/img/nav-niche.svg' },
 ];
 
 // Header hierarchy per Spec G3:
@@ -74,10 +77,7 @@ export const MENU = [
     ],
     highlight: { href: '/contactus?intent=ai-discovery-workshop', img: '/img/ai-solution-banner.webp', title: 'Not sure which one fits?', text: 'Bring one process to a discovery workshop and we will tell you what it actually needs.' } },
   { label: 'Talent', mega: 'columns', cols: [
-    { title: 'Technology teams', links: TALENT },
-  ] },
-  { label: 'Industries', mega: 'columns', cols: [
-    { title: 'Industries', links: INDUSTRIES },
+    { title: 'Talent pathways', links: TALENT },
   ] },
   { label: 'Insights', mega: 'columns', cols: [
     { title: 'Insights', links: INSIGHTS },

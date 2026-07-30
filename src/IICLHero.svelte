@@ -929,13 +929,14 @@
   .ind-strip-k { display: block; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
     color: var(--muted); margin-bottom: 14px; }
   .ind-chips { display: flex; flex-wrap: wrap; gap: 10px; }
-  .ind-mark { flex: none; display: block; width: 26px; height: 26px; background: currentColor;
+  .ind-mark { flex: none; display: block; width: 22px; height: 22px; background: currentColor;
     -webkit-mask: var(--mark) center / contain no-repeat; mask: var(--mark) center / contain no-repeat; }
   /* Collapsed to a 52px circle; the name expands out of it on hover or keyboard focus. */
-  .ind-chip { display: inline-flex; align-items: center; gap: 0;
-    height: 52px; padding: 0 13px; color: var(--ink); text-decoration: none; background: #fff;
-    border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px;
-    transition: border-color .2s, color .2s, background .2s; }
+  .ind-chip { display: inline-flex; align-items: center; justify-content: center; gap: 0;
+    width: 44px; height: 44px; padding: 0 11px; box-sizing: border-box;
+    color: var(--ink); text-decoration: none; background: #fff;
+    border: 1px solid var(--line); border-radius: 999px;
+    transition: width .34s cubic-bezier(0.22,1,0.36,1), border-color .2s, color .2s, background .2s; }
   .ind-chip:hover, .ind-chip:focus-visible {
     color: #fff; background: var(--brand-solid, #d81f1e); border-color: var(--brand-solid, #d81f1e); }
 
@@ -944,10 +945,12 @@
     opacity: 0; transform: translateX(-4px);
     transition: max-width .34s cubic-bezier(0.22,1,0.36,1), opacity .22s ease,
                 transform .34s cubic-bezier(0.22,1,0.36,1), margin-left .34s cubic-bezier(0.22,1,0.36,1); }
+  .ind-chip:hover, .ind-chip:focus-visible { width: auto; }
   .ind-chip:hover .ind-name, .ind-chip:focus-visible .ind-name {
     max-width: 220px; opacity: 1; transform: none; margin-left: 10px; }
 
   @media (prefers-reduced-motion: reduce) {
+    .ind-chip { width: auto; }
     .ind-name { max-width: 220px; opacity: 1; transform: none; margin-left: 10px; transition: none; }
   }
 
