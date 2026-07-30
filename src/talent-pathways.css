@@ -728,7 +728,7 @@
 /* India map — inline SVG with a visible outline (a clip-path can't show a border). */
 .tp-root .india-map {
   position: absolute;
-  inset: 8% 6% 12%;
+  inset: 17% 14% 18%;
   width: auto;
   height: auto;
   margin: auto;
