@@ -734,15 +734,17 @@
   margin: auto;
   display: block;
 }
+/* No colour — neutral monochrome India, per request. */
 .tp-root .india-outline {
-  fill: rgba(238, 47, 46, 0.06);
-  stroke: rgba(238, 47, 46, 0.55);
-  stroke-width: 1.4;
+  fill: rgba(255, 255, 255, 0.05);
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 0.9;
   stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 .tp-root .map-city circle {
-  fill: var(--red-light);
-  filter: drop-shadow(0 0 5px rgba(238, 47, 46, 0.7));
+  fill: rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.45));
 }
 .tp-root .map-city text {
   fill: rgba(255, 255, 255, 0.78);
