@@ -57,7 +57,7 @@ function frame() {
   const thin = s.indexOf(Math.min(...s));       // extrusion axis → camera looks along it
   const w = s[(thin + 1) % 3], h = s[(thin + 2) % 3];
   const span = Math.max(w, h);
-  const dist = (span / 2) / Math.tan((camera.fov * Math.PI / 180) / 2) * 1.18;
+  const dist = (span / 2) / Math.tan((camera.fov * Math.PI / 180) / 2) * 1.15;
   const pos = [0, 0, 0]; pos[thin] = dist;
   camera.position.set(pos[0], pos[1], pos[2]);
   camera.up.set(thin === 1 ? 0 : 0, thin === 1 ? 0 : 1, thin === 1 ? -1 : 0); // keep north up

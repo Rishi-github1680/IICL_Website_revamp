@@ -14,6 +14,15 @@
   // Per-deploy cache-buster for the model iframe (see IICLHero) so a header change is
   // never masked by a stale CDN copy of india-map.html.
   const BUILD_ID = typeof __BUILD_ID__ !== 'undefined' ? __BUILD_ID__ : 'dev';
+  // City pins overlaid on the static India render (% of the panel).
+  const mapPins = [
+    { name: 'NCR', left: 40, top: 27 },
+    { name: 'MUM', left: 29, top: 58 },
+    { name: 'PUN', left: 34, top: 60 },
+    { name: 'HYD', left: 42, top: 63 },
+    { name: 'BLR', left: 41, top: 77 },
+    { name: 'CHE', left: 46, top: 76 },
+  ];
 
   const domains = [
     { code: 'AI', name: 'AI & GenAI',           summary: 'ML engineering, GenAI applications, MLOps, AI platforms and responsible AI.',        roles: 'AI/ML Engineers · GenAI Engineers · MLOps · AI Architects' },
@@ -216,6 +225,9 @@
         </div>
         <div class="map-panel" aria-label="Conceptual India talent map">
           <iframe class="india-map-frame" src="/india-map.html?transparent=1&ui=0&b={BUILD_ID}" title="3D map of India" loading="lazy"></iframe>
+          {#each mapPins as p}
+            <span class="map-pin" style="left:{p.left}%;top:{p.top}%"><i></i>{p.name}</span>
+          {/each}
           <div class="map-caption">
             <b>CAPABILITY DEPTH</b>
             <span>Research layer · illustrative mock-up</span>
