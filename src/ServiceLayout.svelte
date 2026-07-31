@@ -287,6 +287,10 @@
   @media (max-width: 760px) {
     .svc-h1 { max-width: none; }
     .svc-hero { padding-top: 84px; min-height: 0; }
+    /* Full-bleed hero actions between the gutters, matching Layout/ProductLayout. */
+    .svc-actions { flex-direction: column; align-items: stretch; }
+    .cta, .ghost-light { justify-content: center; text-align: center; }
+    .cta-band .cta-big { display: flex; width: 100%; box-sizing: border-box; }
   }
   @media (prefers-reduced-motion: reduce) {
     .svc-content :global(.page-section.reveal) { opacity: 1; transform: none; transition: none; }

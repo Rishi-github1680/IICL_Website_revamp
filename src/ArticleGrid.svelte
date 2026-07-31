@@ -71,7 +71,9 @@
   .ag-meta { display: flex; align-items: center; gap: 10px; }
   .ag-cat { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--brand-ink); }
   .ag-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--line); }
-  .ag-time { font-size: 11px; letter-spacing: .1em; color: var(--muted); }
+  /* 11px mixed-case sat under the readable floor on a phone; the tracked uppercase
+     category beside it can stay smaller because caps read larger at the same size. */
+  .ag-time { font-size: 12px; letter-spacing: .1em; color: var(--muted); }
 
   .ag-go { display: inline-flex; align-items: center; gap: 9px; margin-top: 18px; font-size: 14.5px; font-weight: 600; color: var(--ink); }
   .ag-go i { font-style: normal; color: var(--brand-ink); transition: transform .28s cubic-bezier(0.22,1,0.36,1); }
@@ -92,7 +94,12 @@
   .ag-lead-excerpt { margin: 14px 0 0; font-size: 16.5px; line-height: 1.65; color: var(--muted); max-width: 52ch; }
 
   /* ── Card grid ── */
-  .ag-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+  /* min(300px, 100%) rather than a bare 300px: on a 320px phone the content box is
+     272px, and a hard 300px track cannot shrink to fit it — the grid stayed 300px
+     wide and pushed the whole document into a horizontal scroll. The min() lets the
+     track collapse to the column width once there is less than 300px to give it,
+     while still holding 300px as the wrap threshold everywhere above that. */
+  .ag-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 32px; }
   .ag-card { display: flex; flex-direction: column; text-decoration: none; color: inherit;
     transition: transform .3s cubic-bezier(0.22,1,0.36,1); }
   .ag-card:hover { transform: translateY(-6px); }
@@ -103,7 +110,7 @@
   .ag-card-media::after { content: ''; position: absolute; inset: auto 0 0; height: 3px; background: var(--red);
     transform: scaleX(0); transform-origin: left; transition: transform .42s cubic-bezier(0.22,1,0.36,1); }
   .ag-card:hover .ag-card-media::after { transform: scaleX(1); }
-  .ag-num { position: absolute; top: 12px; right: 14px; font-size: 11px; letter-spacing: .16em;
+  .ag-num { position: absolute; top: 12px; right: 14px; font-size: 12px; letter-spacing: .16em;
     color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.8); }
   .ag-card-body { padding: 18px 0 0; }
   .ag-card-title { margin: 14px 0 0; font-size: 20px; line-height: 1.28; letter-spacing: -.012em;

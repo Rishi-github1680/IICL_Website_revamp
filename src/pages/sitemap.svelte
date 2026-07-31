@@ -98,6 +98,13 @@
     color: var(--brand-ink); border: 1px solid color-mix(in srgb, var(--brand) 40%, transparent);
     border-radius: 999px; padding: 1px 6px; margin-left: 4px; }
 
-  @media (max-width: 900px) { .sm-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 900px) {
+    .sm-grid { grid-template-columns: repeat(2, 1fr); }
+    /* This page is nothing but a dense link index — 20px rows were the smallest tap
+       targets on the site. Each becomes a 44px row and the list margin goes, so the
+       columns get more reachable without getting much longer. */
+    .sm-list li { margin-bottom: 0; }
+    .sm-list a { display: inline-flex; align-items: center; min-height: 44px; }
+  }
   @media (max-width: 520px) { .sm-grid { grid-template-columns: 1fr; } }
 </style>

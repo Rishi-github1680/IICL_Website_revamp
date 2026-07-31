@@ -51,11 +51,20 @@
   --shadow-2: 0 6px 16px rgba(18,20,24,0.07), 0 2px 5px rgba(18,20,24,0.04);
   --shadow-3: 0 18px 40px rgba(18,20,24,0.11), 0 4px 12px rgba(18,20,24,0.05);
 
-  --nav-h: 60px;   /* measured height of the sticky .nav-bar */
+  /* Measured height of the sticky .nav-bar. It drives the in-page anchor offset, the
+     mega-panel top and the mobile sheet's max-height, so it has to match reality —
+     at 60px it was 2px taller than the bar actually is and the mobile sheet hung
+     5px below it. Desktop: 34px brand / 37px .talk + 20px padding + 1px rule. */
+  --nav-h: 58px;
 }
 
-/* Phones and small tablets take the 24px gutter. Section rhythm stays 32px. */
-@media (max-width: 900px) { :root { --wrap-pad: 24px; } }
+/* Phones and small tablets take the 24px gutter, and the section rhythm matches it:
+   24px of content, the divider rule with nothing extra either side, then 24px again.
+   Sections express their spacing purely as --space-section padding, so setting the
+   token here is what makes the gap above and below every rule identical. */
+@media (max-width: 900px) { :root { --wrap-pad: 24px; --space-section: 24px; } }
+/* Touch bar: 44px controls + 12px padding + 1px rule. */
+@media (max-width: 980px) { :root { --nav-h: 57px; } }
 
 body { font-family: var(--font-display); }
 
@@ -285,6 +294,43 @@ img { max-width: 100%; }
   font-family: var(--font-mono); font-size: 12px; color: var(--brand-ink); }
 .stagelist strong { font-size: 15.5px; font-weight: var(--w-heading); color: var(--ink); }
 .stagelist span { font-size: 14.5px; line-height: 1.6; color: #40434a; }
+
+/* ── Touch targets ─────────────────────────────────────────────────────
+   Everything below is pointer-size only: it changes hit areas on touch, never
+   type, colour or spacing. Two techniques, picked per control:
+
+   1. Controls that already have a box (chips, pill buttons) get a real
+      min-height of 44px and centre their label inside it.
+   2. Small standalone links (the hero kicker, the closing "cta-link") get a
+      transparent ::after that stretches their hit area to 44px WITHOUT moving
+      anything. Growing these with padding would have shifted the hero rhythm on
+      every page; the overlay leaves the visual position untouched.
+
+   Inline links inside a running paragraph are deliberately excluded — WCAG
+   exempts text in a sentence, and expanding them would overlap the lines above
+   and below and cause mis-taps rather than prevent them.
+
+   These selectors live in components with scoped styles. That is fine: Svelte
+   keeps the authored class on the element and only ADDS its hash, so a global
+   rule still matches. Tag+class (a.foo) is used so this out-ranks the scoped
+   rule where both set the same property. `button.track` is qualified on purpose
+   — IICLHero uses .track for an <ol>, which must not pick this up. */
+@media (max-width: 900px) {
+  a.cta-link, a.page-kicker, a.pr-kicker, a.svc-kicker,
+  a.inline-cta, a.anchor-cta, a.path-cta { position: relative; }
+  a.cta-link::after, a.page-kicker::after, a.pr-kicker::after, a.svc-kicker::after,
+  a.inline-cta::after, a.anchor-cta::after, a.path-cta::after {
+    content: ''; position: absolute; left: 0; right: 0; top: 50%;
+    height: 44px; transform: translateY(-50%);
+  }
+
+  button.cat-chip, button.team-chip, button.track, button.dc-change {
+    min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
+  }
+
+  /* Focused-only, but it is the first thing a keyboard or switch user lands on. */
+  a.skip-link { min-height: 44px; display: inline-flex; align-items: center; box-sizing: border-box; }
+}
 
 /* ── Two-column FAQ ────────────────────────────────────────────────────
    Past five questions a single column makes the reader scroll through answers that do

@@ -149,6 +149,10 @@
      rhythm so each column reads as a block rather than a loose scatter. */
   .ft-col .ft-h { font-size: 11px; font-weight: var(--w-medium); letter-spacing: 0.14em; text-transform: uppercase;
     color: rgba(255,255,255,0.45); margin: 0 0 12px; }
+  /* The second heading in a column ("Industries", "Company") carries this class in the
+     markup, but the rule was never written — so the new group started tight against
+     the end of the previous list and the two read as one run of links. */
+  .ft-col .ft-h4-gap { margin-top: 24px; }
   .ft-col ul { list-style: none; margin: 0; padding: 0; }
   .ft-col li { margin: 0 0 4px; }
   .ft-col a { display: inline-block; color: rgba(255,255,255,0.82); text-decoration: none; font-size: 14px;
@@ -207,5 +211,22 @@
   @media (max-width: 560px) {
     .ft-top { grid-template-columns: 1fr; }
     .ft-actions { justify-content: space-between; }
+    /* Two full-width CTAs read better than two half-width ones with wrapped labels. */
+    .ft-cta { flex: 1 1 100%; justify-content: center; }
+  }
+
+  /* ── Touch sizing ───────────────────────────────────────────────────────────
+     The sitemap links are the densest tap targets on the site: 14px text on a 4px
+     rhythm gave 19px-high rows, so on a phone the columns were a wall of near-
+     unhittable links. Each row becomes a 44px target and the list margin is removed
+     so the columns do not simply double in height. inline-flex, not flex, because
+     the address links carry an inline <strong> that a flex container would break
+     onto its own line — those are already multi-line and tall enough, so they are
+     deliberately left out. */
+  @media (max-width: 900px) {
+    .ft-col li { margin-bottom: 0; }
+    .ft-col a, .ft-contact a { display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
+    .ft-col a.ft-prod, .ft-prod.is-disabled { display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
+    .ft-soc { width: 44px; height: 44px; }
   }
 </style>

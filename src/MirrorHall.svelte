@@ -189,6 +189,14 @@
     .mh { padding: 44px var(--wrap-pad) 32px; }
     .mh-mirror, .mh-fade { display: none; }
     .mh-glow { bottom: -8px; }
+    /* The dots were a 7×7 tap target. The mark stays 7px — a dot wide enough to tap
+       literally would be wider than the strip it sits in — but the button now spans
+       the full 44px height and the whole gap to its neighbour, so the reachable area
+       is ~29×44 with no overlap between adjacent dots. */
+    .mh-dots { gap: 22px; }
+    .mh-dot { position: relative; }
+    .mh-dot::after { content: ''; position: absolute; top: 50%; left: 50%;
+      width: calc(100% + 22px); height: 44px; transform: translate(-50%, -50%); }
   }
   @media (prefers-reduced-motion: reduce) {
     .mh-card, .mh-card img, .mh-mirror, .mh-row, .mh-item { transition: none; }

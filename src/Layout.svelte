@@ -388,6 +388,16 @@
   @media (max-width: 760px) {
     .page-h1 { max-width: none; }
     .page-hero { padding: 72px 0 56px; }
+    /* Hero actions run full-bleed between the page gutters instead of sitting as
+       narrow pills that wrap onto ragged rows. The buttons take their width from
+       the .wrap, so each one ends up exactly --wrap-pad (24px) from both screen
+       edges — the same shape as the footer CTAs. Applies to the primary CTA and
+       equally to "Visit website" and "Back to home". */
+    .page-hero-actions { flex-direction: column; align-items: stretch; }
+    .cta, .ghost-light { justify-content: center; text-align: center; }
+    /* The closing band's CTA too: it was centred at its label width, so it sat on a
+       different rail from every other button on the page. */
+    .cta-band .cta-big { display: flex; width: 100%; box-sizing: border-box; }
   }
 
   /* On a narrow phone the CTA label is wider than the gutter allows, and

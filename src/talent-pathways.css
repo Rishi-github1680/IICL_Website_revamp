@@ -1408,8 +1408,123 @@
 .tp-root .domain-card a,
 .tp-root .track-grid a { position: static; margin-top: 16px; }
 
-/* Space-between stacks → simple top-aligned stacks with a normal gap. */
-.tp-root .playbook li { min-height: 0; align-content: start; gap: 14px; }
+/* Space-between stacks → simple top-aligned stacks with a normal gap.
+   The :nth-child()/:nth-last-child() variants are listed explicitly because the
+   ≤680px rule near line 1279 re-imposes min-height: 220px through those exact
+   selectors, and a pseudo-class outranks this plain one. Without them, cards 3, 4
+   and 5 alone kept a 220px floor — which is why the last three niche playbook
+   cards sat in a tall, half-empty box on a phone while cards 1 and 2 looked fine. */
+.tp-root .playbook li,
+.tp-root .playbook li:nth-child(3),
+.tp-root .playbook li:nth-last-child(-n + 2) { min-height: 0; align-content: start; gap: 14px; }
 .tp-root .ecosystem-row > div { min-height: 0; align-content: start; gap: 10px; }
 .tp-root .principle-strip > div { min-height: 0; align-content: start; gap: 8px; }
 .tp-root .market-signals > div { min-height: 0; align-content: start; gap: 8px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Responsive re-assertion — MUST STAY LAST IN THIS FILE.
+
+   This stylesheet is two packs concatenated. The first (the GCC rules, ~lines
+   1-970) declares its own @media collapses; the second (the Startup/Hiring/Niche
+   port, from ~line 1000) then RE-DECLARES several of the same selectors at equal
+   specificity. Because source order breaks specificity ties, those later
+   unconditional rules were beating the earlier media queries at every width, so
+   the grids below never collapsed at all:
+
+     .pillar-grid / .track-grid   stayed 3-up   → /startup-ecosystem-support
+     .principle-strip             stayed 4-up
+     .governance-grid             stayed 4-up
+     .process-layout              stayed minmax(380px) + minmax(480px)
+                                                → /how-iicl-hires was 930px wide
+                                                  inside a 320px viewport
+     .market-grid                 stayed 0.8fr 1.2fr
+
+   Re-stating them here — after every unconditional rule in the file — is what
+   makes them take effect. Anything added below this banner must keep that order.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .tp-root .pillar-grid,
+  .tp-root .track-grid,
+  .tp-root .principle-strip,
+  .tp-root .governance-grid { grid-template-columns: repeat(2, 1fr); }
+  .tp-root .process-layout,
+  .tp-root .market-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+
+@media (max-width: 680px) {
+  .tp-root .pillar-grid,
+  .tp-root .track-grid,
+  .tp-root .principle-strip,
+  .tp-root .governance-grid { grid-template-columns: 1fr; }
+  /* Actions run the full column between the gutters instead of shrink-wrapping their
+     label, so every button on a phone starts and ends 24px from the screen edge. */
+  .tp-root .hero-actions { flex-direction: column; align-items: stretch; }
+  .tp-root .button { width: 100%; justify-content: center; box-sizing: border-box; }
+  /* The 7-stage rail becomes a scrolling tab strip (see the ≤900 block above).
+     Its own overflow-x makes it a scroll container, so it cannot widen the page,
+     but the panel underneath must not hold a desktop min-height on a phone.
+
+     .stage-controls is absolutely positioned against this panel's bottom edge, so
+     dropping the min-height alone would let it land on top of the output card.
+     The padding reserves that band explicitly instead of relying on a fixed height:
+     35px offset + the control row + breathing space. */
+  .tp-root .process-detail { min-height: 0; padding-bottom: 84px; }
+  /* 12px text buttons were a 62x14 tap target. */
+  .tp-root .stage-controls button { min-height: 44px; display: inline-flex; align-items: center; }
+  .tp-root .stage-controls { bottom: 18px; }
+}
+
+/* Micro-labels. The ported pack set its mono captions at 8-10px. That is below the
+   readable floor on a phone, and these are not decoration — they are the badge
+   numbers and the field labels that say what each block of the page is ("REQUIRED
+   OUTPUT", "ROLE OUTCOMES", "CAPABILITY DEPTH"). They are set in caps, which reads
+   roughly a size larger than mixed case, so 11px is a legible floor here.
+
+   The hero diagrams are deliberately NOT in this list. .system-core, .orbit-node,
+   .radar-core, .radar-node, .runway-stop and .pipeline-node label a fixed-geometry
+   drawing — their circles and orbits are sized in px, so growing the type inside
+   them would overflow the artwork rather than make the page more readable. */
+@media (max-width: 900px) {
+  .tp-root .process-detail > small,
+  .tp-root .phase-detail > small,
+  .tp-root .domain-detail > small,
+  .tp-root .track-grid article > small,
+  .tp-root .map-caption b,
+  .tp-root .map-caption span { font-size: 11px; }
+
+  .tp-root .process-step > span,
+  .tp-root .condition-card > span,
+  .tp-root .domain-top > span,
+  .tp-root .domain-top > b,
+  .tp-root .model-list article > span,
+  .tp-root .horizontal-flow li > b,
+  .tp-root .pillar-card > span,
+  .tp-root .track-grid article > span,
+  .tp-root .decision-board > div > span,
+  .tp-root .ecosystem-row > div > span,
+  .tp-root .principle-strip > div > span,
+  .tp-root .output-card > span,
+  .tp-root .dossier-id > span,
+  .tp-root .dossier-grid > div > span,
+  .tp-root .responsibility-head span,
+  .tp-root .evidence-grid > div > span,
+  .tp-root .governance-grid article > span,
+  .tp-root .map-pin,
+  .tp-root .signal-row li,
+  .tp-root .niche-thesis > div > span,
+  .tp-root .domain-button > span,
+  /* :last-child is carried over from the base rule at ~line 1199 — without it this
+     selector is a class short and loses the specificity tie. */
+  .tp-root .domain-detail > div:last-child span,
+  .tp-root .playbook li > span,
+  .tp-root .matrix-row > span,
+  .tp-root .market-signals > div > span,
+  /* Not geometry-constrained like the rest of the hero artwork — it is an absolutely
+     positioned caption on the panel's bottom edge, so it has room to grow. */
+  .tp-root .system-status,
+  .tp-root .scroll-cue span,
+  .tp-root .horizontal-flow li > span,
+  /* The phase panel's service list numbers its items with a bare <span>. */
+  .tp-root .phase-detail ul li > span { font-size: 11px; }
+}

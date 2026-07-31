@@ -261,7 +261,7 @@
         <h2>Share the outcome, not only the job description.</h2>
         <p>IICL will help turn the requirement into a role scorecard, search strategy, assessment path and decision-ready hiring plan.</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="/contactus?intent=talent-requirement">Structure a talent requirement <span aria-hidden="true">↗</span></a>
+          <a class="button button-primary" href="/contactus?intent=gcc-capability-requirement&source=/how-iicl-hires">Structure a talent requirement <span aria-hidden="true">↗</span></a>
           <a class="button button-dark-ghost" href="/gcc-technology-teams">Explore GCC teams <span aria-hidden="true">→</span></a>
         </div>
       </div>

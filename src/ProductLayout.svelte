@@ -13,6 +13,7 @@
   import { can3D } from './can3d.js';
   import Backdrop from './Backdrop.svelte';
   import { breadcrumbSchema, productSchema, faqSchema, jsonLd } from './seo.js';
+  import { PRODUCT_IDS } from './contact/contact-schema.js';
 
   let {
     h1 = '', lede = '', heroModel = null, heroBanner = null, path = '',
@@ -25,6 +26,18 @@
 
   const me = PRODUCTS.find((p) => p.href === path) || {};
   const accent = me.acc || '#ee2f2e';
+
+  // Contact routing, derived rather than repeated on five pages (CTA registry rows
+  // 14-18: every product page books a demo on the shared product-demo schema with its
+  // own approved product ID, which is what adds the product-specific questions). The
+  // slug IS the product ID; anything not on the allowlist just falls through to the
+  // plain contact page rather than inventing a variant.
+  const productId = PRODUCT_IDS.find((id) => id === path.replace(/^\//, '').toLowerCase()) || null;
+  const contactHref = $derived(
+    ctaHref !== '/contactus' ? ctaHref
+      : productId ? `/contactus?intent=product-demo&product=${productId}&source=${path}`
+      : '/contactus'
+  );
   // Four fits one row; a full eight-card rail is longer than the page it sits under.
   const siblings = PRODUCTS.filter((p) => p.href !== path && !p.soon).slice(0, 4);
 
@@ -92,7 +105,7 @@
       <h1 class="pr-h1">{h1}</h1>
       {#if lede}<p class="pr-lede">{lede}</p>{/if}
       <div class="pr-actions">
-        <a href={ctaHref} class="pr-cta">{cta || 'Book a demo'} <span class="mono">→</span></a>
+        <a href={contactHref} class="pr-cta">{cta || 'Book a demo'} <span class="mono">→</span></a>
         {#if me.site}
           <a href={me.site} target="_blank" rel="noopener" class="pr-ghost">
             Visit {me.label} <span class="mono">↗</span>
@@ -150,7 +163,7 @@
     <div class="wrap">
       <span class="mono pr-band-kicker">Start with one process</span>
       <h2 class="pr-band-h">See {me.label || h1} run against something you actually do.</h2>
-      <a href={ctaHref} class="pr-cta pr-cta-big">{cta || 'Book a demo'} <span class="mono">→</span></a>
+      <a href={contactHref} class="pr-cta pr-cta-big">{cta || 'Book a demo'} <span class="mono">→</span></a>
     </div>
   </div>
 
@@ -284,6 +297,8 @@
     .pr-more-row { grid-template-columns: 1fr; }
     .pr-actions { flex-direction: column; align-items: stretch; }
     .pr-cta, .pr-ghost { justify-content: center; }
+    /* The closing band's CTA sat centred at its label width, off the page's rail. */
+    .pr-band .pr-cta-big { display: flex; width: 100%; box-sizing: border-box; }
   }
   @media (prefers-reduced-motion: reduce) {
     .pr-body :global(.page-section.reveal) { opacity: 1; transform: none; transition: none; }

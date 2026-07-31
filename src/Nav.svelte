@@ -168,6 +168,9 @@
   .brand { display: inline-flex; align-items: center; gap: 13px; text-decoration: none; flex: none; transition: opacity .2s; }
   .brand:hover { opacity: 0.82; }
   .brand-logo { height: 34px; width: auto; display: block; }
+  /* The logo is 34px tall, so the link was a 34px-high tap target. On touch it needs
+     44px; the extra comes from the link box, not the artwork, so nothing resizes. */
+  @media (max-width: 980px) { .brand { min-height: 44px; } }
   .nav-links { display: flex; align-items: center; gap: 26px; }
   .nav-group { position: relative; }
 
@@ -225,8 +228,11 @@
   /* iicl.in panel language: white, 10px radius, soft shadow, 30px padding, no border */
   .dropdown:not(.mega) { position: absolute; top: 100%; left: 0; margin-top: 14px; min-width: 210px; background: #fff;
     padding: 22px 26px; display: flex; flex-direction: column; gap: 2px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-  .dropdown.mega { position: fixed; left: 0; right: 0; margin: 14px auto 0; top: 60px; box-sizing: border-box; display: grid;
-    background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 30px; border-radius: 10px; }
+  /* Hung off the real bar height rather than a hard-coded 60px, which no longer
+     matched the bar (it measures 58px) and left the panel floating a few pixels low. */
+  .dropdown.mega { position: fixed; left: 0; right: 0; margin: 14px auto 0; top: var(--nav-h); box-sizing: border-box; display: grid;
+    background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 30px; border-radius: 10px;
+    max-height: calc(100dvh - var(--nav-h) - 28px); overflow-y: auto; }
   /* Two even link columns with a full-width footer CTA underneath. */
   /* Service rows sit slightly tighter than product rows — no logo tile to clear. */
   .mm-item-svc { align-items: center; }
@@ -318,8 +324,11 @@
     transition: transform .22s cubic-bezier(0.22,1,0.36,1); }
   .mm-foot:hover .mm-foot-arw { transform: translateX(4px); }
 
-  /* Hamburger */
-  .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: 0; cursor: pointer; padding: 8px; }
+  /* Hamburger. The three 24px bars are the mark; the button is sized to a full 44×44
+     touch target around them (it measured 40×32 before, under the minimum on the one
+     control the whole mobile navigation depends on). */
+  .hamburger { display: none; flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px; background: none; border: 0; cursor: pointer; padding: 0; width: 44px; height: 44px; flex: none; }
   .hamburger span { width: 24px; height: 2px; background: #f4f2ee; display: block; transition: transform .25s, opacity .2s; }
   .hamburger.on span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .hamburger.on span:nth-child(2) { opacity: 0; }
@@ -327,7 +336,15 @@
 
   @media (max-width: 980px) {
     .hamburger { display: flex; }
-    .nav-links { position: fixed; inset: 60px 0 auto; flex-direction: column; align-items: stretch; gap: 0; background: #070707; border-bottom: 1px solid rgba(238,47,46,0.25); padding: 8px 20px 24px; max-height: calc(100vh - 60px); overflow-y: auto; display: none; }
+    /* The brand link and the hamburger are both 44px tall on touch. Trimming the bar's
+       own padding keeps the header the same overall height it was (~57px) while the
+       controls inside it grow to a proper tap size. */
+    .nav-inner { padding-block: 6px; }
+    /* Anchored to the bar itself (top: 100% inside the sticky .nav-bar) instead of a
+       fixed 60px offset. The bar is 55-58px depending on breakpoint, so the constant
+       left a visible gap between the bar and the sheet. 100dvh, not 100vh, so the
+       sheet is not left scrolling under a mobile browser's collapsing address bar. */
+    .nav-links { position: absolute; top: 100%; left: 0; right: 0; bottom: auto; flex-direction: column; align-items: stretch; gap: 0; background: #070707; border-bottom: 1px solid rgba(238,47,46,0.25); padding: 8px 20px 24px; max-height: calc(100dvh - var(--nav-h)); overflow-y: auto; overscroll-behavior: contain; display: none; }
     .nav-links.open { display: flex; }
     .nav-group { border-bottom: 1px solid rgba(255,255,255,0.06); }
     .nav-group::after { display: none; }

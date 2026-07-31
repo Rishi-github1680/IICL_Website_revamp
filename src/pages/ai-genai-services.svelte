@@ -325,8 +325,14 @@
 
   /* Real gaps, borders on the cards. A 1px gap over a background drew the dividers
      but showed as a grey block wherever the last row was not full. */
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr);
+  /* minmax(0, 1fr), not a bare 1fr: 1fr floors at min-content, so a long unbroken
+     word in a card held the track open and pushed the row past the viewport. The
+     column counts match the shared .grid-3 steps in theme.css so the card rows on
+     this page break at the same widths as every other card grid on the site. */
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px; margin-top: 16px; }
+  @media (max-width: 1040px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 660px)  { .cards { grid-template-columns: 1fr; } }
   .card { background: #fff; padding: 18px; border: 1px solid var(--line); border-radius: 8px; }
   .card h3 { margin: 0 0 8px; font-size: 16px; font-weight: var(--w-heading); color: var(--ink); }
   .card p { margin: 0; font-size: 14.5px; line-height: 1.6; color: #40434a; }
@@ -337,7 +343,9 @@
   .out span { color: var(--brand-ink); margin-right: 6px; }
 
   .gov { list-style: none; margin: 16px 0 0; padding: 0; display: grid;
-    grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 1040px) { .gov { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 660px)  { .gov { grid-template-columns: 1fr; } }
   .gov li { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 13px 16px; display: flex; gap: 12px; align-items: baseline;
     font-size: 14.5px; color: #40434a; }
   .gov span { font-size: 11px; color: var(--brand-ink); }
@@ -354,4 +362,10 @@
   .note { font-size: var(--fs-small); color: var(--muted); }
   .safety { padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px;
     background: #fff; font-size: var(--fs-small); line-height: 1.6; }
+  /* On a phone the actions stack and run the full column between the gutters, so each
+     button sits 24px from both screen edges like every other action on the site. */
+  @media (max-width: 660px) {
+    .cta-row { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
+  }
 </style>

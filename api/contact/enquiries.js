@@ -10,7 +10,11 @@
 // Env vars (Vercel dashboard): RESEND_API_KEY, CONTACT_TO, CONTACT_FROM.
 
 import { randomUUID } from "node:crypto";
-import { INTENTS, INTENT_IDS, PRODUCT_IDS, requirementFields } from "../../src/contact/contact-schema.js";
+import { INTENTS, INTENT_IDS, PRODUCT_IDS, requirementFields, RESPONSE_CHANNELS } from "../../src/contact/contact-schema.js";
+
+// Bumped whenever the owner map or routing rules change, so an accepted record can be
+// traced back to the routing that produced it (PDF release gate 8).
+const ROUTING_VERSION = "2026-07-01";
 
 const FIELD_MAX = 4000;
 const clean = (v, limit = 400) => String(v == null ? "" : v).trim().slice(0, limit);
@@ -91,6 +95,9 @@ export default async function handler(req, res) {
 
   const submissionId = randomUUID();
   const consentVersion = clean(body.consent?.version, 40);
+  // Allowlisted, like every other client-supplied value: an unknown channel falls back
+  // to the default rather than being written through to the CRM as free text.
+  const responseChannel = RESPONSE_CHANNELS.includes(body.responseChannel) ? body.responseChannel : RESPONSE_CHANNELS[0];
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -103,8 +110,10 @@ export default async function handler(req, res) {
     ...schema.contact.map((f) => [f.label, contact[f.name]]),
     ...requirementFields(intent, product).filter((f) => f.type !== "file").map((f) => [f.label, requirement[f.name]]),
     ["Source", attribution.source || "—"], ["CTA", attribution.ctaId || "—"],
+    ["Preferred response", responseChannel],
     ["Marketing consent", body.consent?.marketing ? "yes" : "no"],
-    ["Consent version", consentVersion || "—"], ["Submission", submissionId],
+    ["Consent version", consentVersion || "—"], ["Routing version", ROUTING_VERSION],
+    ["Submission", submissionId],
   ]
     .filter(([, v]) => v !== "")
     .map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0;vertical-align:top"><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(String(v)).replace(/\n/g, "<br>")}</td></tr>`)

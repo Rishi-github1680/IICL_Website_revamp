@@ -233,7 +233,7 @@
         <h2>Bring us the capability problem everyone says is hard to hire.</h2>
         <p>We will help define the evidence, adjacent talent pools, market constraints and search plan before presenting profiles.</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="/contactus?intent=niche-search">Start a niche technology search <span aria-hidden="true">↗</span></a>
+          <a class="button button-primary" href="/contactus?intent=gcc-capability-requirement&source=/niche-technology-hiring">Start a niche technology search <span aria-hidden="true">↗</span></a>
           <a class="button button-dark-ghost" href="/how-iicl-hires">See the hiring process <span aria-hidden="true">→</span></a>
         </div>
       </div>

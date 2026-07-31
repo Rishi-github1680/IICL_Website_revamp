@@ -220,7 +220,7 @@
         <h2>Tell us what you are building—and what must be true next.</h2>
         <p>Start with the product thesis, current stage, team, technology constraints, target milestone and enterprise-readiness requirements.</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="/contactus?intent=startup-scale-journey">Map your startup scale journey <span aria-hidden="true">↗</span></a>
+          <a class="button button-primary" href="/contactus?intent=gcc-team-expansion&source=/startup-ecosystem-support">Map your startup scale journey <span aria-hidden="true">↗</span></a>
           <a class="button button-dark-ghost" href="/niche-technology-hiring">Explore niche hiring <span aria-hidden="true">→</span></a>
         </div>
       </div>

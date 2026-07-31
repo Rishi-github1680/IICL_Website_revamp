@@ -193,6 +193,37 @@ export const INTENTS = {
   },
 };
 
+// "What happens next" per intent (PDF §17 mock-ups: the context rail states ORIGIN,
+// ROUTE OWNER and WHAT HAPPENS NEXT before the visitor commits). Attached in a loop
+// rather than inline so the intent definitions above stay readable, and so a missing
+// entry degrades to a truthful generic line instead of an empty panel.
+const NEXT_STEP = {
+  general: 'A relevant IICL team member reviews and routes the enquiry.',
+  'ai-discovery-workshop': 'Enterprise AI Advisory confirms scope and proposes workshop dates.',
+  'enterprise-ai-use-case': 'AI Solution Consulting reviews the use case and its feasibility.',
+  'agentic-ai-workflow-assessment': 'Agentic AI Advisory reviews the workflow and its authority boundary.',
+  'agentic-ai-architecture': 'AI Architecture reviews the objective and the integration surface.',
+  'agentic-ai-security-assessment': 'Agent Security reviews the authority, approval and audit model.',
+  'agentic-ai-value-assessment': 'The AI Value Office reviews the baseline and how it would be measured.',
+  'agentic-ai-managed-operations': 'Managed AgentOps reviews the current production state.',
+  'gcc-team-expansion': 'GCC Solutions reviews capability and delivery requirements.',
+  'gcc-capability-requirement': 'Talent Solutions reviews the roles and current market availability.',
+  'product-demo': 'Product Solutions prepares a demo against your scenario.',
+  'industry-workflow': 'Industry AI Solutions reviews the workflow for that sector.',
+  'service-requirement': 'Technology Services reviews the scope and qualifies the requirement.',
+  'professional-application': 'Talent Acquisition reviews the application against the open role.',
+  'professional-open': 'Talent Acquisition records the profile subject to your consent.',
+  'partnership-enquiry': 'Strategic Partnerships reviews the proposition.',
+  'privacy-enquiry': 'The Privacy Office handles the request through a restricted queue.',
+};
+for (const [id, cfg] of Object.entries(INTENTS)) {
+  cfg.next = NEXT_STEP[id] || 'An IICL specialist reviews your enquiry and replies.';
+}
+
+// Preferred response channel (PDF §05 step 3 / §17 review mock-up). A preference, not
+// a promise: which channels are actually offered is an IICL operating decision.
+export const RESPONSE_CHANNELS = ['Email', 'Call', 'WhatsApp'];
+
 // General path is a router, not a dead end (PDF §08): one direction question that
 // swaps to the matching schema without re-asking source/contact.
 export const GENERAL_ROUTER = [
@@ -255,6 +286,19 @@ export const CTA_REGISTRY = [
   { family: 'Company', source: '/privacy-policy', cta: 'Contact the Privacy Owner', intent: 'privacy-enquiry' },
   { family: 'Company', source: '/contactus', cta: 'Send an enquiry', intent: 'general' },
   { family: 'Company', source: '/sitemap', cta: 'Navigate to a relevant path', intent: 'general' },
+
+  // ── Post-handoff pages ─────────────────────────────────────────────────────
+  // These three talent-pathway pages did not exist when the 46-route registry was
+  // drawn up, and their CTAs were pointing at intent IDs with no schema behind them
+  // (talent-requirement, niche-search, startup-scale-journey). Unknown IDs fail safely
+  // to the general path, so nothing was lost — but the enquiry also arrived with none
+  // of its context, which is the whole point of the registry. They are mapped to the
+  // nearest DOCUMENTED intent rather than given new ones, because a new intent needs a
+  // named owner queue and IICL has not confirmed one (see the PDF's open decisions).
+  // Confirm the owner for these three and they can become intents of their own.
+  { family: 'Talent', source: '/how-iicl-hires', cta: 'Structure a talent requirement', intent: 'gcc-capability-requirement' },
+  { family: 'Talent', source: '/niche-technology-hiring', cta: 'Start a niche technology search', intent: 'gcc-capability-requirement' },
+  { family: 'Talent', source: '/startup-ecosystem-support', cta: 'Map your startup scale journey', intent: 'gcc-team-expansion' },
 ];
 
 // Consent text — versioned so an accepted submission records exactly what was agreed
@@ -289,6 +333,23 @@ export function resolveContext(search) {
     if (v && /^[\w\-.]{1,80}$/.test(v)) utm[k] = v;
   }
   return { intent, product, source, ctaId, utm };
+}
+
+// Human label for the page the visitor came from, shown as ORIGIN in the context rail.
+// Derived from the path rather than passed in a query parameter — the URL carries IDs,
+// never display copy, and a title in the URL would be one more thing to allowlist.
+export function sourceLabel(path) {
+  if (!path || path === '/') return path === '/' ? 'Home' : 'Direct';
+  const slug = path.replace(/^\/+|\/+$/g, '');
+  if (!slug) return 'Home';
+  const words = slug.split(/[-/]/).filter(Boolean).map((w) => {
+    // Keep the product and acronym spellings the rest of the site uses.
+    const known = { ai: 'AI', gcc: 'GCC', hr: 'HR', erp: 'ERP', genai: 'GenAI',
+      ivaak: 'iVaak', iwac: 'iWac', idental: 'iDental', icognito: 'iCognito', trufix: 'TruFix',
+      iicl: 'IICL', usecase: 'Use case', dev: 'Development', aboutus: 'About us' };
+    return known[w] || w.charAt(0).toUpperCase() + w.slice(1);
+  });
+  return words.join(' ');
 }
 
 // The field list for an intent (+ product variant), used by the renderer and mirrored

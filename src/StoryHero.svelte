@@ -35,6 +35,9 @@
   let progress = $state(0);
 
   // Panels fade over a progress window: [in-start, in-end, out-start, out-end].
+  // The caller divides the scroll into one band per step (see the `at` values in
+  // aboutus.svelte), so the pacing is identical at every display size — no phone-only
+  // re-timing here, which is what kept the story consistent to describe and to test.
   const fade = (p, a, b, c, d) => {
     const s = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x));
     return Math.min(s((p - a) / (b - a)), 1 - s((p - c) / (d - c)));
@@ -78,6 +81,9 @@
     const stops = panels
       .map((pn) => (Array.isArray(pn.at) ? (pn.at[1] + pn.at[2]) / 2 : null))
       .filter((v) => v != null && v >= 0 && v <= 1);
+    // Snapping settles the world on the nearest beat when scrolling stops, on phones
+    // too: it is what makes each stage land fully formed instead of leaving the story
+    // frozen half-way between two panels.
     const stopSnap = no3D ? () => {} : snapStory(journeyEl, stops);
 
     return () => {
@@ -90,10 +96,13 @@
   });
 </script>
 
+<!-- The scroll length is a custom property rather than an inline height so the
+     reduced-motion rule can collapse the section in CSS. An inline height would
+     have needed !important to undo. -->
 <section
   class="sh"
   class:is-flat={no3D}
-  style={no3D ? '' : `height:${screens}vh`}
+  style:--sh-h={no3D ? null : `${screens}vh`}
   bind:this={journeyEl}
 >
   <div class="sh-stage">
@@ -125,9 +134,7 @@
           class:center={i === panels.length - 1}
           style:opacity={fade(progress, ...p.at)}
         >
-          <span class="sh-kicker mono"><span class="tick"></span>{p.n}</span>
-          <h2 class="sh-h2">{p.h}</h2>
-          <p class="sh-note">{p.note}</p>
+          {@render stage(p)}
         </div>
       {/each}
 
@@ -139,11 +146,32 @@
       {/if}
     {/if}
   </div>
+
+  <!-- Reduced-motion rendering of the same stages. With motion off the section
+       collapses to one screen, so the scroll-driven panels above would never advance
+       past the first beat and three of the four steps would be unreachable. This
+       carries the same content as a plain list instead. Exactly one of the two is
+       ever displayed, so the text is never announced twice. -->
+  {#if !no3D && panels.length}
+    <ol class="sh-stages">
+      {#each panels as p}
+        <li class="sh-stages-item">{@render stage(p)}</li>
+      {/each}
+    </ol>
+  {/if}
 </section>
 
+{#snippet stage(p)}
+  <span class="sh-kicker mono"><span class="tick"></span>{p.n}</span>
+  <h2 class="sh-h2">{p.h}</h2>
+  <p class="sh-note">{p.note}</p>
+{/snippet}
+
 <style>
-  .sh { position: relative; background: #050505; }
+  .sh { position: relative; background: #050505; height: var(--sh-h, auto); }
   .sh.is-flat { height: 66vh; min-height: 420px; }
+  /* The scroll-driven panels are the normal case; the list is the reduced-motion one. */
+  .sh-stages { display: none; }
   .sh-stage { position: sticky; top: 0; height: 100vh; min-height: 600px; overflow: hidden; }
   .sh.is-flat .sh-stage { position: relative; height: 100%; min-height: 420px; }
   .sh-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -188,12 +216,42 @@
   @keyframes shPulse { 50% { opacity: .35; } }
 
   @media (max-width: 760px) {
-    .sh-line.left, .sh-line.right { left: var(--wrap-pad); right: var(--wrap-pad); text-align: left; max-width: none; }
+    /* The story stays scroll-driven with its stages OVER the world — that is the whole
+       point of the section, and text sitting below it means the animation is never
+       actually watched. What changes on a phone is the pace: the scroll track is a bit
+       over half its desktop length, so four beats are reachable in a few flicks rather
+       than a marathon, and each stage anchors to the bottom so the world stays visible
+       above it (the same shape the homepage journey uses). */
+    /* Same length as every other display — the caller sets one scroll per step, so a
+       phone-only multiplier would give phones a different number of scrolls. */
+    /* The opening panel centres its children, so the caller's action buttons sat at
+       their label width instead of on the page's 24px rail like every other button. */
+    .sh-hero :global(.page-hero-actions) { align-self: stretch; width: 100%; }
+    .sh-line { top: auto; bottom: 15vh; transform: none; max-width: none; }
+    .sh-line.left, .sh-line.right { left: var(--wrap-pad); right: var(--wrap-pad); text-align: left; }
+    .sh-line.center { left: var(--wrap-pad); right: var(--wrap-pad); transform: none; text-align: left; }
     .sh-line.right .sh-note { margin-left: 0; }
+    .sh-note { max-width: none; }
+    /* A scrim under the text instead of dimming the artwork, so the world can play at
+       full strength and the copy still holds contrast over whatever is behind it. */
+    .sh-stage::after { content: ''; position: absolute; inset: auto 0 0; height: 62%; pointer-events: none;
+      background: linear-gradient(180deg, rgba(5,5,5,0) 0%, rgba(5,5,5,.72) 55%, rgba(5,5,5,.92) 100%); }
+    .sh-panel { z-index: 1; }
     .sh-hud { left: var(--wrap-pad); right: var(--wrap-pad); }
   }
   @media (prefers-reduced-motion: reduce) {
     .sh-hud-dot { animation: none; }
+    /* No scroll track, so the overlaid panels would never advance past the first beat
+       and three of the four stages would be unreachable. The static list carries the
+       same content instead — the one case where reading beats watching. */
     .sh { height: 100vh !important; }
+    .sh-line, .sh-scroll { display: none; }
+    .sh-stage::after { display: none; }
+    .sh-stages { display: grid; gap: 0; list-style: none; margin: 0; padding: 0; }
+    .sh-stages-item { padding: 24px var(--wrap-pad); border-top: 1px solid rgba(255,255,255,.1); }
+    .sh-stages-item:first-child { border-top: 0; }
+    .sh-stages .sh-kicker { margin-bottom: 10px; }
+    .sh-stages .sh-h2, .sh-stages .sh-note { text-shadow: none; max-width: none; }
+    .sh-stages .sh-note { margin-top: 10px; }
   }
 </style>

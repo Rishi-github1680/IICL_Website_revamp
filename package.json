@@ -10,7 +10,8 @@
     "preview": "npm run gen && vite preview --host 0.0.0.0 --port 5174",
     "build:ssr": "vite build --config vite.config.ssr.js",
     "prerender": "node scripts/prerender.mjs",
-    "og": "node scripts/gen-og.mjs"
+    "og": "node scripts/gen-og.mjs",
+    "test:api": "node scripts/test-api.mjs"
   },
   "dependencies": {
     "three": "0.179.1"

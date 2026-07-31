@@ -473,8 +473,14 @@
   .row-b { font-size: 14.5px; line-height: 1.55; color: #40434a; }
   .row-c { font-size: 11.5px; line-height: 1.5; color: var(--muted); }
 
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr);
+  /* minmax(0, 1fr), not a bare 1fr: 1fr floors at min-content, so a long unbroken
+     word in a card held the track open and pushed the row past the viewport. The
+     column counts match the shared .grid-3 steps in theme.css so the card rows on
+     this page break at the same widths as every other card grid on the site. */
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px; margin-top: 14px; }
+  @media (max-width: 1040px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 660px)  { .cards { grid-template-columns: 1fr; } }
   .card { background: #fff; padding: 18px; border: 1px solid var(--line); border-radius: 8px; }
   .card h3 { margin: 0 0 7px; font-size: 15.5px; font-weight: var(--w-heading); color: var(--ink); }
   .card p { margin: 0; font-size: 14px; line-height: 1.6; color: #40434a; }
@@ -507,4 +513,10 @@
   .note { font-size: var(--fs-small); color: var(--muted); }
   .safety { padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px;
     background: #fff; font-size: var(--fs-small); line-height: 1.6; }
+  /* On a phone the actions stack and run the full column between the gutters, so each
+     button sits 24px from both screen edges like every other action on the site. */
+  @media (max-width: 660px) {
+    .cta-row { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
+  }
 </style>

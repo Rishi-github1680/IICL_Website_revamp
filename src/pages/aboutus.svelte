@@ -52,22 +52,31 @@
   lede="IICL builds AI agents, enterprise software and automation platforms, with delivery teams operating across India and the USA."
   heroImage={PAGE_ART["aboutus"]}
   heroStory={{
-    screens: 620,
+    // Four steps, four scrolls. The stage is sticky and one screen tall, so a section
+    // of 500vh leaves exactly 4 screens of scroll — one per step — at every display
+    // size. The `at` windows below divide that range into four equal bands so each
+    // step owns one scroll rather than the hand-tuned, uneven windows this used to
+    // carry (step 1 held for 6% of the story, step 3 for 11%).
+    screens: 500,
     // The phase captions carry the narrative. No `status` readout: the floating
     // system-log pill was noise on a page that already has a heading and a lede.
     panels: [
+      // One quarter of the scroll each: fade in over the first ~5%, hold fully
+      // readable across the middle, fade out over the last ~5%. Step 4 runs past 1 so
+      // it stays up while the reader reaches the end of the section rather than
+      // dimming out over the final pixels.
       { n: '01 — The gap', h: 'We start where the work is stuck.',
         note: 'Not with a platform, but with the process nobody has time to fix. The near side is what you run today. The far side is what AI makes possible.',
-        at: [0.17, 0.21, 0.27, 0.31] },
+        at: [0.03, 0.09, 0.21, 0.25] },
       { n: '02 — The attempt', h: 'The first design rarely survives contact.',
         note: 'A two-week proof exists to find that out cheaply. When something collapses, it collapses on our time, on a scope small enough to be honest about.',
-        at: [0.36, 0.4, 0.47, 0.52] },
+        at: [0.27, 0.33, 0.46, 0.50] },
       { n: '03 — The memory', h: 'What failed becomes what we build on.',
         note: 'The wreckage stays in view. Every engagement carries forward what the last one learned — which is why the second design is supported before it is spanned.',
-        at: [0.6, 0.65, 0.76, 0.82] },
+        at: [0.52, 0.58, 0.71, 0.75] },
       { n: '04 — The crossing', h: 'What holds is what was tested.',
         note: 'The bridge that stands is not the first one drawn. It is the one that carries the weight of everything the earlier attempt taught us — which is why we would rather find the flaw in a two-week proof than in your production systems.',
-        at: [0.91, 0.95, 1.5, 2] },
+        at: [0.77, 0.83, 1.5, 2] },
     ],
   }}
   path="/aboutus"

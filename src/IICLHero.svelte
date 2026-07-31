@@ -102,6 +102,15 @@
     exploring = true;
     if (ch4El) ch4El.style.display = 'none';
     if (m4El) { m4El.style.pointerEvents = 'auto'; postTo(m4El, { iiclExplore: true }); }
+    // "See all products" sits in the last chapter, whose window runs slightly past the
+    // point where the sticky stage releases — so clicking it late left the galaxy (and
+    // the product card inside it) already scrolling off the top of the screen. Park on
+    // the last position where the stage still fills the viewport, so product view
+    // always opens full-bleed.
+    if (journeyEl) {
+      const top = journeyEl.offsetTop + journeyEl.offsetHeight - window.innerHeight;
+      if (window.scrollY > top - 4) window.scrollTo({ top, behavior: 'smooth' });
+    }
   }
   function exitExplore() {
     if (!exploring) return;
@@ -203,10 +212,16 @@
       // Held back under the hero copy (H1, lede, two CTAs read over it), then back to
       // full strength for chapter 1, which only has a short headline beside it.
       { el: m1El, i0: -1, i1: 0.35, peak: (J) => 0.35 + 0.6 * smooth((J - 0.13) / 0.07) },  // brain
-      { el: m2El, i0: 0.35, i1: 0.56 },  // voice agent
+      // ── .glb DISABLED ── while the brain scene is commented out of the markup below,
+      // the voice agent opens the journey instead of starting at 0.35, so the first
+      // stretch is a live scene rather than an empty stage. Restore `i0: 0.35` at the
+      // same time as the iframe.
+      { el: m2El, i0: -1, i1: 0.56 },    // voice agent
       { el: m3El, i0: 0.56, i1: 0.78 },  // delivery stream
       { el: m4El, i0: 0.78, i1: 9 }      // galaxy
-    ];
+    // Any scene can be commented out of the markup without breaking the loop below,
+    // which would otherwise dereference a missing iframe on the first frame.
+    ].filter((m) => m.el);
     // Particle dissolve for the four chapter headlines: letters never move — they materialize
     // grain-by-grain in random order (and dissolve out the same way), in step with the models.
     for (const chEl of [ch1El, ch2El, ch3El, ch4El]) {
@@ -454,7 +469,7 @@
        products grid is gone, and /#products is linked from other pages. -->
   <main id="main">
   <div id="products" bind:this={journeyEl} class="journey">
-    <div class="journey-stage">
+    <div class="journey-stage" class:is-exploring={exploring}>
       <div bind:this={glowEl} class="journey-glow"></div>
       {#if no3D}
         <!-- No WebGL, a metered connection, or models switched off: one still
@@ -467,7 +482,17 @@
         <div class="journey-model journey-flat journey-holding" class:is-gone={modelReady} aria-hidden={modelReady}>
           <Backdrop label="Enterprise AI, illustrated" />
         </div>
+        <!-- ── .glb SCENE DISABLED (temporary) ──────────────────────────────────
+             hologram.html is the only homepage scene backed by a .glb — it loads
+             /brain_hologram.glb through GLTFLoader (src/hologram.js). Commented out
+             on request; the other three scenes are generated particle systems and
+             fetch no model file, so they stay.
+
+             TO RESTORE: uncomment the iframe below AND put the voice agent's window
+             back to `i0: 0.35` in models() above. Both were changed together, and
+             restoring only one leaves the opening either empty or double-covered.
         <iframe bind:this={m1El} data-src="hologram.html?transparent=1&ui=0&b={BUILD_ID}" title="AI brain hologram 3D model" loading="lazy" class="journey-model" style="opacity:1;"></iframe>
+        ── end disabled scene ── -->
         <iframe bind:this={m2El} data-src="voice-agent.html?transparent=1&ui=0&scatter=1&b={BUILD_ID}" title="AI voice agent 3D model" class="journey-model" style="opacity:0;"></iframe>
         <iframe bind:this={m3El} data-src="data-stream.html?transparent=1&ui=0&scatter=1&b={BUILD_ID}" title="Global delivery stream 3D model" class="journey-model" style="opacity:0;"></iframe>
         <iframe bind:this={m4El} data-src="galaxy.html?transparent=1&ui=0&scatter=1&b={BUILD_ID}" title="Product galaxy 3D model" class="journey-model" style="opacity:0;"></iframe>
@@ -819,7 +844,23 @@
   /* Holds the stage until a scene renders; fades out once one does. */
   .journey-holding { transition: opacity .55s ease; }
   .journey-holding.is-gone { opacity: 0; }
-  .journey-vignette { position: absolute; inset: 0; background: radial-gradient(130% 100% at 50% 50%, rgba(0,0,0,0) 62%, rgba(3,3,3,0.65) 100%); pointer-events: none; }
+  .journey-vignette { position: absolute; inset: 0; background: radial-gradient(130% 100% at 50% 50%, rgba(0,0,0,0) 62%, rgba(3,3,3,0.65) 100%); pointer-events: none; transition: opacity .4s ease; }
+
+  /* ── Product view ──────────────────────────────────────────────────────────
+     In explore mode the galaxy renders its own product card inside the iframe, and
+     everything this stage normally lays over the scene is working against it. The
+     card docks to the LEFT on desktop, which is exactly where the vignette is at its
+     darkest, and to the BOTTOM under 860px, which is where the text scrim is at 90%
+     black — so the card was being read through two layers of darkening that exist
+     only to make the chapter copy legible. None of them are wanted here: the card is
+     already opaque and carries its own contrast. Chapter 4 is also still faded in at
+     this point in the scroll and would sit on top of the card, so it goes too. */
+  .journey-stage.is-exploring .journey-vignette { opacity: 0; }
+  .journey-stage.is-exploring::after { display: none; }
+  .journey-stage.is-exploring .journey-glow { opacity: 0; }
+  /* The scroll loop writes chapter opacity as an inline style every frame, so this
+     has to out-rank it rather than race it. */
+  .journey-stage.is-exploring .chapter { opacity: 0 !important; pointer-events: none; }
 
   .hero-panel { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 72px 32px 0; box-sizing: border-box; pointer-events: none; }
   .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
@@ -999,19 +1040,40 @@
     .journey { height: 380vh; }
     .chapter { max-width: min(440px, 62vw); }
   }
+  @media (max-width: 900px) {
+    /* Two FAQ columns on a phone gave each question a ~150px measure, so every
+       question wrapped to four or five lines and the two pillars interleaved down
+       the screen. Stacked, each group reads as one labelled run of questions. */
+    .faq-groups { grid-template-columns: 1fr; gap: 22px; }
+  }
   @media (max-width: 720px) {
     .svc-cols { grid-template-columns: 1fr; gap: 0; }
-    /* Phone: the journey still animates — the chapters simply stack over the model
-       and the scroll distance shortens so each stage is reachable with a thumb. */
-    .journey { height: 320vh; }
-    .chapter { max-width: none; top: auto; bottom: 12vh; transform: none; }
+    /* Phone: the journey still animates and the chapters sit over the model. 320vh gave
+       five beats (hero + four chapters) about half a flick each — too fast to register
+       what changed in the scene between them. */
+    .journey { height: 420vh; }
+    .chapter { max-width: none; top: auto; bottom: 12vh; transform: none; z-index: 2; }
     .chapter-left, .chapter-right { left: var(--wrap-pad); right: var(--wrap-pad); text-align: left; }
     .chapter-right .chapter-eyebrow, .chapter-right .chapter-link { justify-content: flex-start; }
     .chapter-h2 { font-size: var(--fs-h2); }
     .chapter-p { font-size: var(--fs-body); }
-    .hero-actions { flex-direction: column; align-items: stretch; width: 100%; max-width: 320px; }
+    /* A scrim behind the chapter text rather than dimming the scene. The models were
+       held at 55% opacity to keep the copy readable, which is precisely what stopped
+       the animation being worth watching on a phone. Full-strength scene, gradient
+       under the text, same legibility. */
+    .journey-stage::after { content: ''; position: absolute; inset: auto 0 0; height: 58%; pointer-events: none;
+      z-index: 1; background: linear-gradient(180deg, rgba(6,6,6,0) 0%, rgba(6,6,6,.70) 52%, rgba(6,6,6,.90) 100%); }
+    /* The panel's own 32px pad put the hero buttons on a different rail from the rest
+       of the page; --wrap-pad is the one gutter number the whole site uses. */
+    .hero-panel { z-index: 2; padding-inline: var(--wrap-pad); }
+    /* No max-width: the 320px cap left the two hero buttons on a narrower rail than
+       everything else on the page, floating 35px in from each edge instead of 24. */
+    .hero-actions { flex-direction: column; align-items: stretch; width: 100%; }
     .cta, .ghost { justify-content: center; }
-    /* Keep the model visible behind the text rather than letting it fill the screen. */
-    .journey-model { opacity: .55; }
+    /* Booking buttons that live inside a card span the card's content box rather
+       than shrink-wrapping their label. The card carries a 24px pad, so the button
+       sits exactly 24px in from each card edge. */
+    .conv-card, .path { padding: 24px; }
+    .conv-card .cta { align-self: stretch; justify-content: center; }
   }
 </style>
