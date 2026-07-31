@@ -150,7 +150,12 @@
       <div class="pr-more-row">
         {#each siblings as s}
           <a class="pr-more-card" href={s.href} style="--acc:{s.acc};">
-            <span class="mono pr-more-tag">{s.tag}</span>
+            <span class="pr-more-top">
+              {#if s.logo}
+                <span class="pr-more-mark" style="--mark:url('{s.logo}')" aria-hidden="true"></span>
+              {/if}
+              <span class="mono pr-more-tag">{s.tag}</span>
+            </span>
             <span class="pr-more-name">{s.label}</span>
             <span class="pr-more-desc">{s.desc}</span>
           </a>
@@ -191,6 +196,7 @@
   .pr-model-flat { overflow: hidden; transition: opacity .55s ease; }
   .pr-model-flat.is-gone { opacity: 0; }
   .pr-model { position: absolute; top: 0; right: -4%; width: 56%; height: 100%; border: 0; pointer-events: none;
+    filter: brightness(var(--anim-dim));
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 26%); mask-image: linear-gradient(90deg, transparent 0, #000 26%); }
   .pr-scrim { position: absolute; inset: 0; pointer-events: none;
     background: linear-gradient(90deg, rgba(8,9,11,0.88) 0%, rgba(8,9,11,0.66) 40%, rgba(8,9,11,0.2) 74%, rgba(8,9,11,0.04) 100%); }
@@ -269,6 +275,16 @@
     border: 1px solid var(--line); border-top: 2px solid var(--acc); padding: 18px 18px 20px; color: var(--ink);
     transition: transform .2s, box-shadow .2s; }
   .pr-more-card:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(20,20,25,0.13); }
+  /* The suite rail listed names only, so the six products read as text where the nav
+     and footer both show their marks. Same monochrome-mask treatment as those two, so
+     the glyphs read as one family and each takes its own product accent rather than
+     the clashing palettes the source SVGs are drawn in. */
+  .pr-more-top { display: flex; align-items: center; gap: 10px; }
+  .pr-more-mark { position: relative; flex: none; width: 30px; height: 30px; border-radius: 8px;
+    background: color-mix(in srgb, var(--acc) 12%, transparent); transition: background .2s ease; }
+  .pr-more-mark::before { content: ''; position: absolute; inset: 6px; background: var(--acc);
+    -webkit-mask: var(--mark) center / contain no-repeat; mask: var(--mark) center / contain no-repeat; }
+  .pr-more-card:hover .pr-more-mark { background: color-mix(in srgb, var(--acc) 22%, transparent); }
   .pr-more-tag { font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brand-ink); }
   .pr-more-name { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
   .pr-more-desc { font-size: 13.5px; line-height: 1.5; color: var(--muted); }

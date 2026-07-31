@@ -56,6 +56,15 @@
      at 60px it was 2px taller than the bar actually is and the mobile sheet hung
      5px below it. Desktop: 34px brand / 37px .talk + 20px padding + 1px rule. */
   --nav-h: 58px;
+
+  /* ── Animation dimming ──────────────────────────────────────────────────────
+     Every moving backdrop on the site — the homepage journey scenes, the story
+     world, the product and content hero models — is held back to this brightness
+     so the copy on top of it leads. The scenes are scenery; the words are the
+     point. Applied as a filter rather than opacity because the journey drives each
+     scene's opacity from JavaScript on every scroll frame, and a CSS opacity would
+     simply be overwritten. One number, tuned here, moves all of them together. */
+  --anim-dim: 0.55;
 }
 
 /* Phones and small tablets take the 24px gutter, and the section rhythm matches it:

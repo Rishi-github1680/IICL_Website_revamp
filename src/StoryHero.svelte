@@ -19,15 +19,29 @@
     title = '',
     lede = '',
     // [{ n, h, note, at: [inStart, inEnd, outStart, outEnd] }]
+    // `at` is only read in mode="scroll".
     panels = [],
     // [[progress, message]] — the readout, in scroll order.
     status = [],
-    // Screens of scroll the story gets. More = slower, more deliberate.
+    // How the steps are presented:
+    //
+    //   "scroll" — the original: a tall sticky track where each step fades in over the
+    //     world at its own scroll position. The animation IS the content, so this suits
+    //     a brand piece like /story where watching it is the point.
+    //
+    //   "list"   — the world is a one-screen visual header and the steps follow it as
+    //     ordinary readable content. Costs one screen instead of five and puts every
+    //     step on the page at once. This is what a page whose job is to inform should
+    //     use, which is why /aboutus is on it.
+    mode = 'scroll',
+    // Screens of scroll the story gets in mode="scroll". Ignored in "list".
     screens = 780,
     fallbackImage = null,
     fallbackAlt = '',
     children,
   } = $props();
+
+  const isList = mode === 'list';
 
   const no3D = !get3D();
 
@@ -62,8 +76,19 @@
       const tick = () => {
         raf = requestAnimationFrame(tick);
         const vh = window.innerHeight || 1;
-        const total = journeyEl.offsetHeight - vh;
-        const p = total <= 0 ? 0 : Math.max(0, Math.min(1, (window.scrollY - journeyEl.offsetTop) / total));
+        let p;
+        if (isList) {
+          // There is no tall track to read a position from, so reading one would pin the
+          // world at frame zero. Progress runs 0→1 as the stage travels up through the
+          // viewport instead: the world still evolves while the visitor reads, without
+          // anyone having to scroll five screens to see it do so.
+          const r = (journeyEl.firstElementChild || journeyEl).getBoundingClientRect();
+          const span = r.height + vh;
+          p = span <= 0 ? 0 : Math.max(0, Math.min(1, (vh - r.top) / span));
+        } else {
+          const total = journeyEl.offsetHeight - vh;
+          p = total <= 0 ? 0 : Math.max(0, Math.min(1, (window.scrollY - journeyEl.offsetTop) / total));
+        }
         progress = p;
         world.setProgress(p);
       };
@@ -76,15 +101,12 @@
     window.addEventListener('pointermove', onMove, { passive: true });
 
     // Settle onto whichever panel is nearest once scrolling stops, so the story never
-    // sits frozen between two beats. Stops are the midpoint of each panel's fully-shown
-    // window, taken from the same `at` values that drive the fades.
-    const stops = panels
+    // sits frozen between two beats. Only meaningful when the beats ARE scroll
+    // positions — in list mode it would just fight the reader.
+    const stops = isList ? [] : panels
       .map((pn) => (Array.isArray(pn.at) ? (pn.at[1] + pn.at[2]) / 2 : null))
       .filter((v) => v != null && v >= 0 && v <= 1);
-    // Snapping settles the world on the nearest beat when scrolling stops, on phones
-    // too: it is what makes each stage land fully formed instead of leaving the story
-    // frozen half-way between two panels.
-    const stopSnap = no3D ? () => {} : snapStory(journeyEl, stops);
+    const stopSnap = stops.length ? snapStory(journeyEl, stops) : () => {};
 
     return () => {
       stopped = true;
@@ -96,13 +118,11 @@
   });
 </script>
 
-<!-- The scroll length is a custom property rather than an inline height so the
-     reduced-motion rule can collapse the section in CSS. An inline height would
-     have needed !important to undo. -->
 <section
   class="sh"
   class:is-flat={no3D}
-  style:--sh-h={no3D ? null : `${screens}vh`}
+  class:is-list={isList}
+  style:--sh-h={no3D || isList ? null : `${screens}vh`}
   bind:this={journeyEl}
 >
   <div class="sh-stage">
@@ -115,19 +135,21 @@
 
     <!-- Opening panel. With models off it simply stays put — there is no world
          underneath for it to hand over to. -->
+    <!-- In list mode the opening panel is the section's heading, so it stays put; in
+         scroll mode it hands over to the first beat. -->
     <div
       class="sh-panel sh-hero"
-      style:opacity={no3D ? 1 : fade(progress, -1, 0, 0.06, 0.12)}
-      style:visibility={!no3D && progress > 0.13 ? 'hidden' : 'visible'}
+      style:opacity={no3D || isList ? 1 : fade(progress, -1, 0, 0.06, 0.12)}
+      style:visibility={!no3D && !isList && progress > 0.13 ? 'hidden' : 'visible'}
     >
       {#if kicker}<div class="sh-eyebrow mono"><span class="tick"></span>{kicker}<span class="tick"></span></div>{/if}
       <h1 class="sh-h1">{title}</h1>
       {#if lede}<p class="sh-lede">{lede}</p>{/if}
       {@render children?.()}
-      {#if !no3D}<span class="sh-scroll mono">SCROLL ↓</span>{/if}
+      {#if !no3D && !isList}<span class="sh-scroll mono">SCROLL ↓</span>{/if}
     </div>
 
-    {#if !no3D}
+    {#if !no3D && !isList}
       {#each panels as p, i}
         <div
           class="sh-panel sh-line {i % 2 === 0 ? 'left' : 'right'}"
@@ -147,12 +169,9 @@
     {/if}
   </div>
 
-  <!-- Reduced-motion rendering of the same stages. With motion off the section
-       collapses to one screen, so the scroll-driven panels above would never advance
-       past the first beat and three of the four steps would be unreachable. This
-       carries the same content as a plain list instead. Exactly one of the two is
-       ever displayed, so the text is never announced twice. -->
-  {#if !no3D && panels.length}
+  <!-- The steps as ordinary content, under the world rather than timed over it. Only
+       one presentation is ever rendered, so the copy is never announced twice. -->
+  {#if isList && panels.length}
     <ol class="sh-stages">
       {#each panels as p}
         <li class="sh-stages-item">{@render stage(p)}</li>
@@ -168,13 +187,30 @@
 {/snippet}
 
 <style>
+  /* ── mode="scroll" ── a tall sticky track; each step arrives at its own position. */
   .sh { position: relative; background: #050505; height: var(--sh-h, auto); }
   .sh.is-flat { height: 66vh; min-height: 420px; }
-  /* The scroll-driven panels are the normal case; the list is the reduced-motion one. */
-  .sh-stages { display: none; }
   .sh-stage { position: sticky; top: 0; height: 100vh; min-height: 600px; overflow: hidden; }
   .sh.is-flat .sh-stage { position: relative; height: 100%; min-height: 420px; }
-  .sh-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* ── mode="list" ── the world is a one-screen header and the steps are content.
+     Five screens of scrolling to read four short paragraphs, with only one of them
+     legible at a time, is a poor trade on a page whose job is to inform. */
+  .sh.is-list { height: auto; }
+  .sh.is-list .sh-stage { position: relative; height: 72vh; min-height: 380px; max-height: 720px; }
+
+  .sh-stages { list-style: none; margin: 0 auto; padding: var(--space-section) var(--wrap-pad);
+    max-width: var(--wrap-max); box-sizing: border-box;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 44px; }
+  .sh-stages .sh-kicker { margin-bottom: 10px; }
+  /* No artwork behind this copy, so the shadows that kept it legible over the world
+     are dead weight and the measure can run the full column. */
+  .sh-stages .sh-h2, .sh-stages .sh-note { text-shadow: none; max-width: none; }
+  .sh-stages .sh-h2 { font-size: clamp(19px, 1.6vw, 23px); }
+  .sh-stages .sh-note { margin-top: 9px; }
+  @media (max-width: 760px) { .sh-stages { grid-template-columns: 1fr; gap: 22px; } }
+  .sh-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+    filter: brightness(var(--anim-dim)); }
   .sh-vignette { position: absolute; inset: 0; pointer-events: none;
     background: radial-gradient(130% 100% at 50% 50%, rgba(0,0,0,0) 60%, rgba(3,3,3,.7) 100%); }
 
@@ -216,14 +252,6 @@
   @keyframes shPulse { 50% { opacity: .35; } }
 
   @media (max-width: 760px) {
-    /* The story stays scroll-driven with its stages OVER the world — that is the whole
-       point of the section, and text sitting below it means the animation is never
-       actually watched. What changes on a phone is the pace: the scroll track is a bit
-       over half its desktop length, so four beats are reachable in a few flicks rather
-       than a marathon, and each stage anchors to the bottom so the world stays visible
-       above it (the same shape the homepage journey uses). */
-    /* Same length as every other display — the caller sets one scroll per step, so a
-       phone-only multiplier would give phones a different number of scrolls. */
     /* The opening panel centres its children, so the caller's action buttons sat at
        their label width instead of on the page's 24px rail like every other button. */
     .sh-hero :global(.page-hero-actions) { align-self: stretch; width: 100%; }
@@ -231,27 +259,9 @@
     .sh-line.left, .sh-line.right { left: var(--wrap-pad); right: var(--wrap-pad); text-align: left; }
     .sh-line.center { left: var(--wrap-pad); right: var(--wrap-pad); transform: none; text-align: left; }
     .sh-line.right .sh-note { margin-left: 0; }
-    .sh-note { max-width: none; }
-    /* A scrim under the text instead of dimming the artwork, so the world can play at
-       full strength and the copy still holds contrast over whatever is behind it. */
-    .sh-stage::after { content: ''; position: absolute; inset: auto 0 0; height: 62%; pointer-events: none;
-      background: linear-gradient(180deg, rgba(5,5,5,0) 0%, rgba(5,5,5,.72) 55%, rgba(5,5,5,.92) 100%); }
-    .sh-panel { z-index: 1; }
     .sh-hud { left: var(--wrap-pad); right: var(--wrap-pad); }
   }
   @media (prefers-reduced-motion: reduce) {
     .sh-hud-dot { animation: none; }
-    /* No scroll track, so the overlaid panels would never advance past the first beat
-       and three of the four stages would be unreachable. The static list carries the
-       same content instead — the one case where reading beats watching. */
-    .sh { height: 100vh !important; }
-    .sh-line, .sh-scroll { display: none; }
-    .sh-stage::after { display: none; }
-    .sh-stages { display: grid; gap: 0; list-style: none; margin: 0; padding: 0; }
-    .sh-stages-item { padding: 24px var(--wrap-pad); border-top: 1px solid rgba(255,255,255,.1); }
-    .sh-stages-item:first-child { border-top: 0; }
-    .sh-stages .sh-kicker { margin-bottom: 10px; }
-    .sh-stages .sh-h2, .sh-stages .sh-note { text-shadow: none; max-width: none; }
-    .sh-stages .sh-note { margin-top: 10px; }
   }
 </style>

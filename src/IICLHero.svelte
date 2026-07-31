@@ -201,13 +201,16 @@
       return total <= 0 ? 0 : Math.max(0, Math.min(1, (window.scrollY - journeyEl.offsetTop) / total));
     };
     // Four-stage journey: brain → voice agent → delivery engine → product galaxy.
+    // The chapters moved out of the stage and are ordinary content now, so only the
+    // hero panel is still choreographed. The filter keeps the rest of the entries
+    // harmless if any of them is ever put back or taken out again.
     const panels = () => [
       { el: heroPanelEl, w0: -0.1, w1: 0.15 },
       { el: ch1El, w0: 0.18, w1: 0.33 },
       { el: ch2El, w0: 0.38, w1: 0.53 },
       { el: ch3El, w0: 0.58, w1: 0.74 },
       { el: ch4El, w0: 0.8, w1: 1.05 }
-    ];
+    ].filter((p) => p.el);
     const models = () => [
       // Held back under the hero copy (H1, lede, two CTAs read over it), then back to
       // full strength for chapter 1, which only has a short headline beside it.
@@ -519,44 +522,50 @@
         <span class="scroll-hint">SCROLL ↓</span>
       </div>
 
-      <div bind:this={ch1El} class="chapter chapter-left">
-        <div class="chapter-eyebrow">
-          <span class="tick"></span>
-          <span class="chapter-kicker">01 — Agentic AI</span>
-        </div>
-        <h2 class="chapter-h2">Agents that do the work, not just the talking.</h2>
-        <p class="chapter-p">Agents that complete multi-step work across your ERP, help desk and CRM — inside a defined authority boundary, with material actions traceable.</p>
-        <a href="/agentic-ai" class="chapter-link">Agentic AI services <span class="mono">→</span></a>
-      </div>
+    </div>
+  </div>
 
-      <div bind:this={ch2El} class="chapter chapter-right">
-        <div class="chapter-eyebrow chapter-eyebrow-right">
-          <span class="chapter-kicker">02 — Voice AI</span>
-          <span class="tick"></span>
-        </div>
-        <h2 class="chapter-h2">Every call answered, in the languages your customers use.</h2>
-        <p class="chapter-p">iVaak picks up in your customer's language, qualifies, resolves and hands off with a transcript — around the clock.</p>
-        <a href="/ivaak" class="chapter-link">Meet iVaak <span class="mono">→</span></a>
+  <!-- The four chapters, as content rather than as overlays timed to scroll positions.
+       They used to be absolutely positioned inside the sticky stage and revealed one
+       per screen, which cost four and a bit screens of scrolling and never showed more
+       than one at a time. Here they are all on the page at once, and the journey above
+       is a short piece of scenery instead of the thing you have to scroll through.
+       No bind:this any more: the scroll choreography and the particle-dissolve pass
+       both skip anything they cannot find, so moving these out disables both for the
+       chapters while leaving the hero panel's own fade intact. -->
+  <div class="section section-chapters">
+    <div class="wrap">
+      <div data-reveal class="section-head">
+        <div class="label-row"><span class="tick"></span><span class="label">What we do</span></div>
+        <h2 class="section-h2">Four lines of work, one delivery engine.</h2>
       </div>
-
-      <div bind:this={ch3El} class="chapter chapter-left">
-        <div class="chapter-eyebrow">
-          <span class="tick"></span>
-          <span class="chapter-kicker">03 — Global network</span>
-        </div>
-        <h2 class="chapter-h2">Two continents. One delivery engine.</h2>
-        <p class="chapter-p">Hyderabad builds, the US team delivers — one connected network shipping enterprise AI around the clock, in your time zone.</p>
-        <a href="/aboutus" class="chapter-link">About IICL <span class="mono">→</span></a>
-      </div>
-
-      <div bind:this={ch4El} class="chapter chapter-right">
-        <div class="chapter-eyebrow chapter-eyebrow-right">
-          <span class="chapter-kicker">04 — At scale</span>
-          <span class="tick"></span>
-        </div>
-        <h2 class="chapter-h2">A product suite, across the industries we serve.</h2>
-        <p class="chapter-p">Delivered from Hyderabad and the USA — WhatsApp commerce, voice AI, service management and enterprise workflows, built for enterprise and mid-market teams.</p>
-        <a href="#journey" class="chapter-link" onclick={enterExplore}>See all products <span class="mono">→</span></a>
+      <div class="chapters">
+        <article data-reveal class="chapter-card">
+          <span class="mono chapter-kicker">01 — Agentic AI</span>
+          <h3 class="chapter-h3">Agents that do the work, not just the talking.</h3>
+          <p class="chapter-p">Agents that complete multi-step work across your ERP, help desk and CRM — inside a defined authority boundary, with material actions traceable.</p>
+          <a href="/agentic-ai" class="chapter-link">Agentic AI services <span class="mono">→</span></a>
+        </article>
+        <article data-reveal class="chapter-card">
+          <span class="mono chapter-kicker">02 — Voice AI</span>
+          <h3 class="chapter-h3">Every call answered, in the languages your customers use.</h3>
+          <p class="chapter-p">iVaak picks up in your customer's language, qualifies, resolves and hands off with a transcript — around the clock.</p>
+          <a href="/ivaak" class="chapter-link">Meet iVaak <span class="mono">→</span></a>
+        </article>
+        <article data-reveal class="chapter-card">
+          <span class="mono chapter-kicker">03 — Global network</span>
+          <h3 class="chapter-h3">Two continents. One delivery engine.</h3>
+          <p class="chapter-p">Hyderabad builds, the US team delivers — one connected network shipping enterprise AI around the clock, in your time zone.</p>
+          <a href="/aboutus" class="chapter-link">About IICL <span class="mono">→</span></a>
+        </article>
+        <article data-reveal class="chapter-card">
+          <span class="mono chapter-kicker">04 — At scale</span>
+          <h3 class="chapter-h3">A product suite, across the industries we serve.</h3>
+          <p class="chapter-p">Delivered from Hyderabad and the USA — WhatsApp commerce, voice AI, service management and enterprise workflows, built for enterprise and mid-market teams.</p>
+          <!-- Opens the galaxy explorer, which lives in the journey above; enterExplore
+               scrolls back to it so the product view opens full-bleed. -->
+          <a href="#products" class="chapter-link" onclick={enterExplore}>See all products <span class="mono">→</span></a>
+        </article>
       </div>
     </div>
   </div>
@@ -812,9 +821,10 @@
   :global(.skip-link:focus) { top: 0; }
   .iicl-root { width: 100%; background: #070707; font-family: var(--font); color: #f4f2ee; }
   .mono { font-family: var(--font-mono); }
+  .journey a, .hero a { color: #f4f2ee; }
   /* Dark-stage links only. As a bare `a` rule this also hit the light sections
      lower down the page, where #f4f2ee on #f7f6f3 is 1.03:1 — invisible. */
-  .journey a, .hero a, .chapter a { color: #f4f2ee; }
+
 
   /* Product explorer exit */
   .explore-exit { position: fixed; top: 84px; right: 28px; z-index: 46; background: rgba(10,10,10,0.85); color: #f4f2ee;
@@ -834,12 +844,21 @@
   /* Four stages. Height sets how much scroll each stage gets — the stage windows are
      fractions of progress, so shortening this paces them proportionally rather than
      dropping any. Was 620vh, which alone was over half the page's scroll. */
-  .journey { height: 460vh; position: relative; background: #0a0a0a; }
+  /* The journey is scenery now, not the thing you scroll through. It was 460vh — over
+     four screens — because each of the four chapters needed its own scroll position to
+     arrive at. The chapters are content below the section, so the track only has to be
+     long enough for the scenes to hand over to each other: one sticky screen plus one
+     of travel. */
+  .journey { height: 200vh; position: relative; background: #0a0a0a; }
   .journey-stage { position: sticky; top: 0; height: 100vh; min-height: 620px; overflow: hidden; cursor: none; background: radial-gradient(100% 100% at 50% 40%, #141414 0%, #0a0a0a 55%, #050505 100%); }
   .journey-stage a { cursor: none; }
   .journey-glow { position: absolute; top: 12%; left: 22%; right: 22%; height: 74%; opacity: 0.8; will-change: transform, opacity;
     background: radial-gradient(ellipse at center, rgba(238,47,46,0.11) 0%, rgba(238,47,46,0) 62%); pointer-events: none; }
-  .journey-model { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; background: transparent; }
+  .journey-model { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; background: transparent;
+    filter: brightness(var(--anim-dim)); }
+  /* Product view is the exception: there the galaxy IS the content being read, so it
+     runs at full strength like the card sitting on it. */
+  .journey-stage.is-exploring .journey-model { filter: none; }
   .journey-flat { overflow: hidden; }
   /* Holds the stage until a scene renders; fades out once one does. */
   .journey-holding { transition: opacity .55s ease; }
@@ -860,7 +879,6 @@
   .journey-stage.is-exploring .journey-glow { opacity: 0; }
   /* The scroll loop writes chapter opacity as an inline style every frame, so this
      has to out-rank it rather than race it. */
-  .journey-stage.is-exploring .chapter { opacity: 0 !important; pointer-events: none; }
 
   .hero-panel { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 72px 32px 0; box-sizing: border-box; pointer-events: none; }
   .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
@@ -874,16 +892,26 @@
   .hero-actions { display: flex; align-items: center; gap: 14px; pointer-events: auto; }
   .scroll-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.22em; color: rgba(243,243,244,0.45); }
 
-  .chapter { position: absolute; top: 50%; transform: translateY(-50%); max-width: 400px; opacity: 0; pointer-events: none; }
-  .chapter-left { left: max(var(--wrap-pad), calc(50% - 580px)); }
-  .chapter-right { right: max(var(--wrap-pad), calc(50% - 580px)); text-align: right; }
-  .chapter-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .chapter-eyebrow-right { justify-content: flex-end; }
+  /* ── The four chapters, as content ──────────────────────────────────────────
+     Dark band directly under the journey so it still reads as one continuous
+     opening, then the page turns white for the sections below it. */
+  .section-chapters { background: #0d0d0d; color: #f4f2ee; --ink: #f4f2ee; --muted: rgba(244,242,238,.6); --line: rgba(255,255,255,.12); }
+  .section-chapters .section-h2 { color: #fff; }
+  .section-chapters .label { color: #ff6b60; }
+  .chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; overflow: hidden; }
+  .chapter-card { background: #0d0d0d; padding: 24px; display: flex; flex-direction: column; gap: 9px;
+    transition: background .25s ease; }
+  .chapter-card:hover { background: #131313; }
+  .chapter-h3 { margin: 0; font-size: clamp(18px, 1.6vw, 21px); line-height: 1.24; letter-spacing: -.015em;
+    font-weight: var(--w-heading); color: #fff; text-wrap: pretty; }
+  .chapter-card .chapter-p { margin: 0; flex: 1; font-size: 14.5px; line-height: 1.6; color: rgba(244,242,238,.62); }
+  .chapter-card .chapter-link { align-self: flex-start; border-bottom-width: 1px; font-size: 14.5px; }
+  @media (max-width: 760px) { .chapters { grid-template-columns: 1fr; } }
+
   .chapter-kicker { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(243,243,244,0.6); }
-  .chapter-h2 { font-weight: var(--w-body); font-size: clamp(28px, 3vw, 42px); line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 16px; color: #fff; text-wrap: pretty; }
   .chapter-p { font-size: 17px; font-weight: var(--w-light); line-height: 1.65; color: rgba(243,243,244,0.72); margin: 0 0 24px; text-wrap: pretty; }
   .chapter-link { pointer-events: auto; display: inline-flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; font-weight: 600; font-size: 15.5px; border-bottom: 2px solid #ee2f2e; padding-bottom: 4px; transition: color .2s; }
-  .chapter-right .chapter-link { justify-content: flex-end; }
   .chapter-link:hover { color: var(--brand-ink); }
 
   /* Generic sections — light theme (everything below the hero is white) */
@@ -1036,10 +1064,6 @@
   }
   /* Tablet / iPad: the journey keeps its animation but needs a shorter scroll and
      chapters that sit inside the gutter rather than against a 580px half-measure. */
-  @media (max-width: 1040px) {
-    .journey { height: 380vh; }
-    .chapter { max-width: min(440px, 62vw); }
-  }
   @media (max-width: 900px) {
     /* Two FAQ columns on a phone gave each question a ~150px measure, so every
        question wrapped to four or five lines and the two pillars interleaved down
@@ -1048,15 +1072,6 @@
   }
   @media (max-width: 720px) {
     .svc-cols { grid-template-columns: 1fr; gap: 0; }
-    /* Phone: the journey still animates and the chapters sit over the model. 320vh gave
-       five beats (hero + four chapters) about half a flick each — too fast to register
-       what changed in the scene between them. */
-    .journey { height: 420vh; }
-    .chapter { max-width: none; top: auto; bottom: 12vh; transform: none; z-index: 2; }
-    .chapter-left, .chapter-right { left: var(--wrap-pad); right: var(--wrap-pad); text-align: left; }
-    .chapter-right .chapter-eyebrow, .chapter-right .chapter-link { justify-content: flex-start; }
-    .chapter-h2 { font-size: var(--fs-h2); }
-    .chapter-p { font-size: var(--fs-body); }
     /* A scrim behind the chapter text rather than dimming the scene. The models were
        held at 55% opacity to keep the copy readable, which is precisely what stopped
        the animation being worth watching on a phone. Full-strength scene, gradient

@@ -13,7 +13,9 @@
   import StoryHero from './StoryHero.svelte';
   let {
     kicker = '', h1 = '', lede = '', heroBanner = HERO_BANNER_DEFAULT, heroModel = null,
-    // A scroll-driven story world in place of the flat hero — { panels, status, screens }.
+    // A story world in place of the flat hero — { panels, status, mode, screens }.
+    // mode: "list" (world as a one-screen header, steps as content below) or the
+    // default "scroll" (tall sticky track, one step per screen).
     // Used only while models are on; with them off the normal hero (and its image) runs.
     heroStory = null,
     // heroImage = { img, alt }: a real photograph, rendered as an <img> so it stays sharp,
@@ -139,6 +141,7 @@
       panels={heroStory.panels}
       status={heroStory.status}
       screens={heroStory.screens}
+      mode={heroStory.mode}
     >
       <div class="page-hero-actions">
         <a href={ctaHref} class="cta">{cta || 'Talk to us'} <span class="mono">→</span></a>
@@ -238,6 +241,7 @@
   .page-hero.has-model { min-height: 410px; display: flex; align-items: center; }
   .page-hero.has-model .wrap { position: relative; z-index: 2; width: 100%; }
   .hero-model { position: absolute; top: 0; right: -6%; width: 60%; height: 100%; border: 0; pointer-events: none; z-index: 1;
+    filter: brightness(var(--anim-dim));
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22%); mask-image: linear-gradient(90deg, transparent 0, #000 22%); }
   @media (max-width: 860px) { .hero-model { display: none; } .page-hero.has-model { min-height: 0; } }
   .page-hero::after { content: ''; position: absolute; inset: auto 0 0; height: 2px; background: linear-gradient(90deg, var(--red), transparent 60%); z-index: 3; }

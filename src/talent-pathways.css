@@ -1475,6 +1475,12 @@
   .tp-root .stage-controls { bottom: 18px; }
 }
 
+/* The animated hero diagrams (the runway, the pipeline, the search radar, the GCC
+   orbit) are held back to the same brightness as every other moving backdrop on the
+   site, so the headline and lede beside them lead. The copy lives in .hero-copy, a
+   sibling, so only the artwork is affected. */
+.tp-root .hero-system { filter: brightness(var(--anim-dim)); }
+
 /* Micro-labels. The ported pack set its mono captions at 8-10px. That is below the
    readable floor on a phone, and these are not decoration — they are the badge
    numbers and the field labels that say what each block of the page is ("REQUIRED

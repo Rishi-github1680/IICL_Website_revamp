@@ -52,12 +52,11 @@
   lede="IICL builds AI agents, enterprise software and automation platforms, with delivery teams operating across India and the USA."
   heroImage={PAGE_ART["aboutus"]}
   heroStory={{
-    // Four steps, four scrolls. The stage is sticky and one screen tall, so a section
-    // of 500vh leaves exactly 4 screens of scroll — one per step — at every display
-    // size. The `at` windows below divide that range into four equal bands so each
-    // step owns one scroll rather than the hand-tuned, uneven windows this used to
-    // carry (step 1 held for 6% of the story, step 3 for 11%).
-    screens: 500,
+    // About Us is here to inform, so the world is a one-screen header and the four
+    // steps sit under it as readable content — every step on the page at once instead
+    // of five screens of scrolling to meet them one at a time. /story keeps the
+    // scroll-driven presentation, where watching the animation is the point.
+    mode: 'list',
     // The phase captions carry the narrative. No `status` readout: the floating
     // system-log pill was noise on a page that already has a heading and a lede.
     panels: [
